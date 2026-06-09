@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.EvenementReproduction;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour EvenementReproduction.
+ * À transformer plus tard en JpaRepository<EvenementReproduction, Long> après création de l'Entity JPA.
  */
-public interface EvenementReproductionRepository extends JpaRepository<EvenementReproduction, Long> {
+public interface EvenementReproductionRepository {
 }

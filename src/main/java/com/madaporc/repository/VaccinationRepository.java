@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Vaccination;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Vaccination.
+ * À transformer plus tard en JpaRepository<Vaccination, Long> après création de l'Entity JPA.
  */
-public interface VaccinationRepository extends JpaRepository<Vaccination, Long> {
+public interface VaccinationRepository {
 }

@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.CycleProduction;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour CycleProduction.
+ * À transformer plus tard en JpaRepository<CycleProduction, Long> après création de l'Entity JPA.
  */
-public interface CycleProductionRepository extends JpaRepository<CycleProduction, Long> {
+public interface CycleProductionRepository {
 }

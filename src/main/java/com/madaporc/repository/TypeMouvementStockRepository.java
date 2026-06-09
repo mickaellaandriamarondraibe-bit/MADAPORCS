@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.TypeMouvementStock;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour TypeMouvementStock.
+ * À transformer plus tard en JpaRepository<TypeMouvementStock, Long> après création de l'Entity JPA.
  */
-public interface TypeMouvementStockRepository extends JpaRepository<TypeMouvementStock, Long> {
+public interface TypeMouvementStockRepository {
 }

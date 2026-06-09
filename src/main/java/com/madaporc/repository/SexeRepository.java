@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Sexe;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Sexe.
+ * À transformer plus tard en JpaRepository<Sexe, Long> après création de l'Entity JPA.
  */
-public interface SexeRepository extends JpaRepository<Sexe, Long> {
+public interface SexeRepository {
 }

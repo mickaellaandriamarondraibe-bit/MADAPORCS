@@ -1,11 +1,11 @@
 package com.madaporc.DTO;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * DTO placeholder pour RapportDTO.
- * À compléter selon les champs du PDF et du formulaire Figma.
+ * DTO conforme au PDF - placeholder à compléter si besoin.
  */
 @Getter
 @Setter

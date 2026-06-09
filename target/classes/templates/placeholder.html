@@ -10,22 +10,16 @@
 
 <main class="content">
     <div class="placeholder-card">
-        <p class="tag">PLACEHOLDER</p>
+        <p class="tag">PLACEHOLDER STRICT PDF</p>
         <h1 th:text="${titre}">Titre</h1>
-
+        <p><strong>Controller :</strong> <span th:text="${controllerName}">Controller</span></p>
+        <p><strong>Méthode :</strong> <span th:text="${methodName}">method</span></p>
+        <p><strong>Route :</strong> <span th:text="${route}">route</span></p>
         <div class="figma">
             <strong>Référence Figma :</strong>
-            <span th:text="${referenceFigma}">Référence</span>
+            <span th:text="${referenceFigma}">Référence Figma</span>
         </div>
-
-        <p th:text="${message}">Message</p>
-
-        <hr>
-
-        <p>
-            Cette page existe pour réserver la place du module.
-            La personne responsable remplacera ce placeholder par la vraie page Thymeleaf.
-        </p>
+        <p>Cette page est volontairement vide. Elle sera remplacée par la vraie vue du module.</p>
     </div>
 </main>
 </body>

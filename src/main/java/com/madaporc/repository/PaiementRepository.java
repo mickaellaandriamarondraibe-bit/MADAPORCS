@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Paiement;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Paiement.
+ * À transformer plus tard en JpaRepository<Paiement, Long> après création de l'Entity JPA.
  */
-public interface PaiementRepository extends JpaRepository<Paiement, Long> {
+public interface PaiementRepository {
 }

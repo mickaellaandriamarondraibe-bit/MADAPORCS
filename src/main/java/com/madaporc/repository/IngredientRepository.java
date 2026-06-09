@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Ingredient;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Ingredient.
+ * À transformer plus tard en JpaRepository<Ingredient, Long> après création de l'Entity JPA.
  */
-public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
+public interface IngredientRepository {
 }

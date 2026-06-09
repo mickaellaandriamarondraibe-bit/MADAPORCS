@@ -1,23 +1,14 @@
 package com.madaporc.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Entity placeholder pour Presence.
- * À compléter avec les colonnes de la base de données.
+ * Model placeholder pour la table presences.
+ * Les colonnes exactes seront ajoutées pendant le développement du module.
  */
 @Getter
 @Setter
-@Entity
-@Table(name = "presences")
 public class Presence {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

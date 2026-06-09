@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Presence;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Presence.
+ * À transformer plus tard en JpaRepository<Presence, Long> après création de l'Entity JPA.
  */
-public interface PresenceRepository extends JpaRepository<Presence, Long> {
+public interface PresenceRepository {
 }

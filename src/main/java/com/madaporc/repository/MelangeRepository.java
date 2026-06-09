@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Melange;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour Melange.
+ * À transformer plus tard en JpaRepository<Melange, Long> après création de l'Entity JPA.
  */
-public interface MelangeRepository extends JpaRepository<Melange, Long> {
+public interface MelangeRepository {
 }

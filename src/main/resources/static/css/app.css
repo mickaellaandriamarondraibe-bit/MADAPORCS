@@ -10,8 +10,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: var(--bg);
     color: var(--text);
+    background: var(--bg);
 }
 .sidebar {
     position: fixed;
@@ -26,13 +26,13 @@ body {
 }
 .sidebar h2 { margin: 0; }
 .sidebar small { opacity: .8; }
-.sidebar nav { margin-top: 24px; display: grid; gap: 5px; }
+.sidebar nav { margin-top: 22px; display: grid; gap: 5px; }
 .sidebar span {
-    margin-top: 14px;
+    margin-top: 13px;
     font-size: 11px;
     text-transform: uppercase;
-    opacity: .65;
     letter-spacing: .08em;
+    opacity: .65;
 }
 .sidebar a {
     color: white;

@@ -1,14 +1,20 @@
 package com.madaporc.DTO;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * DTO placeholder pour DepenseDTO.
- * À compléter selon les champs du PDF et du formulaire Figma.
+ * DTO conforme au PDF - placeholder à compléter si besoin.
  */
 @Getter
 @Setter
 public class DepenseDTO {
     private Long id;
+    private Long categorieDepenseId;
+    private String libelle;
+    private BigDecimal montant;
+    private LocalDate dateDepense;
+    private String description;
 }

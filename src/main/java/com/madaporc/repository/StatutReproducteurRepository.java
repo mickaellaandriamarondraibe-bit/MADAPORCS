@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.StatutReproducteur;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository placeholder pour StatutReproducteur.
+ * À transformer plus tard en JpaRepository<StatutReproducteur, Long> après création de l'Entity JPA.
  */
-public interface StatutReproducteurRepository extends JpaRepository<StatutReproducteur, Long> {
+public interface StatutReproducteurRepository {
 }
