@@ -1,0 +1,45 @@
+<div th:fragment="sidebar" class="sidebar">
+    <h2>MADAPORC</h2>
+    <small>Squelette complet</small>
+
+    <nav>
+        <a th:href="@{/dashboard}">Tableau de bord</a>
+
+        <span>Production</span>
+        <a th:href="@{/lots}">Lots de porcs</a>
+        <a th:href="@{/mouvements-lots}">Mouvements lots</a>
+        <a th:href="@{/pesees-lots}">Pesées lots</a>
+
+        <span>Reproduction</span>
+        <a th:href="@{/reproducteurs}">Reproducteurs</a>
+        <a th:href="@{/cycles-production}">Cycles production</a>
+        <a th:href="@{/evenements-reproduction}">Événements reproduction</a>
+
+        <span>Commerce</span>
+        <a th:href="@{/clients}">Clients</a>
+        <a th:href="@{/ventes}">Ventes</a>
+        <a th:href="@{/paiements-factures}">Paiements & factures</a>
+
+        <span>Ressources</span>
+        <a th:href="@{/ingredients}">Ingrédients</a>
+        <a th:href="@{/mouvements-stock}">Mouvements stock</a>
+        <a th:href="@{/melanges}">Mélanges</a>
+        <a th:href="@{/distributions-aliment}">Distributions</a>
+
+        <span>Santé</span>
+        <a th:href="@{/vaccins}">Vaccins</a>
+        <a th:href="@{/vaccinations}">Vaccinations</a>
+        <a th:href="@{/suivis-sanitaires}">Suivi sanitaire</a>
+
+        <span>Personnel</span>
+        <a th:href="@{/employes}">Employés</a>
+        <a th:href="@{/presences}">Présences</a>
+        <a th:href="@{/salaires}">Salaires</a>
+
+        <span>Autres</span>
+        <a th:href="@{/rapports}">Rapports</a>
+        <a th:href="@{/profil}">Profil</a>
+        <a th:href="@{/utilisateurs}">Utilisateurs</a>
+        <a th:href="@{/roles}">Rôles</a>
+    </nav>
+</div>

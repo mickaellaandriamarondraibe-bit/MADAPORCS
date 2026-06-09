@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titre} + ' - MADAPORC'">MADAPORC</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<main class="content">
+    <div class="placeholder-card">
+        <p class="tag">PLACEHOLDER</p>
+        <h1 th:text="${titre}">Titre</h1>
+
+        <div class="figma">
+            <strong>Référence Figma :</strong>
+            <span th:text="${referenceFigma}">Référence</span>
+        </div>
+
+        <p th:text="${message}">Message</p>
+
+        <hr>
+
+        <p>
+            Cette page existe pour réserver la place du module.
+            La personne responsable remplacera ce placeholder par la vraie page Thymeleaf.
+        </p>
+    </div>
+</main>
+</body>
+</html>
