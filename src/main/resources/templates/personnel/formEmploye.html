@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employé</title>
+</head>
+<body>
+
+    <h1 th:text="${employe.id == null ? 'Ajouter employé' : 'Modifier employé'}"></h1>
+
+    <form th:action="@{/employes/save}" th:object="${employe}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <p>
+            <label>Nom</label>
+            <input type="text" th:field="*{nom}" required>
+        </p>
+
+        <p>
+            <label>Prénom</label>
+            <input type="text" th:field="*{prenom}">
+        </p>
+
+        <p>
+            <label>Contact</label>
+            <input type="text" th:field="*{contact}">
+        </p>
+
+        <p>
+            <label>Adresse</label>
+            <input type="text" th:field="*{adresse}">
+        </p>
+
+        <p>
+            <label>Date embauche</label>
+            <input type="date" th:field="*{dateEmbauche}">
+        </p>
+
+        <p>
+            <label>Salaire</label>
+            <input type="number" step="0.01" th:field="*{salaireBase}">
+        </p>
+
+        <p>
+            <label>Poste</label>
+            <select name="posteEmployeId">
+                <option value="">-- Choisir --</option>
+                <option th:each="poste : ${postes}" th:value="${poste.id}" th:text="${poste.libelle}" th:selected="${employe.posteEmploye != null && employe.posteEmploye.id == poste.id}"></option>
+            </select>
+        </p>
+
+        <p>
+            <label>Statut</label>
+            <select name="statutEmployeId">
+                <option value="">Choisir </option>
+                <option th:each="statut : ${statuts}" th:value="${statut.id}" th:text="${statut.libelle}" th:selected="${employe.statutEmploye != null && employe.statutEmploye.id == statut.id}"></option>
+            </select>
+        </p>
+
+        <button type="submit">Enregistrer</button>
+        <a th:href="@{/employes}">Annuler</a>
+    </form>
+
+</body>
+</html>

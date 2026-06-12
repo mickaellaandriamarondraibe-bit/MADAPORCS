@@ -8,6 +8,10 @@
 
     <h1>Liste des employés</h1>
 
+    <p>
+        <a th:href="@{/employes/new}">Ajouter employé</a>
+    </p>
+
     <table border="1">
         <thead>
             <tr>
@@ -20,6 +24,7 @@
                 <th>Salaire</th>
                 <th>Poste</th>
                 <th>Statut</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -36,6 +41,17 @@
                 <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}"></td>
 
                 <td th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}"></td>
+                <td>
+                    <a th:href="@{/employes/edit/{id}(id=${employe.id})}">Modifier</a>
+
+                    <form th:action="@{/employes/desactiver/{id}(id=${employe.id})}" method="post" style="display:inline">
+                        <button type="submit">Désactiver</button>
+                    </form>
+
+                    <form th:action="@{/employes/delete/{id}(id=${employe.id})}" method="post" style="display:inline">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>
