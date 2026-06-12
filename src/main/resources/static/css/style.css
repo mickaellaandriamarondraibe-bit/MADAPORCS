@@ -646,6 +646,11 @@ video {
   width: 100%;
 }
 
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
 .w-sidebar-width {
   width: 260px;
 }
