@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titre}"></title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<main class="content">
+    <div class="placeholder-card">
+        <table border="1px">
+            <thead>
+                <tr>
+                    <td>Id mouvement</td>
+                    <td>Id lot</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mouvement:${mouvements}">
+                    <td th:text="${mouvement.id}"></td>
+                    <td th:text="${mouvement.lotPorcId}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/lots/mouvements/showForm/{id}(id=${lotPorcId})}"><button>Nouveau mouvement</button></a>
+    </div>
+</main>
+</body>
+</html>
