@@ -1,20 +1,24 @@
 package com.madaporc.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-/**
- * Service placeholder conforme au PDF.
- * Remplacer progressivement les commentaires par les vraies méthodes.
- */
+import com.madaporc.model.Employe;
+import com.madaporc.repository.EmployeRepository;
+
+
 @Service
 public class EmployeService {
 
+    private final EmployeRepository employeRepository;
 
-    // List<Employe> rechercherEmployes(String motCle, Long posteId, Long statutId)
-    // String creer(EmployeDTO dto)
-    // String modifier(Long id, EmployeDTO dto)
-    // String archiverEmploye(Long id)
-    // BigDecimal getSalaireBase(Long employeId)
-    // void prepareEmployeFormModel(Model model, Long id)
+    public EmployeService(EmployeRepository employeRepository){
+        this.employeRepository = employeRepository;
+
+    }
+    public List<Employe> findAllEmployes(){
+        return employeRepository.findAll();
+    }
 
 }
