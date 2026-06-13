@@ -51,6 +51,7 @@
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/LotPorcController.java
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/MelangeController.java
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/MouvementLotController.java
+/home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/MouvementLotRestController.java
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/MouvementStockController.java
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/PaiementFactureController.java
 /home/manoa/Documents/ITU/L2/S4/TRAININGS/PROJET (MME BAOVOLA)/MadaPorc/Project-Conception/MADAPORCS/src/main/java/com/madaporc/controller/PeseeLotController.java
