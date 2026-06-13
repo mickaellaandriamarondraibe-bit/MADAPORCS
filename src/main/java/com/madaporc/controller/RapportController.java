@@ -1,4 +1,4 @@
-package com.madaporc.controllers;
+package com.madaporc.controller;
 
 import java.time.LocalDate;
 
