@@ -9,6 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+
 public class TypeMouvementStock {
     private Long id;
 }
