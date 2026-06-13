@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail du Lot - Onglet Pesees</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<main class="content">
+    <div class="placeholder-card">
+        <table>
+            <thead>
+                <tr>
+                    <td>Id pesée</td>
+                    <td>Id lot</td>
+                    <td colspan="2">Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pesee:${pesees}">
+                    <td th:text="${pesee.id}"></td>
+                    <td th:text="${pesee.lotPorcId}"></td>
+                    <td>
+                        <a th:href="@{/lots/pesees/edit/{lotPorcId}/{id}(lotPorcId=${pesee.lotPorcId}, id=${pesee.id})}">Modifier</a>
+                        <a th:href="@{/lots/pesees/delete/{lotPorcId}/{id}(lotPorcId=${pesee.lotPorcId}, id=${pesee.id})}">Supprimer</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/lots/pesees/showForm/{id}(id=${lotPorcId})}"><button>Nouvelle pesée</button></a>
+    </div>
+</main>
+</body>
+</html>

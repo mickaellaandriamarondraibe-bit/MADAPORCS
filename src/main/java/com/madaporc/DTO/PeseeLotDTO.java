@@ -16,4 +16,6 @@ public class PeseeLotDTO {
     private BigDecimal poidsMoyenKg;
     private LocalDate datePesee;
     private String observation;
+    private Long createdBy;
+    private LocalDate createdAt;
 }

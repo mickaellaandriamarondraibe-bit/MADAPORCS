@@ -65,6 +65,7 @@ public class MouvementLotService {
         return dto;
     }
 
+    @Transactional
     public void ajouterMouvement(MouvementLotDTO dto, Long utilisateurId) {
         MouvementLotPorc mvt = new MouvementLotPorc();
         mvt.setLotPorcId(dto.getLotPorcId());

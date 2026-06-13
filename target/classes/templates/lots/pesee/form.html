@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail du Lot - Onglet Pesees</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<main class="content">
+    <div class="placeholder-card">
+        <form action="@{/lots/pesees/save}" method="post">
+            <input type="hidden" th:field="*{lotPorcId}" th:value="${lotPorcId}">
+            <input type="hidden" th:field="*{id}">
+            
+            <label for="poids">Poids:</label>
+            <input type="number" th:field="*{poids}" id="poids">
+            <br><br>
+            
+            <label for="datePesee">Date de la pesée:</label>
+            <input type="datetime-local" th:field="*{datePesee}">
+            <br><br>
+            
+            <label for="commentaire">Observation:</label>
+            <input type="text" th:field="*{commentaire}" id="commentaire">
+            <br><br>
+            
+            <button type="submit">Enregistrer la pesée</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

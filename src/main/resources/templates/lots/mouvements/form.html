@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 <main class="content">
     <div class="placeholder-card">
-        <form action="" th:object="${mouvementLotPorc}" method="post">
+        <form action="@{/lots/mouvements/save}" th:object="${mouvementLotPorc}" method="post">
             <input type="hidden" th:field="*{lotPorcId}" th:value="${lotPorcId}" id="lotPorcId">
 
             <input type="hidden" th:field="*{id}">
