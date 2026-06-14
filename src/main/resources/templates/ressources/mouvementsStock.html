@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mouvements de Stock - MADAPORC / GestPorc</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
-    <link rel="stylesheet" th:href="@{/css/material-symbols.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
@@ -16,102 +14,7 @@
         <div class="figma">
             <strong>Référence Figma :</strong> Mouvements de Stock - MADAPORC / GestPorc
         </div>
-            <form th:action="@{/stocks/mouvements/save}"
-            th:object="${mouvement}"
-            method="post">
-
-            <input type="hidden" th:field="*{id}">
-
-            <label>Ingredient</label>
-
-            <select th:field="*{ingredientId}">
-                <option th:each="i : ${ingredients}"
-                        th:value="${i.id}"
-                        th:text="${i.libelle}">
-                </option>
-            </select>
-
-            <label>Type mouvement</label>
-
-            <select th:field="*{typeMouvementStockId}">
-                <option th:each="t : ${types}"
-                        th:value="${t.id}"
-                        th:text="${t.libelle}">
-                </option>
-            </select>
-
-            <label>Quantité (kg)</label>
-            <input type="number"
-                step="0.01"
-                th:field="*{quantiteKg}">
-
-            <label>Prix total</label>
-            <input type="number"
-                step="0.01"
-                th:field="*{prixTotal}">
-
-            <label>Date</label>
-            <input type="datetime-local"
-                th:field="*{dateMouvement}">
-
-            <label>Motif</label>
-            <textarea th:field="*{motif}"></textarea>
-
-            <button type="submit">
-                Enregistrer
-            </button>
-        </form>
-
-        <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Ingredient</th>
-                <th>Type</th>
-                <th>Quantité</th>
-                <th>Prix total</th>
-                <th>Motif</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <tr th:each="m : ${mouvements}">
-
-                <td th:text="${m.dateMouvement}"></td>
-
-                <td th:text="${m.ingredient.libelle}"></td>
-
-                <td th:text="${m.typeMouvementStock.libelle}"></td>
-
-                <td th:text="${m.quantiteKg}"></td>
-
-                <td th:text="${m.prixTotal}"></td>
-
-                <td th:text="${m.motif}"></td>
-
-                <td>
-
-                    <a th:href="@{/stocks/mouvements/form(id=${m.id})}">
-                        Modifier
-                    </a>
-
-                    <form th:action="@{/stocks/mouvements/delete/{id}(id=${m.id})}"
-                        method="post">
-
-                        <button type="submit">
-                            Supprimer
-                        </button>
-
-                    </form>
-
-                </td>
-
-            </tr>
-
-        </tbody>
-    </table>
+        <p>Vue réservée selon le PDF : <strong>ressources/mouvementsStock</strong>.</p>
     </div>
 </main>
 </body>

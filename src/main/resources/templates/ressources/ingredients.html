@@ -2,102 +2,19 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des Ingrédients - MADAPORC / GestPorc</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
-    <link rel="stylesheet" th:href="@{/css/material-symbols.css}">
+    <title>Gestion des Ingredients - MADAPORC / GestPorc</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 <main class="content">
     <div class="placeholder-card">
         <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Gestion des Ingrédients - MADAPORC / GestPorc</h1>
+        <h1>Gestion des Ingredients - MADAPORC / GestPorc</h1>
         <div class="figma">
             <strong>Référence Figma :</strong> Gestion des Ingredients - MADAPORC / GestPorc
         </div>
-        
-        <div th:if="${message}" style="color: red; margin-bottom: 15px;">
-            <p th:text="${message}"></p>
-        </div>
-
-        <form th:action="@{/ingredients}" method="get" style="margin-bottom: 20px;">
-            <input type="text" name="motCle" th:value="${motCle}" placeholder="Rechercher par libellé...">
-            <button type="submit">Rechercher</button>
-            <a th:href="@{/ingredients}" style="margin-left: 10px; text-decoration: none;">Réinitialiser</a>
-        </form>
-
-        <hr style="margin: 20px 0;">
-
-        <form th:action="@{/ingredients/save}" th:object="${ingredient}" method="post">
-            <input type="hidden" th:field="*{id}">
-
-            <label>Libellé</label>
-            <input type="text" th:field="*{libelle}" required>
-
-            <label>Prix par Unité</label>
-            <input type="number" step="0.01" th:field="*{prixKg}" required>
-
-            <label>Stock Actuel</label>
-            <input type="number" step="0.01" th:field="*{stockActuelKg}">
-
-            <label>Seuil Minimum d'Alerte</label>
-            <input type="number" step="0.01" th:field="*{seuilMinKg}">
-
-            <label>Unité (kg, litre, etc.)</label>
-            <input type="text" th:field="*{unite}">
-
-            <label style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                <input type="checkbox" th:field="*{actif}"> Actif dans le système
-            </label>
-
-            <button type="submit" style="margin-top: 15px;">
-                Enregistrer l'Ingrédient
-            </button>
-        </form>
-
-        <hr style="margin: 30px 0;">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Libellé</th>
-                    <th>Prix/Unité</th>
-                    <th>Stock</th>
-                    <th>Seuil Min.</th>
-                    <th>Unité</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="i : ${ingredients}">
-                    <td th:text="${i.libelle}"></td>
-                    <td th:text="${i.prixKg}"></td>
-                    <td th:text="${i.stockActuelKg}"></td>
-                    <td th:text="${i.seuilMinKg}"></td>
-                    <td th:text="${i.unite}"></td>
-                    
-                    <td th:text="${i.actif ? 'Actif' : 'Inactif'}"></td>
-                    
-                    <td>
-                        <a th:href="@{/ingredients/form(id=${i.id})}">
-                            Modifier
-                        </a>
-
-                        <form th:action="@{/ingredients/delete/{id}(id=${i.id})}" method="post" style="display: inline-block;">
-                            <button type="submit" onclick="return confirm('Confirmer la suppression ?');">
-                                Supprimer
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(ingredients)}">
-                    <td colspan="7" style="text-align: center; padding: 20px;">Aucun ingrédient trouvé.</td>
-                </tr>
-            </tbody>
-        </table>
-
+        <p>Vue réservée selon le PDF : <strong>ressources/ingredients</strong>.</p>
     </div>
 </main>
 </body>

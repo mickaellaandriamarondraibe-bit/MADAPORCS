@@ -2,180 +2,20 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mélanges Alimentaires - MADAPORC / GestPorc</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
-    <link rel="stylesheet" th:href="@{/css/material-symbols.css}">
-    <style>
-        .recette-row { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 10px; }
-        .recette-row div { flex: 1; }
-        .remove-btn { background-color: #d9534f; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; }
-        .add-btn { background-color: #5cb85c; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; margin-top: 10px; }
-        .ing-liste { font-size: 0.9em; color: #555; list-style-type: square; padding-left: 20px; }
-    </style>
+    <title>Melanges Alimentaires / Feed Formulations - MADAPORC</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 <main class="content">
     <div class="placeholder-card">
         <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Mélanges Alimentaires / Feed Formulations - MADAPORC</h1>
+        <h1>Melanges Alimentaires / Feed Formulations - MADAPORC</h1>
         <div class="figma">
-            <strong>Référence Figma :</strong> Gestion des Mélanges - MADAPORC / GestPorc
+            <strong>Référence Figma :</strong> Melanges Alimentaires / Feed Formulations - MADAPORC
         </div>
-
-        <div th:if="${message}" style="color: white; background-color: #d9534f; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
-            <p th:text="${message}" style="margin: 0;"></p>
-        </div>
-
-        <form th:action="@{/melanges/save}" th:object="${melange}" method="post">
-            <input type="hidden" th:field="*{id}">
-
-            <label>Libellé du mélange</label>
-            <input type="text" th:field="*{libelle}" required style="width: 100%; margin-bottom: 15px;">
-
-            <label>Description / Notes de préparation</label>
-            <textarea th:field="*{description}" style="width: 100%; height: 60px; margin-bottom: 20px;"></textarea>
-
-            <h3>Composition de la Recette</h3>
-            
-            <div id="wrapper-ingredients">
-                <div class="recette-row" th:each="mi, itemStat : *{ingredients}">
-                    <div>
-                        <label>Sélectionner l'Ingrédient</label>
-                        <select th:name="|ingredients[${itemStat.index}].ingredientId|" required>
-                            <option value="">-- Choisir --</option>
-                            <option th:each="ing : ${allIngredients}" 
-                                    th:value="${ing.id}" 
-                                    th:text="|${ing.libelle} (${ing.prixKg} €/kg)|"
-                                    th:selected="${mi.ingredientId == ing.id}">
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Quantité (kg)</label>
-                        <input type="number" step="0.01" th:name="|ingredients[${itemStat.index}].quantiteKg|" th:value="${mi.quantiteKg}" required min="0.01">
-                    </div>
-                    <div>
-                        <label>Pourcentage (%)</label>
-                        <input type="number" step="0.01" th:name="|ingredients[${itemStat.index}].pourcentage|" th:value="${mi.pourcentage}" required min="0.01" max="100">
-                    </div>
-                    <button type="button" class="remove-btn" onclick="supprimerLigne(this)">Supprimer</button>
-                </div>
-            </div>
-
-            <button type="button" class="add-btn" onclick="ajouterLigne()">+ Ajouter un ingrédient</button>
-
-            <div style="margin-top: 30px;">
-                <button type="submit" style="padding: 10px 25px;">Enregistrer la formule</button>
-                <a th:href="@{/melanges}" style="margin-left: 15px; text-decoration: none; color: #555;">Annuler / Réinitialiser</a>
-            </div>
-        </form>
-
-        <hr style="margin: 40px 0;">
-
-        <h2>Formules Enregistrées</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Formule / Libellé</th>
-                    <th>Description</th>
-                    <th>Ingrédients et Dosages</th>
-                    <th>Coût de Revient Calculé</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="m : ${melanges}">
-                    <td style="font-weight: bold;" th:text="${m.libelle}"></td>
-                    <td th:text="${m.description}"></td>
-                    <td>
-                        <ul class="recette-liste">
-                            <li th:each="line : ${m.ingredients}" 
-                                th:text="|${line.ingredient.libelle} : ${line.quantiteKg} kg (${line.pourcentage} %)|">
-                            </li>
-                        </ul>
-                    </td>
-                    <td style="color: #2e7d32; font-weight: bold;" th:text="|${m.coutRevientKg} € / kg|"></td>
-                    <td>
-                        <a th:href="@{/melanges/form(id=${m.id})}">Modifier</a>
-                        
-                        <form th:action="@{/melanges/delete/{id}(id=${m.id})}" method="post" style="display: inline-block; margin-left: 10px;">
-                            <button type="submit" class="remove-btn" style="padding: 4px 8px; font-size: 0.9em;" onclick="return confirm('Voulez-vous supprimer définitivement ce mélange ?');">
-                                Supprimer
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(melanges)}">
-                    <td colspan="5" style="text-align: center; padding: 20px; color: #777;">Aucun mélange enregistré pour le moment.</td>
-                </tr>
-            </tbody>
-        </table>
+        <p>Vue réservée selon le PDF : <strong>ressources/melanges</strong>.</p>
     </div>
 </main>
-
-<script th:inline="javascript">
-    const listeIngredientsDispo = [[${allIngredients}]];
-
-    function ajouterLigne() {
-        const conteneur = document.getElementById('wrapper-ingredients');
-        const indexActuel = conteneur.getElementsByClassName('recette-row').length;
-
-        const nouvelleLigne = document.createElement('div');
-        nouvelleLigne.className = 'recette-row';
-
-        // Construction dynamique des sélecteurs d'options d'ingrédients
-        let optionsHtml = '<option value="">-- Choisir --</option>';
-        listeIngredientsDispo.forEach(ing => {
-            optionsHtml += `<option value="${ing.id}">${ing.libelle} (${ing.prixKg} €/kg)</option>`;
-        });
-
-        nouvelleLigne.innerHTML = `
-            <div>
-                <label>Sélectionner l'Ingrédient</label>
-                <select name="ingredients[${indexActuel}].ingredientId" required>
-                    ${optionsHtml}
-                </select>
-            </div>
-            <div>
-                <label>Quantité (kg)</label>
-                <input type="number" step="0.01" name="ingredients[${indexActuel}].quantiteKg" required min="0.01">
-            </div>
-            <div>
-                <label>Pourcentage (%)</label>
-                <input type="number" step="0.01" name="ingredients[${indexActuel}].pourcentage" required min="0.01" max="100">
-            </div>
-            <button type="button" class="remove-btn" onclick="supprimerLigne(this)">Supprimer</button>
-        `;
-        conteneur.appendChild(nouvelleLigne);
-    }
-
-    function supprimerLigne(bouton) {
-        const conteneur = document.getElementById('wrapper-ingredients');
-        const lignes = conteneur.getElementsByClassName('recette-row');
-        
-        if (lignes.length > 1) {
-            bouton.parentElement.remove();
-            reindexerLignes();
-        } else {
-            alert('Une formule doit conserver au moins une ligne d\'ingrédient.');
-        }
-    }
-
-    function reindexerLignes() {
-        const conteneur = document.getElementById('wrapper-ingredients');
-        const lignes = conteneur.getElementsByClassName('recette-row');
-        
-        for (let i = 0; i < lignes.length; i++) {
-            const select = lignes[i].querySelector('select');
-            const inputs = lignes[i].querySelectorAll('input');
-            
-            if (select) select.name = `ingredients[${i}].ingredientId`;
-            if (inputs[0]) inputs[0].name = `ingredients[${i}].quantiteKg`;
-            if (inputs[1]) inputs[1].name = `ingredients[${i}].pourcentage`;
-        }
-    }
-</script>
 </body>
 </html>
