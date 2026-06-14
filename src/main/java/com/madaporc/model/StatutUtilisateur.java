@@ -1,14 +1,20 @@
 package com.madaporc.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Model placeholder pour la table statuts_utilisateur.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
+@Entity
+@Table(name = "statuts_utilisateur")
 @Getter
 @Setter
 public class StatutUtilisateur {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true, nullable = false)
+    private String nom;
+    
+    private String description;
 }

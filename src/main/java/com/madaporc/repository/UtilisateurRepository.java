@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Utilisateur;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Repository placeholder pour Utilisateur.
- * À transformer plus tard en JpaRepository<Utilisateur, Long> après création de l'Entity JPA.
- */
-public interface UtilisateurRepository {
+import java.util.Optional;
+
+@Repository
+public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
+    Optional<Utilisateur> findByEmail(String email);
 }
