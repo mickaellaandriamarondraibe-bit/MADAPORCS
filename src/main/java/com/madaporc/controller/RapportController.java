@@ -3,6 +3,7 @@ package com.madaporc.controller;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,60 +16,62 @@ import com.madaporc.service.RapportService;
 @RequestMapping("/rapports")
 public class RapportController {
 
-    @Autowired
-    private RapportService rapportService;
+        @Autowired
+        private RapportService rapportService;
 
-    @GetMapping
-    public String rapports(
-            @RequestParam(required = false) LocalDate debut,
-            @RequestParam(required = false) LocalDate fin,
-            Model model) {
+        @GetMapping
+        public String rapports(
+                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
 
-        model.addAttribute(
-                "rapportFinancier",
-                rapportService.genererRapportFinancier(debut, fin));
+                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
 
-        model.addAttribute(
-                "rapportSanitaire",
-                rapportService.genererRapportSanitaire(debut, fin));
+                        Model model) {
 
-        model.addAttribute(
-                "rapportStock",
-                rapportService.genererRapportStock());
+                model.addAttribute(
+                                "rapportFinancier",
+                                rapportService.genererRapportFinancier(debut, fin));
 
-        model.addAttribute(
-                "rapportPresence",
-                rapportService.genererRapportPresence(debut, fin));
+                model.addAttribute(
+                                "rapportSanitaire",
+                                rapportService.genererRapportSanitaire(debut, fin));
 
-        model.addAttribute(
-                "rapportProduction",
-                rapportService.genererRapportProduction(debut, fin));
+                model.addAttribute(
+                                "rapportStock",
+                                rapportService.genererRapportStock());
 
-        model.addAttribute("debut", debut);
-        model.addAttribute("fin", fin);
+                model.addAttribute(
+                                "rapportPresence",
+                                rapportService.genererRapportPresence(debut, fin));
 
-        return "rapports/index";
-    }
+                model.addAttribute(
+                                "rapportProduction",
+                                rapportService.genererRapportProduction(debut, fin));
 
-    @GetMapping("/export/pdf")
-    public String exportPdf(
-            @RequestParam(required = false) LocalDate debut,
-            @RequestParam(required = false) LocalDate fin,
-            Model model) {
+                model.addAttribute("debut", debut);
+                model.addAttribute("fin", fin);
 
-        // génération PDF à implémenter
+                return "rapports/index";
+        }
 
-        return "redirect:/rapports";
-    }
+        @GetMapping("/export/pdf")
+        public String exportPdf(
+                        @RequestParam(required = false) LocalDate debut,
+                        @RequestParam(required = false) LocalDate fin,
+                        Model model) {
 
-    @GetMapping("/export/excel")
-    public String exportExcel(
-            @RequestParam(required = false) LocalDate debut,
-            @RequestParam(required = false) LocalDate fin,
-            Model model) {
+                // génération PDF à implémenter
 
-        // génération Excel à implémenter
+                return "redirect:/rapports";
+        }
 
-        return "redirect:/rapports";
-    }
+        @GetMapping("/export/excel")
+        public String exportExcel(
+                        @RequestParam(required = false) LocalDate debut,
+                        @RequestParam(required = false) LocalDate fin,
+                        Model model) {
+
+                // génération Excel à implémenter
+
+                return "redirect:/rapports";
+        }
 }
