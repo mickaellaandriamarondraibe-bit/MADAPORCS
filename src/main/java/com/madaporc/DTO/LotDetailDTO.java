@@ -44,7 +44,6 @@ public class LotDetailDTO {
     private List<Object> suivisSanitaires;
     private List<Object> vaccinations;
     private List<Object> distributions;
-    private List<Object> ventes;
     private BigDecimal tauxMortalite;
     private BigDecimal gmqMoyen;
 }

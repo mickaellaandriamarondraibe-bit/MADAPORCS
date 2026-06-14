@@ -19,9 +19,10 @@ public class LotPorcController {
     @Autowired
     private LotPorcService lotPorcService;
 
-    public String listLots(@RequestParam(required = false) String code,
-                           @RequestParam(required = false) Long raceId,
-                           @RequestParam(required = false) Long statutId,
+    @GetMapping("/lots")
+    public String listLots(@RequestParam(value = "code", required = false) String code,
+                           @RequestParam(value = "raceId", required = false) Long raceId,
+                           @RequestParam(value = "statutId", required = false) Long statutId,
                            Model model) {
         lotPorcService.prepareLotListModel(model, code, raceId, statutId);
         model.addAttribute("titre", "Liste des Lots");
@@ -29,6 +30,7 @@ public class LotPorcController {
         return "lots/listeLots";
     }
 
+    @GetMapping("/lots/form")
     public String showForm(@RequestParam(required = false) Long id,
                            @RequestParam(required = false) String typeEntree,
                            Model model) {
@@ -38,6 +40,7 @@ public class LotPorcController {
         return "lots/formLot";
     }
 
+    @PostMapping("/lots/save")
     public String saveLot(@ModelAttribute LotPorcDTO dto,
                           Model model,
                           HttpSession session) {
@@ -64,6 +67,7 @@ public class LotPorcController {
         }
     }
 
+    @GetMapping("/lots/{id}")
     public String detailLot(@PathVariable Long id, Model model) {
         LotDetailDTO detail = lotPorcService.getDetailLot(id);
 
@@ -79,6 +83,7 @@ public class LotPorcController {
         return "lots/detailLot";
     }
 
+    @GetMapping("/lots/{id}/tab/{tab}")
     public String detailLotTab(@PathVariable Long id,
                                @PathVariable String tab,
                                Model model) {
@@ -96,6 +101,7 @@ public class LotPorcController {
         return "lots/detailLot";
     }
 
+    @PostMapping("/lots/archive/{id}")
     public String archiver(@PathVariable Long id, Model model) {
         String resultat = lotPorcService.archiverLot(id);
         model.addAttribute("succes", resultat);
