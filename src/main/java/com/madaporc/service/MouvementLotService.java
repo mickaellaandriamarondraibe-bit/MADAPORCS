@@ -136,13 +136,6 @@ public class MouvementLotService {
         }
     }
 
-    public void supprimerMouvement(Long mouvementId) {
-        MouvementLotPorc mouvement = mouvementLotRepository.findById(mouvementId).orElse(null);
-        if (mouvement != null) {
-            mouvementLotRepository.delete(mouvement);
-        }
-    }
-
     // String verifierQuantiteDisponible(Long lotId, Integer quantite, String typeMouvement)
     // void mettreAJourEffectifLot(Long lotId, Integer quantite, String typeMouvement)
     // String validerMouvementLot(MouvementLotDTO dto)

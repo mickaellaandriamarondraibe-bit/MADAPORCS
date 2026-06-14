@@ -58,23 +58,4 @@ public class MouvementLotController {
         return "redirect:/lots/mouvements/" + dto.getLotPorcId();
     }
 
-    @GetMapping("/delete/{lotPorcId}/{id}")
-    public String deleteMouvement(@PathVariable Long lotPorcId, @PathVariable Long id) {
-        mouvementLotService.supprimerMouvement(id);
-        return "redirect:/lots/mouvements/" + lotPorcId;
-    }
-
-    @GetMapping("/edit/{lotPorcId}/{id}")
-    public String showEditForm(@PathVariable Long lotPorcId, @PathVariable Long id, Model model) {
-        MouvementLotPorc mouvement = mouvementLotService.getMouvementLotPorcRepository().findById(id).orElse(null);
-        if (mouvement == null) {
-            return "redirect:/lots/mouvements/" + lotPorcId;
-        }
-
-        List<TypeMouvementLot> typesMouvements = typeMouvementLotRepository.findAll();
-        model.addAttribute("typesMouvements", typesMouvements);
-        model.addAttribute("mouvementLotPorc", mouvement);
-        model.addAttribute("lotPorcId", lotPorcId);
-        return "lots/mouvements/form";
-    }
 }
