@@ -4,6 +4,13 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.madaporc.repository.VenteRepository;
+import com.madaporc.repository.DepenseRepository;
+import com.madaporc.repository.IngredientRepository;
+import com.madaporc.repository.SuiviSanitaireRepository;
+import com.madaporc.repository.PresenceRepository;
+import com.madaporc.repository.CycleProductionRepository;
+
 @Service
 public class RapportService {
 
