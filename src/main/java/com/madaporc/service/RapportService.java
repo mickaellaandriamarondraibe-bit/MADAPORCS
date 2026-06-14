@@ -1,21 +1,104 @@
 package com.madaporc.service;
 
+import java.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Service placeholder conforme au PDF.
- * Remplacer progressivement les commentaires par les vraies méthodes.
- */
 @Service
 public class RapportService {
 
+    @Autowired
+    private VenteRepository venteRepository;
 
-    // RapportFinancierDTO genererRapportFinancier(LocalDate debut, LocalDate fin)
-    // RapportSanitaireDTO genererRapportSanitaire(LocalDate debut, LocalDate fin)
-    // RapportStockDTO genererRapportStock()
-    // RapportPresenceDTO genererRapportPresence(LocalDate debut, LocalDate fin)
-    // RapportProductionDTO genererRapportProduction(LocalDate debut, LocalDate fin)
-    // String exporterPdf(RapportDTO rapport)
-    // String exporterExcel(RapportDTO rapport)
+    @Autowired
+    private DepenseRepository depenseRepository;
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private SuiviSanitaireRepository suiviSanitaireRepository;
+
+    @Autowired
+    private PresenceRepository presenceRepository;
+
+    @Autowired
+    private CycleProductionRepository cycleProductionRepository;
+
+    public RapportDTO genererRapportGlobal(
+            LocalDate debut,
+            LocalDate fin) {
+
+        RapportDTO dto = new RapportDTO();
+
+        dto.setFinancier(
+                genererRapportFinancier(debut, fin));
+
+        dto.setSanitaire(
+                genererRapportSanitaire(debut, fin));
+
+        dto.setStock(
+                genererRapportStock());
+
+        dto.setPresence(
+                genererRapportPresence(debut, fin));
+
+        dto.setProduction(
+                genererRapportProduction(debut, fin));
+
+        return dto;
+    }
+
+    public RapportFinancierDTO genererRapportFinancier(
+            LocalDate debut,
+            LocalDate fin) {
+
+        RapportFinancierDTO dto = new RapportFinancierDTO();
+
+        // logique
+
+        return dto;
+    }
+
+    public RapportSanitaireDTO genererRapportSanitaire(
+            LocalDate debut,
+            LocalDate fin) {
+
+        RapportSanitaireDTO dto = new RapportSanitaireDTO();
+
+        // logique
+
+        return dto;
+    }
+
+    public RapportStockDTO genererRapportStock() {
+
+        RapportStockDTO dto = new RapportStockDTO();
+
+        // logique
+
+        return dto;
+    }
+
+    public RapportPresenceDTO genererRapportPresence(
+            LocalDate debut,
+            LocalDate fin) {
+
+        RapportPresenceDTO dto = new RapportPresenceDTO();
+
+        // logique
+
+        return dto;
+    }
+
+    public RapportProductionDTO genererRapportProduction(
+            LocalDate debut,
+            LocalDate fin) {
+
+        RapportProductionDTO dto = new RapportProductionDTO();
+
+        // logique
+
+        return dto;
+    }
 }
