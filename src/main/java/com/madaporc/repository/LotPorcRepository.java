@@ -3,6 +3,7 @@ package com.madaporc.repository;
 import com.madaporc.model.LotPorc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public interface LotPorcRepository extends JpaRepository<LotPorc, Long> {
 
     boolean existsByCodeLot(String codeLot);
 
-    long countByStatutLotLibelle(String statut);
+    long countByStatutLotId(Long statutLotId);
 
     List<LotPorc> findByArchivedAtIsNull();
 
