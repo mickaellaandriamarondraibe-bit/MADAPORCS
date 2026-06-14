@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titre}"></title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<main class="content">
+    <div class="placeholder-card">
+        <table border="1px">
+            <thead>
+                <tr>
+                    <td>Id mouvement</td>
+                    <td>Id lot</td>
+                    <td colspan="2">Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mouvement:${mouvements}">
+                    <td th:text="${mouvement.id}"></td>
+                    <td th:text="${mouvement.lotPorcId}"></td>
+                    <td>
+                        <a th:href="@{/lots/mouvements/edit/{lotPorcId}/{id}(lotPorcId=${mouvement.lotPorcId}, id=${mouvement.id})}" class="btn btn-primary">Modifier</a>
+                        <a th:href="@{/lots/mouvements/delete/{lotPorcId}/{id}(lotPorcId=${mouvement.lotPorcId}, id=${mouvement.id})}" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/lots/mouvements/showForm/{id}(id=${lotPorcId})}"><button>Nouveau mouvement</button></a>
+    </div>
+</main>
+</body>
+</html>

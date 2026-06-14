@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titre}"></title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <script th:src="@{/js/save-verification.js}"></script>
+</head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+<main class="content">
+    <div class="placeholder-card">
+        <form action="" th:object="${mouvementLotPorc}" method="post">
+            <input type="hidden" th:field="*{lotPorcId}" th:value="${lotPorcId}" id="lotPorcId">
+
+            <input type="hidden" th:field="*{id}">
+            
+            <label for="type_mouvement">Type du mouvement:</label>
+            <select id="type_mouvement" th:field="*{typeMouvementLotId}">
+                <option th:each="typeMouvement : ${typesMouvements}" 
+                        th:text="${typeMouvement.libelle}"
+                        th:value="${typeMouvement.id}"
+                        th:selected="${typeMouvement.id == mouvementLotPorc.typeMouvementLotId}"></option>
+            </select>
+            <br><br>
+            
+            <label for="qtt_male">Nombre de mâle:</label>
+            <input type="number" th:field="*{quantiteMale}" id="qtt_male">
+            
+            <div id="qtt_male_error"></div>
+            <br><br>
+            
+            <label for="qtt_femelle">Nombre de femelle:</label>
+            <input type="number" th:field="*{quantiteFemelle}" id="qtt_femelle">
+
+            <div id="qtt_femelle_error"></div>
+            <br><br>
+            
+            <div id="qtt_error"></div>
+
+            <label for="dateMvt">Date du mouvement:</label>
+            <input type="datetime-local" th:field="*{dateMouvement}">
+            <br><br>
+            
+            <label for="motif">Motif du mouvement:</label>
+            <textarea id="motif" th:field="*{motif}" th:value="${mouvementLotPorc.motif}"></textarea>
+            <br><br>
+            
+            <button type="submit" id="save-btn">Enregistrer le mouvement</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

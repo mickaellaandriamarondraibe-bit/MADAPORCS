@@ -23,6 +23,4 @@ public class VenteController {
         model.addAttribute("route", "/ventes");
         return "placeholder";
     }
-
-
 }

@@ -15,6 +15,9 @@ public class MouvementLotDTO {
     private Long lotPorcId;
     private Long typeMouvementLotId;
     private Integer quantite;
+    private Integer quantite_male;
+    private Integer quantite_femelle;
     private LocalDateTime dateMouvement;
     private String motif;
+    private LocalDateTime createdAt;
 }
