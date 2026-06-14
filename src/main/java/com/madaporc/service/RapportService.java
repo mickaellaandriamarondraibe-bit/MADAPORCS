@@ -11,6 +11,13 @@ import com.madaporc.repository.SuiviSanitaireRepository;
 import com.madaporc.repository.PresenceRepository;
 import com.madaporc.repository.CycleProductionRepository;
 
+import com.madaporc.DTO.RapportDTO;
+import com.madaporc.DTO.RapportFinancierDTO;
+import com.madaporc.DTO.RapportSanitaireDTO;
+import com.madaporc.DTO.RapportStockDTO;
+import com.madaporc.DTO.RapportPresenceDTO;
+import com.madaporc.DTO.RapportProductionDTO;
+
 @Service
 public class RapportService {
 
