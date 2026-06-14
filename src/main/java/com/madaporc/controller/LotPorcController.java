@@ -58,7 +58,8 @@ public class LotPorcController {
             resultat = lotPorcService.creer(dto, utilisateurId);
         }
 
-        if (resultat.contains("succès")) {
+        if (resultat.startsWith("Lot créé avec succès")
+        || resultat.startsWith("Lot modifié avec succès")) {
             model.addAttribute("succes", resultat);
             return "redirect:/lots";
         } else {
