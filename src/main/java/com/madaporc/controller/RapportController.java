@@ -16,8 +16,11 @@ import com.madaporc.service.RapportService;
 @RequestMapping("/rapports")
 public class RapportController {
 
-        @Autowired
-        private RapportService rapportService;
+        private final RapportService rapportService;
+
+        public RapportController(RapportService rapportService) {
+                this.rapportService = rapportService;
+        }
 
         @GetMapping
         public String rapports(
