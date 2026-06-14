@@ -7,4 +7,5 @@ import com.madaporc.model.LotPorc;
  * À transformer plus tard en JpaRepository<LotPorc, Long> après création de l'Entity JPA.
  */
 public interface LotPorcRepository {
+    
 }
