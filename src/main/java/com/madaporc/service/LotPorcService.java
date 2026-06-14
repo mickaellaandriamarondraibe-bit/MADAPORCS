@@ -1,14 +1,13 @@
 package com.madaporc.service;
 
 import com.madaporc.DTO.LotDetailDTO;
-import com.madaporc.DTO.LotFiltreDTO;
 import com.madaporc.DTO.LotPorcDTO;
 import com.madaporc.model.LotPorc;
 import com.madaporc.repository.LotPorcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,26 +31,6 @@ public class LotPorcService {
         } else {
             return lotPorcRepository.findByArchivedAtIsNull();
         }
-    }
-
-    public Optional<LotPorc> findLot(Long id) {
-        return lotPorcRepository.findById(id);
-    }
-
-    public String archiverLot(Long lotId) {
-        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
-        if (lotOptional.isPresent()) {
-            LotPorc lot = lotOptional.get();
-            lot.setArchivedAt(LocalDateTime.now());
-            lotPorcRepository.save(lot);
-            return "Lot archivé avec succès";
-        }
-        return "Lot non trouvé";
-    }
-
-    public boolean verifierLotActif(Long lotId) {
-        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
-        return lotOptional.isPresent() && lotOptional.get().getArchivedAt() == null;
     }
 
     public void prepareLotListModel(Model model, String code, Long raceId, Long statutId) {
@@ -94,7 +73,9 @@ public class LotPorcService {
         LotPorc lot = convertirDtoVersEntity(dto);
         lot.setCreatedBy(utilisateurId);
         lot.setCreatedAt(LocalDateTime.now());
-        lot.setNombreMorts(0);
+        if (lot.getNombreMorts() == null) {
+            lot.setNombreMorts(0);
+        }
 
         lotPorcRepository.save(lot);
         return "Lot créé avec succès";
@@ -137,6 +118,21 @@ public class LotPorcService {
 
         lotPorcRepository.save(lot);
         return "Lot modifié avec succès";
+    }
+
+    public String archiverLot(Long lotId) {
+        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
+        if (lotOptional.isPresent()) {
+            LotPorc lot = lotOptional.get();
+            lot.setArchivedAt(LocalDateTime.now());
+            lotPorcRepository.save(lot);
+            return "Lot archivé avec succès";
+        }
+        return "Lot non trouvé";
+    }
+
+    public Optional<LotPorc> findLot(Long id) {
+        return lotPorcRepository.findById(id);
     }
 
     public String verifierCodeUnique(String codeLot, Long idActuel) {
@@ -209,34 +205,13 @@ public class LotPorcService {
         return lot;
     }
 
-    public LotPorcDTO convertirEntityVersDto(LotPorc lot) {
-        LotPorcDTO dto = new LotPorcDTO();
-        dto.setId(lot.getId());
-        dto.setCodeLot(lot.getCodeLot());
-        dto.setTypeEntree(lot.getTypeEntree());
-        dto.setRaceId(lot.getRaceId());
-        dto.setStatutLotId(lot.getStatutLotId());
-        dto.setNombreInitial(lot.getNombreInitial());
-        dto.setNombreActuel(lot.getNombreActuel());
-        dto.setNombreMalesInitial(lot.getNombreMalesInitial());
-        dto.setNombreFellesInitial(lot.getNombreFellesInitial());
-        dto.setNombreMalesActuel(lot.getNombreMalesActuel());
-        dto.setNombreFellesActuel(lot.getNombreFellesActuel());
-        dto.setNombreMorts(lot.getNombreMorts());
-        dto.setDateNaissanceEstimee(lot.getDateNaissanceEstimee());
-        dto.setDateAchat(lot.getDateAchat());
-        dto.setPrixAchatTotal(lot.getPrixAchatTotal());
-        dto.setPoidsMoyenInitialKg(lot.getPoidsMoyenInitialKg());
-        dto.setPoidsMoyenActuelKg(lot.getPoidsMoyenActuelKg());
-        dto.setObservation(lot.getObservation());
-        dto.setCreatedBy(lot.getCreatedBy());
-        dto.setCreatedAt(lot.getCreatedAt());
-        dto.setArchivedAt(lot.getArchivedAt());
-        return dto;
+    public boolean verifierLotActif(Long lotId) {
+        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
+        return lotOptional.isPresent() && lotOptional.get().getArchivedAt() == null;
     }
 
-    public LotDetailDTO getDetailLot(Long id) {
-        Optional<LotPorc> lotOptional = lotPorcRepository.findById(id);
+    public LotDetailDTO getDetailLot(Long lotId) {
+        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
         if (!lotOptional.isPresent()) {
             return null;
         }
@@ -264,7 +239,95 @@ public class LotPorcService {
         detail.setCreatedBy(lot.getCreatedBy());
         detail.setCreatedAt(lot.getCreatedAt());
         detail.setArchivedAt(lot.getArchivedAt());
+        detail.setTauxMortalite(calculerTauxMortalite(lotId));
+        detail.setGmqMoyen(calculerGMQMoyen(lotId));
+        detail.setMouvements(getMouvements(lotId));
+        detail.setPesees(getPesees(lotId));
+        detail.setSuivisSanitaires(getSuivisSanitaires(lotId));
+        detail.setVaccinations(getVaccinations(lotId));
+        detail.setDistributions(getDistributions(lotId));
+        detail.setVentes(getVentes(lotId));
 
         return detail;
+    }
+
+    public List<Object> getMouvements(Long lotId) {
+        return List.of();
+    }
+
+    public List<Object> getPesees(Long lotId) {
+        return List.of();
+    }
+
+    public List<Object> getSuivisSanitaires(Long lotId) {
+        return List.of();
+    }
+
+    public List<Object> getVaccinations(Long lotId) {
+        return List.of();
+    }
+
+    public List<Object> getDistributions(Long lotId) {
+        return List.of();
+    }
+
+    public List<Object> getVentes(Long lotId) {
+        return List.of();
+    }
+
+    public BigDecimal calculerTauxMortalite(Long lotId) {
+        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
+        if (!lotOptional.isPresent()) {
+            return BigDecimal.ZERO;
+        }
+
+        LotPorc lot = lotOptional.get();
+        if (lot.getNombreInitial() == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal nombreMorts = new BigDecimal(lot.getNombreMorts() != null ? lot.getNombreMorts() : 0);
+        BigDecimal nombreInitial = new BigDecimal(lot.getNombreInitial());
+        return nombreMorts.divide(nombreInitial, 4, java.math.RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+    }
+
+    public BigDecimal calculerGMQMoyen(Long lotId) {
+        Optional<LotPorc> lotOptional = lotPorcRepository.findById(lotId);
+        if (!lotOptional.isPresent()) {
+            return BigDecimal.ZERO;
+        }
+
+        LotPorc lot = lotOptional.get();
+        if (lot.getPoidsMoyenInitialKg() == null || lot.getPoidsMoyenActuelKg() == null) {
+            return BigDecimal.ZERO;
+        }
+
+        return lot.getPoidsMoyenActuelKg().subtract(lot.getPoidsMoyenInitialKg());
+    }
+
+    public LotPorcDTO convertirEntityVersDto(LotPorc lot) {
+        LotPorcDTO dto = new LotPorcDTO();
+        dto.setId(lot.getId());
+        dto.setCodeLot(lot.getCodeLot());
+        dto.setTypeEntree(lot.getTypeEntree());
+        dto.setRaceId(lot.getRaceId());
+        dto.setStatutLotId(lot.getStatutLotId());
+        dto.setNombreInitial(lot.getNombreInitial());
+        dto.setNombreActuel(lot.getNombreActuel());
+        dto.setNombreMalesInitial(lot.getNombreMalesInitial());
+        dto.setNombreFellesInitial(lot.getNombreFellesInitial());
+        dto.setNombreMalesActuel(lot.getNombreMalesActuel());
+        dto.setNombreFellesActuel(lot.getNombreFellesActuel());
+        dto.setNombreMorts(lot.getNombreMorts());
+        dto.setDateNaissanceEstimee(lot.getDateNaissanceEstimee());
+        dto.setDateAchat(lot.getDateAchat());
+        dto.setPrixAchatTotal(lot.getPrixAchatTotal());
+        dto.setPoidsMoyenInitialKg(lot.getPoidsMoyenInitialKg());
+        dto.setPoidsMoyenActuelKg(lot.getPoidsMoyenActuelKg());
+        dto.setObservation(lot.getObservation());
+        dto.setCreatedBy(lot.getCreatedBy());
+        dto.setCreatedAt(lot.getCreatedAt());
+        dto.setArchivedAt(lot.getArchivedAt());
+        return dto;
     }
 }

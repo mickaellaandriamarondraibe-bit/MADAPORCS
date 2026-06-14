@@ -13,5 +13,5 @@ public class LotFiltreDTO {
 
     private String code;
     private Long raceId;
-    private Long statutLotId;
+    private Long statutId;
 }

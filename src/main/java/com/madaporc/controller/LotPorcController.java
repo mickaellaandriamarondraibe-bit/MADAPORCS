@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LotPorcController {
@@ -20,7 +19,6 @@ public class LotPorcController {
     @Autowired
     private LotPorcService lotPorcService;
 
-    @GetMapping("/lots")
     public String listLots(@RequestParam(required = false) String code,
                            @RequestParam(required = false) Long raceId,
                            @RequestParam(required = false) Long statutId,
@@ -31,49 +29,42 @@ public class LotPorcController {
         return "lots/listeLots";
     }
 
-    @GetMapping("/lots/form")
-    public String afficherFormulaire(@RequestParam(required = false) Long id,
-                                     @RequestParam(required = false) String typeEntree,
-                                     Model model) {
+    public String showForm(@RequestParam(required = false) Long id,
+                           @RequestParam(required = false) String typeEntree,
+                           Model model) {
         lotPorcService.prepareLotFormModel(model, id, typeEntree);
         model.addAttribute("titre", id != null ? "Modifier un Lot" : "Ajouter un Lot");
         model.addAttribute("pageActive", "lots");
         return "lots/formLot";
     }
 
-    @PostMapping("/lots/save")
-    public String sauvegarderLot(@ModelAttribute LotPorcDTO lotPorcDTO,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
+    public String saveLot(@ModelAttribute LotPorcDTO dto,
+                          Model model,
+                          HttpSession session) {
         Long utilisateurId = (Long) session.getAttribute("utilisateurId");
 
         if (utilisateurId == null) {
-            redirectAttributes.addFlashAttribute("erreur", "Utilisateur non authentifié");
-            return "redirect:/lots";
+            model.addAttribute("erreur", "Utilisateur non authentifié");
+            return "lots/formLot";
         }
 
         String resultat;
-        if (lotPorcDTO.getId() != null) {
-            resultat = lotPorcService.modifier(lotPorcDTO.getId(), lotPorcDTO);
+        if (dto.getId() != null) {
+            resultat = lotPorcService.modifier(dto.getId(), dto);
         } else {
-            resultat = lotPorcService.creer(lotPorcDTO, utilisateurId);
+            resultat = lotPorcService.creer(dto, utilisateurId);
         }
 
         if (resultat.contains("succès")) {
-            redirectAttributes.addFlashAttribute("succes", resultat);
+            model.addAttribute("succes", resultat);
             return "redirect:/lots";
         } else {
-            redirectAttributes.addFlashAttribute("erreur", resultat);
-            if (lotPorcDTO.getId() != null) {
-                return "redirect:/lots/form?id=" + lotPorcDTO.getId();
-            } else {
-                return "redirect:/lots/form";
-            }
+            model.addAttribute("erreur", resultat);
+            return "lots/formLot";
         }
     }
 
-    @GetMapping("/lots/{id}")
-    public String afficherDetailLot(@PathVariable Long id, Model model) {
+    public String detailLot(@PathVariable Long id, Model model) {
         LotDetailDTO detail = lotPorcService.getDetailLot(id);
 
         if (detail == null) {
@@ -84,6 +75,30 @@ public class LotPorcController {
         model.addAttribute("lotDetail", detail);
         model.addAttribute("titre", "Détail du Lot");
         model.addAttribute("pageActive", "lots");
+        model.addAttribute("tabActive", "general");
         return "lots/detailLot";
+    }
+
+    public String detailLotTab(@PathVariable Long id,
+                               @PathVariable String tab,
+                               Model model) {
+        LotDetailDTO detail = lotPorcService.getDetailLot(id);
+
+        if (detail == null) {
+            model.addAttribute("erreur", "Lot non trouvé");
+            return "redirect:/lots";
+        }
+
+        model.addAttribute("lotDetail", detail);
+        model.addAttribute("titre", "Détail du Lot");
+        model.addAttribute("pageActive", "lots");
+        model.addAttribute("tabActive", tab);
+        return "lots/detailLot";
+    }
+
+    public String archiver(@PathVariable Long id, Model model) {
+        String resultat = lotPorcService.archiverLot(id);
+        model.addAttribute("succes", resultat);
+        return "redirect:/lots";
     }
 }
