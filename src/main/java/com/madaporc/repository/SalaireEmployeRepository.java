@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.SalaireEmploye;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.SalaireEmploye;
 
-/**
- * Repository placeholder pour SalaireEmploye.
- * À transformer plus tard en JpaRepository<SalaireEmploye, Long> après création de l'Entity JPA.
- */
-public interface SalaireEmployeRepository {
-}
+    public interface SalaireEmployeRepository extends JpaRepository<SalaireEmploye, Long> {
+
+        List<SalaireEmploye> findByMoisAndAnnee(Integer mois, Integer annee);
+
+    boolean existsByEmployeIdAndMoisAndAnnee(Long employeId, Integer mois, Integer annee);
+    }

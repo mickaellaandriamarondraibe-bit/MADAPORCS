@@ -1,14 +1,17 @@
 package com.madaporc.DTO;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class RapportDTO {
-    private Long id;
+    private RapportFinancierDTO financier;
+
+private RapportSanitaireDTO sanitaire;
+
+private RapportStockDTO stock;
+
+private RapportPresenceDTO presence;
+
+private RapportProductionDTO production;
 }

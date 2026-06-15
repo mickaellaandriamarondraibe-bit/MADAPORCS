@@ -1,10 +1,16 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.Ingredient;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+    import com.madaporc.model.Ingredient;
 
-/**
- * Repository placeholder pour Ingredient.
- * À transformer plus tard en JpaRepository<Ingredient, Long> après création de l'Entity JPA.
- */
-public interface IngredientRepository {
-}
+    public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
+
+        List<Ingredient> findByLibelleContainingIgnoreCase(String libelle);
+
+    List<Ingredient> findByActifTrue();
+
+    @Query("select i from Ingredient i where i.stockActuelKg <= i.seuilMinKg")
+    List<Ingredient> findStocksFaibles();
+    }

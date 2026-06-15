@@ -1,10 +1,9 @@
 package com.madaporc.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.madaporc.model.StatutEmploye;
 
-/**
- * Repository placeholder pour StatutEmploye.
- * À transformer plus tard en JpaRepository<StatutEmploye, Long> après création de l'Entity JPA.
- */
-public interface StatutEmployeRepository {
+public interface StatutEmployeRepository extends JpaRepository<StatutEmploye, Long> {
+
+
 }

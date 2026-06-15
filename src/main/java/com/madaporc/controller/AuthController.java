@@ -1,28 +1,39 @@
 package com.madaporc.controller;
 
-import com.madaporc.DTO.LoginDTO;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+import com.madaporc.DTO.LoginDTO;
+import com.madaporc.service.AuthService;
 
 @Controller
 public class AuthController {
+    private final AuthService service;
+
+    public AuthController(AuthService service) {
+        this.service = service;
+    }
 
     @GetMapping("/login")
     public String showLogin(Model model) {
-        model.addAttribute("titre", "Connexion - MADAPORC / GestPorc");
-        model.addAttribute("referenceFigma", "Connexion - MADAPORC / GestPorc");
-        model.addAttribute("controllerName", "AuthController");
-        model.addAttribute("methodName", "showLogin");
-        model.addAttribute("route", "/login");
-        return "placeholder";
+        model.addAttribute("loginDTO", new LoginDTO());
+        return "login";
     }
 
+    @PostMapping("/login")
+    public String login(@ModelAttribute LoginDTO dto, Model model, HttpSession session) {
+        String e = service.connecter(dto, session);
+        if (e != null) {
+            model.addAttribute("erreur", e);
+            return "login";
+        }
+        return "redirect:/dashboard";
+    }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 }

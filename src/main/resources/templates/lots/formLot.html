@@ -2,20 +2,44 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ajouter un Lot - Naissance / Achat - MADAPORC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Liste des Lots - GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Ajouter un Lot - Naissance / Achat - MADAPORC</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Ajouter un Lot - Naissance / Achat - MADAPORC
-        </div>
-        <p>Vue réservée selon le PDF : <strong>lots/formLot</strong>.</p>
-    </div>
-</main>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="content">
+        <header class="app-header">
+            <div>
+                <div class="eyebrow">MADAPORC / Production</div>
+                <h1>Formulaire Liste des Lots - GestPorc</h1>
+                <p class="page-subtitle">Formulaire conforme au style Figma : simple, lisible et professionnel.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" th:href="@{/lots}">Retour</a>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Informations</h2>
+                    <p>Complétez les champs nécessaires puis enregistrez.</p>
+                </div>
+            </div>
+
+            <form method="post" th:action="@{/lots/save}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Code lot</label><input type="text" name="codeLot" placeholder="Code lot"></div><div class="form-group"><label>Race</label><select name="raceId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Statut</label><select name="statutLotId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Nombre initial</label><input type="number" name="nombreInitial" placeholder="Nombre initial"></div><div class="form-group"><label>Nombre actuel</label><input type="number" name="nombreActuel" placeholder="Nombre actuel"></div><div class="form-group"><label>Date naissance / achat</label><input type="date" name="dateEntree" placeholder="Date naissance / achat"></div><div class="form-group"><label>Poids moyen initial</label><input type="number" name="poidsMoyenInitialKg" placeholder="Poids moyen initial"></div><div class="form-group"><label>Observation</label><textarea name="observation" placeholder="Observation"></textarea></div>
+                </div>
+                <div class="actions" style="margin-top:22px">
+                    <button type="submit" class="btn">Enregistrer</button>
+                    <a class="btn btn-secondary" th:href="@{/lots}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
 </body>
 </html>

@@ -1,28 +1,44 @@
 package com.madaporc.DTO;
 
-import java.math.BigDecimal;
+    import java.math.BigDecimal;
 import java.time.LocalDate;
-import lombok.Getter;
-import lombok.Setter;
+    import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
-public class LotPorcDTO {
-    private Long id;
-    private String typeEntree;
+    @Data
+    public class LotPorcDTO {
+        private Long id;
+
     private String codeLot;
+
+    private String typeEntree;
+
     private Long raceId;
+
     private Long statutLotId;
-    private Integer nombreMalesInitial;
-    private Integer nombreFemellesInitial;
+
     private Integer nombreInitial;
+
     private Integer nombreActuel;
+
+    private Integer nombreMalesInitial;
+
+    private Integer nombreFemellesInitial;
+
+    private Integer nombreMalesActuel;
+
+    private Integer nombreFemellesActuel;
+
+    private Integer nombreMorts;
+
     private LocalDate dateNaissanceEstimee;
+
     private LocalDate dateAchat;
+
     private BigDecimal prixAchatTotal;
+
     private BigDecimal poidsMoyenInitialKg;
+
+    private BigDecimal poidsMoyenActuelKg;
+
     private String observation;
-}
+    }

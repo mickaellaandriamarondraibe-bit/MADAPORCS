@@ -2,20 +2,41 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Paiements et Factures - MADAPORC / GestPorc</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Paiements et Factures - GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Paiements et Factures - MADAPORC / GestPorc</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Paiements et Factures - MADAPORC / GestPorc
-        </div>
-        <p>Vue réservée selon le PDF : <strong>commerce/factureDetail</strong>.</p>
-    </div>
-</main>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="content">
+        <header class="app-header">
+            <div>
+                <div class="eyebrow">MADAPORC / Commerce</div>
+                <h1>Détail Paiements et Factures - GestPorc</h1>
+                <p class="page-subtitle">Vue détail avec informations générales, historique et actions rapides.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" th:href="@{/factures}">Retour</a>
+                <a class="btn" th:href="@{/factures/form}">Modifier</a>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:24px">Actif</div><div class="stat-note">Mis à jour</div></div>
+            <div class="stat-card"><div class="stat-label">Référence</div><div class="stat-value" style="font-size:24px">MAD-001</div><div class="stat-note">Code interne</div></div>
+            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="font-size:24px">24</div><div class="stat-note">Données</div></div>
+            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value" style="font-size:24px">0</div><div class="stat-note">Normal</div></div>
+        </section>
+
+        <section class="card">
+            <div class="card-header"><div><h2>Informations générales</h2><p>Détails principaux du module.</p></div></div>
+            <div class="grid grid-2">
+                <div class="panel"><h3>Identification</h3><p><strong>Code :</strong> MAD-001</p><p><strong>Libellé :</strong> Donnée exemple</p></div>
+                <div class="panel"><h3>Observations</h3><p>Cette page est prête à recevoir les données du contrôleur.</p></div>
+            </div>
+        </section>
+    </main>
+</div>
 </body>
 </html>

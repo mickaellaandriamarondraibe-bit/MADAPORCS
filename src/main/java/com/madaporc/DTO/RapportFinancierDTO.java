@@ -1,14 +1,16 @@
 package com.madaporc.DTO;
 
+import java.math.BigDecimal;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class RapportFinancierDTO {
-    private Long id;
-}
+
+    private BigDecimal totalVentes;
+    private BigDecimal totalDepenses;
+    private BigDecimal beneficeNet;
+
+    private long nombreVentes;
+    private long nombreDepenses;
+}   

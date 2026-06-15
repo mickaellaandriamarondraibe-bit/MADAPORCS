@@ -1,132 +1,152 @@
 package com.madaporc.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
 import com.madaporc.DTO.TraitementDTO;
 import com.madaporc.model.Traitement;
-import com.madaporc.model.Maladie;
-import com.madaporc.repository.TraitementRepository;
 import com.madaporc.repository.MaladieRepository;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.madaporc.repository.TraitementRepository;
 
-/**
- * Service pour la gestion des traitements.
- */
 @Service
-@RequiredArgsConstructor
-@Transactional
 public class TraitementService {
 
     private final TraitementRepository traitementRepository;
     private final MaladieRepository maladieRepository;
 
-    /**
-     * Récupère tous les traitements actifs.
-     */
-    public List<Traitement> findAllTraitementsActifs() {
-        return traitementRepository.findByActifTrue();
+    public TraitementService(
+            TraitementRepository traitementRepository,
+            MaladieRepository maladieRepository
+    ) {
+        this.traitementRepository = traitementRepository;
+        this.maladieRepository = maladieRepository;
     }
 
-    /**
-     * Récupère tous les traitements.
-     */
-    public List<Traitement> findAllTraitements() {
+    public List<Traitement> rechercherTraitements(Long maladieId, String motCle) {
+        if (maladieId != null) {
+            return traitementRepository.findByMaladieId(maladieId);
+        }
+
+        if (motCle != null && !motCle.isBlank()) {
+            return traitementRepository.findByLibelleContainingIgnoreCase(motCle);
+        }
+
         return traitementRepository.findAll();
     }
 
-    /**
-     * Crée un nouveau traitement.
-     */
+    public void prepareTraitementFormModel(Model model, Long id) {
+        TraitementDTO dto = new TraitementDTO();
+
+        if (id != null) {
+            traitementRepository.findById(id).ifPresent(traitement -> {
+                dto.setId(traitement.getId());
+                dto.setMaladieId(traitement.getMaladieId());
+                dto.setLibelle(traitement.getLibelle());
+                dto.setPrix(traitement.getPrix());
+                dto.setDureeGuerisonJours(traitement.getDureeGuerisonJours());
+                dto.setDescription(traitement.getDescription());
+            });
+        }
+
+        model.addAttribute("traitement", dto);
+        model.addAttribute("maladies", maladieRepository.findAll());
+    }
+
     public String creer(TraitementDTO dto) {
-        Traitement traitement = new Traitement();
-        mapperDTOToEntity(dto, traitement);
+        String erreur = validerTraitement(dto);
+
+        if (erreur != null) {
+            return erreur;
+        }
+
+        Traitement traitement = convertirDtoVersEntity(dto);
+
+        if (traitement.getActif() == null) {
+            traitement.setActif(true);
+        }
+
         traitementRepository.save(traitement);
-        return "Traitement créé avec succès";
+
+        return null;
     }
 
-    /**
-     * Modifie un traitement existant.
-     */
     public String modifier(Long id, TraitementDTO dto) {
-        Traitement traitement = traitementRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Traitement non trouvé"));
-        mapperDTOToEntity(dto, traitement);
-        traitement.setDateModification(LocalDateTime.now());
+        if (id == null) {
+            return "Identifiant traitement invalide.";
+        }
+
+        if (!traitementRepository.existsById(id)) {
+            return "Traitement introuvable.";
+        }
+
+        String erreur = validerTraitement(dto);
+
+        if (erreur != null) {
+            return erreur;
+        }
+
+        Traitement traitement = convertirDtoVersEntity(dto);
+        traitement.setId(id);
+
         traitementRepository.save(traitement);
-        return "Traitement modifié avec succès";
+
+        return null;
     }
 
-    /**
-     * Désactive un traitement.
-     */
     public String desactiverTraitement(Long id) {
-        Traitement traitement = traitementRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Traitement non trouvé"));
+        Traitement traitement = traitementRepository.findById(id).orElse(null);
+
+        if (traitement == null) {
+            return "Traitement introuvable.";
+        }
+
         traitement.setActif(false);
-        traitement.setDateModification(LocalDateTime.now());
         traitementRepository.save(traitement);
-        return "Traitement désactivé avec succès";
+
+        return null;
     }
 
-    /**
-     * Recherche des traitements par mot-clé.
-     */
-    public List<Traitement> rechercherTraitements(String motCle) {
-        return traitementRepository.rechercherParMotCle(motCle);
+    public String validerTraitement(TraitementDTO dto) {
+        if (dto == null) {
+            return "Traitement obligatoire.";
+        }
+
+        if (dto.getMaladieId() == null) {
+            return "Maladie obligatoire.";
+        }
+
+        if (!maladieRepository.existsById(dto.getMaladieId())) {
+            return "Maladie introuvable.";
+        }
+
+        if (dto.getLibelle() == null || dto.getLibelle().isBlank()) {
+            return "Libellé obligatoire.";
+        }
+
+        if (dto.getPrix() != null && dto.getPrix().compareTo(BigDecimal.ZERO) < 0) {
+            return "Le prix ne peut pas être négatif.";
+        }
+
+        if (dto.getDureeGuerisonJours() != null && dto.getDureeGuerisonJours() < 0) {
+            return "La durée de guérison ne peut pas être négative.";
+        }
+
+        return null;
     }
 
-    /**
-     * Récupère les traitements pour une maladie donnée.
-     */
-    public List<Traitement> findTraitementsByMaladie(Long maladieId) {
-        return traitementRepository.findByMaladieId(maladieId);
-    }
+    private Traitement convertirDtoVersEntity(TraitementDTO dto) {
+        Traitement traitement = new Traitement();
 
-    /**
-     * Calcule le coût total des traitements.
-     */
-    public BigDecimal calculerCoutTotalTraitements() {
-        return traitementRepository.findByActifTrue().stream()
-            .map(t -> t.getPrixUnite() != null ? t.getPrixUnite() : BigDecimal.ZERO)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
-     * Obtient un traitement par ID.
-     */
-    public Traitement findById(Long id) {
-        return traitementRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Traitement non trouvé"));
-    }
-
-    /**
-     * Compte les traitements actifs.
-     */
-    public long compterTraitementsActifs() {
-        return traitementRepository.findByActifTrue().size();
-    }
-
-    private void mapperDTOToEntity(TraitementDTO dto, Traitement traitement) {
+        traitement.setId(dto.getId());
+        traitement.setMaladieId(dto.getMaladieId());
         traitement.setLibelle(dto.getLibelle());
+        traitement.setPrix(dto.getPrix());
+        traitement.setDureeGuerisonJours(dto.getDureeGuerisonJours());
         traitement.setDescription(dto.getDescription());
-        
-        if (dto.getMaladieId() != null) {
-            Maladie maladie = maladieRepository.findById(dto.getMaladieId())
-                .orElseThrow(() -> new RuntimeException("Maladie non trouvée"));
-            traitement.setMaladie(maladie);
-        }
-        
-        traitement.setPrincipe(dto.getPrincipe());
-        traitement.setDosageMl(dto.getDosageMl());
-        traitement.setFrequenceJours(dto.getFrequenceJours());
-        traitement.setPrixUnite(dto.getPrixUnite());
-        traitement.setNombreJoursTraitement(dto.getNombreJoursTraitement());
-        
-        if (dto.getActif() != null) {
-            traitement.setActif(dto.getActif());
-        }
+
+        return traitement;
     }
 }

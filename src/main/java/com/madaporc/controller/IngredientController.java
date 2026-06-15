@@ -1,28 +1,65 @@
 package com.madaporc.controller;
 
-import com.madaporc.DTO.IngredientDTO;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import com.madaporc.DTO.IngredientDTO;
+import com.madaporc.service.IngredientService;
 
 @Controller
+@RequestMapping("/ingredients")
 public class IngredientController {
 
-    @GetMapping("/ingredients")
-    public String listIngredients(@RequestParam(required=false) String motCle, Model model) {
-        model.addAttribute("titre", "Gestion des Ingredients - MADAPORC / GestPorc");
-        model.addAttribute("referenceFigma", "Gestion des Ingredients - MADAPORC / GestPorc");
-        model.addAttribute("controllerName", "IngredientController");
-        model.addAttribute("methodName", "listIngredients");
-        model.addAttribute("route", "/ingredients");
-        return "placeholder";
+    private final IngredientService ingredientService;
+
+    public IngredientController(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
     }
 
+    @GetMapping
+    public String liste(
+            @RequestParam(required = false) String motCle,
+            @RequestParam(required = false) Boolean actif,
+            Model model
+    ) {
+        model.addAttribute("ingredients", ingredientService.rechercherIngredients(motCle));
+        model.addAttribute("motCle", motCle);
+        model.addAttribute("actif", actif);
 
+        return "ingredients/list";
+    }
+
+    @GetMapping("/form")
+    public String form(
+            @RequestParam(required = false) Long id,
+            Model model
+    ) {
+        ingredientService.prepareIngredientFormModel(model, id);
+        return "ingredients/form";
+    }
+
+    @PostMapping("/save")
+    public String save(
+            @ModelAttribute("ingredient") IngredientDTO dto,
+            Model model
+    ) {
+        String erreur = dto.getId() == null
+                ? ingredientService.creer(dto)
+                : ingredientService.modifier(dto.getId(), dto);
+
+        if (erreur != null) {
+            model.addAttribute("erreur", erreur);
+            model.addAttribute("ingredient", dto);
+            return "ingredients/form";
+        }
+
+        return "redirect:/ingredients";
+    }
+
+    @GetMapping("/desactiver/{id}")
+    public String desactiver(@PathVariable Long id) {
+        ingredientService.desactiverIngredient(id);
+        return "redirect:/ingredients";
+    }
 }

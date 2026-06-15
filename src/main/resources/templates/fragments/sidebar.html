@@ -1,45 +1,58 @@
 <div th:fragment="sidebar" class="sidebar">
-    <h2>MADAPORC</h2>
-    <small>Strict PDF placeholders</small>
+    <div class="brand">
+        <div class="brand-mark">🐖</div>
+        <div>
+            <div class="brand-title">MADAPORC</div>
+            <div class="brand-subtitle">GestPorc • Gestion d'élevage</div>
+        </div>
+    </div>
 
     <nav>
-        <a th:href="@{/login}">Connexion</a>
-        <a th:href="@{/dashboard}">Tableau de bord</a>
+        <div class="nav-section">Accueil</div>
+        <a class="nav-link" th:href="@{/dashboard}"><span class="nav-icon">📊</span>Tableau de bord</a>
 
-        <span>Production</span>
-        <a th:href="@{/lots}">Lots</a>
-        <a th:href="@{/cycles}">Cycles</a>
+        <div class="nav-section">Production</div>
+        <a class="nav-link" th:href="@{/lots}"><span class="nav-icon">🐷</span>Lots de porcs</a>
+        <a class="nav-link" th:href="@{/lots/mouvements}"><span class="nav-icon">↔️</span>Mouvements lots</a>
+        <a class="nav-link" th:href="@{/lots/pesees}"><span class="nav-icon">⚖️</span>Pesées</a>
+        <a class="nav-link" th:href="@{/cycles}"><span class="nav-icon">🔁</span>Cycles</a>
 
-        <span>Reproduction</span>
-        <a th:href="@{/reproducteurs}">Reproducteurs</a>
-        <a th:href="@{/reproduction/evenements}">Événements</a>
+        <div class="nav-section">Reproduction</div>
+        <a class="nav-link" th:href="@{/reproducteurs}"><span class="nav-icon">🐗</span>Reproducteurs</a>
+        <a class="nav-link" th:href="@{/reproduction/evenements}"><span class="nav-icon">🧬</span>Événements</a>
 
-        <span>Commerce</span>
-        <a th:href="@{/clients}">Clients</a>
-        <a th:href="@{/ventes}">Ventes</a>
+        <div class="nav-section">Commerce</div>
+        <a class="nav-link" th:href="@{/clients}"><span class="nav-icon">👥</span>Clients</a>
+        <a class="nav-link" th:href="@{/ventes}"><span class="nav-icon">💳</span>Ventes</a>
+        <a class="nav-link" th:href="@{/factures/1}"><span class="nav-icon">🧾</span>Factures</a>
+        <a class="nav-link" th:href="@{/depenses}"><span class="nav-icon">💸</span>Dépenses</a>
 
-        <span>Finances</span>
-        <a th:href="@{/depenses}">Dépenses</a>
+        <div class="nav-section">Ressources</div>
+        <a class="nav-link" th:href="@{/ingredients}"><span class="nav-icon">🌾</span>Ingrédients</a>
+        <a class="nav-link" th:href="@{/stocks/mouvements}"><span class="nav-icon">📦</span>Mouvements stock</a>
+        <a class="nav-link" th:href="@{/melanges}"><span class="nav-icon">🥣</span>Mélanges</a>
+        <a class="nav-link" th:href="@{/distributions}"><span class="nav-icon">🚚</span>Distributions</a>
 
-        <span>Ressources</span>
-        <a th:href="@{/ingredients}">Ingrédients</a>
-        <a th:href="@{/stocks/mouvements}">Mouvements stock</a>
-        <a th:href="@{/melanges}">Mélanges</a>
-        <a th:href="@{/distributions}">Distributions</a>
+        <div class="nav-section">Santé</div>
+        <a class="nav-link" th:href="@{/vaccins}"><span class="nav-icon">💉</span>Vaccins</a>
+        <a class="nav-link" th:href="@{/vaccinations}"><span class="nav-icon">📅</span>Vaccinations</a>
+        <a class="nav-link" th:href="@{/sante/suivis}"><span class="nav-icon">🩺</span>Suivi sanitaire</a>
+        <a class="nav-link" th:href="@{/maladies}"><span class="nav-icon">🦠</span>Maladies</a>
+        <a class="nav-link" th:href="@{/traitements}"><span class="nav-icon">💊</span>Traitements</a>
 
-        <span>Santé</span>
-        <a th:href="@{/vaccins}">Vaccins</a>
-        <a th:href="@{/vaccinations}">Vaccinations</a>
-        <a th:href="@{/sante/suivis}">Suivi sanitaire</a>
+        <div class="nav-section">Personnel</div>
+        <a class="nav-link" th:href="@{/employes}"><span class="nav-icon">🧑‍🌾</span>Employés</a>
+        <a class="nav-link" th:href="@{/presences}"><span class="nav-icon">🕘</span>Présences</a>
+        <a class="nav-link" th:href="@{/salaires}"><span class="nav-icon">💰</span>Salaires</a>
 
-        <span>Personnel</span>
-        <a th:href="@{/employes}">Employés</a>
-        <a th:href="@{/presences}">Présences</a>
-        <a th:href="@{/salaires}">Salaires</a>
-
-        <span>Paramètres</span>
-        <a th:href="@{/rapports}">Rapports</a>
-        <a th:href="@{/profil}">Profil</a>
-        <a th:href="@{/utilisateurs}">Utilisateurs</a>
+        <div class="nav-section">Administration</div>
+        <a class="nav-link" th:href="@{/rapports}"><span class="nav-icon">📈</span>Rapports</a>
+        <a class="nav-link" th:href="@{/profil}"><span class="nav-icon">👤</span>Profil</a>
+        <a class="nav-link" th:href="@{/utilisateurs}"><span class="nav-icon">🔐</span>Utilisateurs</a>
+        <a class="nav-link" th:href="@{/roles/permissions}"><span class="nav-icon">🛡️</span>Rôles & permissions</a>
     </nav>
+
+    <div class="sidebar-footer">
+        Interface alignée sur la maquette Figma : vert agriculture, fond clair, cartes, tableaux et formulaires.
+    </div>
 </div>

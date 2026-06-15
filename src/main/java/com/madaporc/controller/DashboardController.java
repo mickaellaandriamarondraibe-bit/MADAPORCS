@@ -1,26 +1,24 @@
 package com.madaporc.controller;
 
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import com.madaporc.service.DashboardService;
 
 @Controller
 public class DashboardController {
+    private final DashboardService service;
+
+    public DashboardController(DashboardService service) {
+        this.service = service;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {
-        model.addAttribute("titre", "Tableau de bord - MADAPORC / GestPorc");
-        model.addAttribute("referenceFigma", "Tableau de bord - MADAPORC / GestPorc");
-        model.addAttribute("controllerName", "DashboardController");
-        model.addAttribute("methodName", "dashboard");
-        model.addAttribute("route", "/dashboard");
-        return "placeholder";
+        model.addAttribute("dashboard", service.getDashboard(LocalDate.now().withDayOfMonth(1), LocalDate.now()));
+        return "dashboard/index";
     }
-
 }
+    

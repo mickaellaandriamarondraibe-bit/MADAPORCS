@@ -2,22 +2,32 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion - MADAPORC / GestPorc</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
-    <link rel="stylesheet" th:href="@{/css/material-symbols.css}">
+    <title>Connexion - MADAPORC</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Connexion - MADAPORC / GestPorc</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Connexion - MADAPORC / GestPorc
+<div class="login-page">
+    <section class="login-hero">
+        <div class="brand" style="border-bottom:0;padding:0;margin-bottom:30px">
+            <div class="brand-mark">🐖</div>
+            <div>
+                <div class="brand-title">MADAPORC</div>
+                <div class="brand-subtitle">GestPorc • Gestion professionnelle de porcherie</div>
+            </div>
         </div>
-        <p>Vue réservée selon le PDF : <strong>login</strong>.</p>
-    </div>
-</main>
+        <h1>Gestion professionnelle de porcherie</h1>
+        <p>Suivez les lots, la production, les ventes, les stocks, la santé, le personnel et les rapports depuis une interface claire.</p>
+    </section>
+    <section class="login-box">
+        <form class="login-card" method="post" th:action="@{/login}">
+            <h2>Connexion</h2>
+            <p class="page-subtitle">Accédez à votre espace MADAPORC.</p>
+            <div class="form-group"><label>Email</label><input type="email" name="email" placeholder="exemple@email.com"></div>
+            <div class="form-group"><label>Mot de passe</label><input type="password" name="motDePasse" placeholder="••••••••"></div>
+            <div th:if="${erreur}" class="badge badge-red" th:text="${erreur}">Erreur</div>
+            <button type="submit" class="btn" style="width:100%;margin-top:16px">Se connecter</button>
+        </form>
+    </section>
+</div>
 </body>
 </html>

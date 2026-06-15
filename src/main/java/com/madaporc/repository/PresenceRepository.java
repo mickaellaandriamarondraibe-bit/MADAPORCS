@@ -1,10 +1,19 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.Presence;
+    import java.time.LocalDate;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.Presence;
 
-/**
- * Repository placeholder pour Presence.
- * À transformer plus tard en JpaRepository<Presence, Long> après création de l'Entity JPA.
- */
-public interface PresenceRepository {
-}
+    public interface PresenceRepository extends JpaRepository<Presence, Long> {
+
+        List<Presence> findByDatePresence(LocalDate datePresence);
+
+    boolean existsByEmployeIdAndDatePresence(Long employeId, LocalDate datePresence);
+
+    List<Presence> findByEmployeIdAndDatePresenceBetween(Long employeId, LocalDate debut, LocalDate fin);
+
+    List<Presence> findByDatePresenceBetween(LocalDate debut, LocalDate fin);
+
+    long countByDatePresence(LocalDate datePresence);
+    }

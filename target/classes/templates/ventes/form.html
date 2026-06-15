@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Gestion des Ventes - GestPorc</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="content">
+        <header class="app-header">
+            <div>
+                <div class="eyebrow">MADAPORC / Commerce</div>
+                <h1>Formulaire Gestion des Ventes - GestPorc</h1>
+                <p class="page-subtitle">Formulaire conforme au style Figma : simple, lisible et professionnel.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" th:href="@{/ventes}">Retour</a>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Informations</h2>
+                    <p>Complétez les champs nécessaires puis enregistrez.</p>
+                </div>
+            </div>
+
+            <form method="post" th:action="@{/ventes/save}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Client</label><select name="clientId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Date vente</label><input type="datetime-local" name="dateVente" placeholder="Date vente"></div><div class="form-group"><label>Statut</label><select name="statutVente"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Observation</label><textarea name="observation" placeholder="Observation"></textarea></div>
+                </div>
+                <div class="actions" style="margin-top:22px">
+                    <button type="submit" class="btn">Enregistrer</button>
+                    <a class="btn btn-secondary" th:href="@{/ventes}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

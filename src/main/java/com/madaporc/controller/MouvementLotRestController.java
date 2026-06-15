@@ -1,27 +1,43 @@
 package com.madaporc.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import com.madaporc.DTO.LotPorcDTO;
-import com.madaporc.model.LotPorc;
-import com.madaporc.service.LotPorcService;
-import com.madaporc.repository.LotPorcRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
 
-@Controller
-@RequestMapping("/api/lots/mouvements")
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.madaporc.DTO.MouvementLotDTO;
+import com.madaporc.service.MouvementLotService;
+
+import jakarta.servlet.http.HttpSession;
+
+@RestController
+@RequestMapping("/api/lots")
 public class MouvementLotRestController {
-    @Autowired
-    private LotPorcService lotPorcService;
-    @Autowired
-    private LotPorcRepository lotPorcRepository;
-    
-    @GetMapping("/{lotPorcId}")
-    public LotPorcDTO getLotPorc(@PathVariable Long lotPorcId) {
-        LotPorc lotPorc = lotPorcRepository.findById(lotPorcId).orElse(null);
-        LotPorcDTO dto = lotPorcService.convertToDTO(lotPorc);
-        return dto;
+
+    private final MouvementLotService mouvementLotService;
+
+    public MouvementLotRestController(MouvementLotService mouvementLotService) {
+        this.mouvementLotService = mouvementLotService;
+    }
+
+    @GetMapping("/{lotId}/mouvements")
+    public ResponseEntity<?> lister(@PathVariable Long lotId) {
+        return ResponseEntity.ok(mouvementLotService.findMouvements(lotId));
+    }
+
+    @PostMapping("/mouvements")
+    public ResponseEntity<?> ajouter(
+            @RequestBody MouvementLotDTO dto,
+            HttpSession session
+    ) {
+        Long utilisateurId = (Long) session.getAttribute("userId");
+
+        String erreur = mouvementLotService.ajouterMouvement(dto, utilisateurId);
+
+        if (erreur != null) {
+            return ResponseEntity.badRequest().body(Map.of("erreur", erreur));
+        }
+
+        return ResponseEntity.ok(Map.of("message", "Mouvement enregistré avec succès."));
     }
 }

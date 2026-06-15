@@ -1,14 +1,37 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+    import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+    import lombok.Data;
 
-/**
- * Model placeholder pour la table ventes.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
-public class Vente {
-    private Long id;
-}
+    @Data
+    @Entity
+    @Table(name = "ventes")
+    public class Vente {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+
+        @Column(name = "client_id")
+    private Long clientId;
+
+    @Column(name = "date_vente")
+    private LocalDateTime dateVente;
+
+    @Column(name = "montant_total")
+    private BigDecimal montantTotal;
+
+    @Column(name = "statut_vente")
+    private String statutVente;
+
+    @Column(name = "observation")
+    private String observation;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    }

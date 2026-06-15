@@ -1,19 +1,19 @@
 package com.madaporc.DTO;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class UtilisateurDTO {
     private Long id;
-    private String nom;
-    private String email;
-    private String motDePasse;
-    private Long roleId;
-    private Long statutUtilisateurId;
+
+private String nom;
+
+private String email;
+
+private String motDePasse;
+
+private Long roleId;
+
+private Long statutUtilisateurId;
 }

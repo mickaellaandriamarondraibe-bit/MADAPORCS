@@ -1,16 +1,13 @@
 package com.madaporc.DTO;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class ChangerMotDePasseDTO {
     private String ancienMotDePasse;
-    private String nouveauMotDePasse;
-    private String confirmation;
+
+private String nouveauMotDePasse;
+
+private String confirmation;
 }

@@ -1,14 +1,17 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Data;
 
-/**
- * Model placeholder pour la table type_mouvements_stock.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "type_mouvements_stock")
 public class TypeMouvementStock {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "libelle")
+    private String libelle;
 }

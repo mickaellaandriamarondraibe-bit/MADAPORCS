@@ -1,14 +1,27 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+    import jakarta.persistence.*;
+import java.math.BigDecimal;
+    import lombok.Data;
 
-/**
- * Model placeholder pour la table melange_ingredients.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
-public class MelangeIngredient {
-    private Long id;
-}
+    @Data
+    @Entity
+    @Table(name = "melange_ingredients")
+    public class MelangeIngredient {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+
+        @Column(name = "melange_id")
+    private Long melangeId;
+
+    @Column(name = "ingredient_id")
+    private Long ingredientId;
+
+    @Column(name = "quantite_kg")
+    private BigDecimal quantiteKg;
+
+    @Column(name = "pourcentage")
+    private BigDecimal pourcentage;
+    }

@@ -1,10 +1,9 @@
 package com.madaporc.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.madaporc.model.CategorieDepense;
 
-/**
- * Repository placeholder pour CategorieDepense.
- * À transformer plus tard en JpaRepository<CategorieDepense, Long> après création de l'Entity JPA.
- */
-public interface CategorieDepenseRepository {
+public interface CategorieDepenseRepository extends JpaRepository<CategorieDepense, Long> {
+
+
 }

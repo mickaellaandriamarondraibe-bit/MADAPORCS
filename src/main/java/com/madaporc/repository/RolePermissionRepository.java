@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.RolePermission;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.RolePermission;
 
-/**
- * Repository placeholder pour RolePermission.
- * À transformer plus tard en JpaRepository<RolePermission, Long> après création de l'Entity JPA.
- */
-public interface RolePermissionRepository {
-}
+    public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
+
+        List<RolePermission> findByRoleId(Long roleId);
+
+    void deleteByRoleId(Long roleId);
+    }

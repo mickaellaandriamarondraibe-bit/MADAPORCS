@@ -2,53 +2,44 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${titre}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Mouvements des Lots - GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-    <script th:src="@{/js/save-verification.js}"></script>
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<main class="content">
-    <div class="placeholder-card">
-        <form action="" th:object="${mouvementLotPorc}" method="post">
-            <input type="hidden" th:field="*{lotPorcId}" th:value="${lotPorcId}" id="lotPorcId">
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="content">
+        <header class="app-header">
+            <div>
+                <div class="eyebrow">MADAPORC / Production</div>
+                <h1>Formulaire Mouvements des Lots - GestPorc</h1>
+                <p class="page-subtitle">Formulaire conforme au style Figma : simple, lisible et professionnel.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" th:href="@{/lots/mouvements}">Retour</a>
+            </div>
+        </header>
 
-            <input type="hidden" th:field="*{id}">
-            
-            <label for="type_mouvement">Type du mouvement:</label>
-            <select id="type_mouvement" th:field="*{typeMouvementLotId}">
-                <option th:each="typeMouvement : ${typesMouvements}" 
-                        th:text="${typeMouvement.libelle}"
-                        th:value="${typeMouvement.id}"
-                        th:selected="${typeMouvement.id == mouvementLotPorc.typeMouvementLotId}"></option>
-            </select>
-            <br><br>
-            
-            <label for="qtt_male">Nombre de mâle:</label>
-            <input type="number" th:field="*{quantiteMale}" id="qtt_male">
-            
-            <div id="qtt_male_error"></div>
-            <br><br>
-            
-            <label for="qtt_femelle">Nombre de femelle:</label>
-            <input type="number" th:field="*{quantiteFemelle}" id="qtt_femelle">
+        <section class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Informations</h2>
+                    <p>Complétez les champs nécessaires puis enregistrez.</p>
+                </div>
+            </div>
 
-            <div id="qtt_femelle_error"></div>
-            <br><br>
-            
-            <div id="qtt_error"></div>
-
-            <label for="dateMvt">Date du mouvement:</label>
-            <input type="datetime-local" th:field="*{dateMouvement}">
-            <br><br>
-            
-            <label for="motif">Motif du mouvement:</label>
-            <textarea id="motif" th:field="*{motif}" th:value="${mouvementLotPorc.motif}"></textarea>
-            <br><br>
-            
-            <button type="submit" id="save-btn">Enregistrer le mouvement</button>
-        </form>
-    </div>
-</main>
+            <form method="post" th:action="@{/lots/mouvements/save}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Lot</label><select name="lotPorcId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Type mouvement</label><select name="typeMouvementLotId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Quantité</label><input type="number" name="quantite" placeholder="Quantité"></div><div class="form-group"><label>Date mouvement</label><input type="datetime-local" name="dateMouvement" placeholder="Date mouvement"></div><div class="form-group"><label>Motif</label><textarea name="motif" placeholder="Motif"></textarea></div>
+                </div>
+                <div class="actions" style="margin-top:22px">
+                    <button type="submit" class="btn">Enregistrer</button>
+                    <a class="btn btn-secondary" th:href="@{/lots/mouvements}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
 </body>
 </html>

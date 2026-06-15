@@ -1,14 +1,11 @@
 package com.madaporc.DTO;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class ReproducteurDetailDTO {
     private Long id;
+
+private String codeReproducteur;
 }

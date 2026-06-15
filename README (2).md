@@ -19,7 +19,7 @@ Les seuls fichiers ajoutés hors PDF sont les fichiers techniques obligatoires d
 - `application.properties`
 - `.gitignore`
 - `README.md`
-- `static/css/app.css`
+- `@{/css/app.css}`
 - `templates/placeholder.html`
 - `templates/fragments/sidebar.html`
 - `docs/CONFORMITE_PDF.md`

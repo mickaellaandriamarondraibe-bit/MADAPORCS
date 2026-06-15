@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.DistributionAliment;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.DistributionAliment;
 
-/**
- * Repository placeholder pour DistributionAliment.
- * À transformer plus tard en JpaRepository<DistributionAliment, Long> après création de l'Entity JPA.
- */
-public interface DistributionAlimentRepository {
-}
+    public interface DistributionAlimentRepository extends JpaRepository<DistributionAliment, Long> {
+
+        List<DistributionAliment> findAllByOrderByDateDistributionDesc();
+
+    List<DistributionAliment> findByLotPorcId(Long lotPorcId);
+    }

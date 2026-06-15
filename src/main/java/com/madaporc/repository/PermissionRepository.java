@@ -1,10 +1,13 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.Permission;
+    import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.Permission;
 
-/**
- * Repository placeholder pour Permission.
- * À transformer plus tard en JpaRepository<Permission, Long> après création de l'Entity JPA.
- */
-public interface PermissionRepository {
-}
+    public interface PermissionRepository extends JpaRepository<Permission, Long> {
+
+        Optional<Permission> findByCode(String code);
+
+    List<Permission> findByModule(String module);
+    }

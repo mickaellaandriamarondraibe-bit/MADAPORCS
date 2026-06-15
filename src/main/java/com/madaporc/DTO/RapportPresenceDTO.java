@@ -1,14 +1,12 @@
 package com.madaporc.DTO;
 
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class RapportPresenceDTO {
-    private Long id;
+
+    private long nombrePointages;
+    private long presents;
+    private long absents;
+    private long retards;
 }

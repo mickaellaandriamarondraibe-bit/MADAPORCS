@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.Employe;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.Employe;
 
-/**
- * Repository placeholder pour Employe.
- * À transformer plus tard en JpaRepository<Employe, Long> après création de l'Entity JPA.
- */
-public interface EmployeRepository {
-}
+    public interface EmployeRepository extends JpaRepository<Employe, Long> {
+
+        List<Employe> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCase(String nom, String prenom);
+
+    List<Employe> findByStatutEmployeId(Long statutEmployeId);
+    }

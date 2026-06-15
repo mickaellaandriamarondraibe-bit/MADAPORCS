@@ -1,14 +1,13 @@
 package com.madaporc.DTO;
 
+import java.math.BigDecimal;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class FicheSalaireDTO {
-    private Long id;
+    private Long salaireId;
+
+private String nomEmploye;
+
+private BigDecimal montantNet;
 }

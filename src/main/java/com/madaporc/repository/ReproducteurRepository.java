@@ -1,12 +1,19 @@
 package com.madaporc.repository;
 
+    import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.Reproducteur;
 
-import com.madaporc.model.Reproducteur;
+    public interface ReproducteurRepository extends JpaRepository<Reproducteur, Long> {
 
-/**
- * Repository placeholder pour Reproducteur.
- * À transformer plus tard en JpaRepository<Reproducteur, Long> après création de l'Entity JPA.
- */
-public interface ReproducteurRepository extends JpaRepository<Reproducteur, Long> {
-}
+        List<Reproducteur> findByCodeReproducteurContainingIgnoreCaseOrNomContainingIgnoreCase(String code, String nom);
+
+    Optional<Reproducteur> findByCodeReproducteur(String codeReproducteur);
+
+    boolean existsByCodeReproducteur(String codeReproducteur);
+
+    List<Reproducteur> findBySexeId(Long sexeId);
+
+    long countByStatutReproducteurId(Long statutReproducteurId);
+    }

@@ -1,14 +1,23 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Data;
 
-/**
- * Model placeholder pour la table permissions.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
+@Data
+@Entity
+@Table(name = "permissions")
 public class Permission {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "libelle")
+    private String libelle;
+
+    @Column(name = "module")
+    private String module;
 }

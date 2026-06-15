@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Présence et Pointage - GestPorc</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="content">
+        <header class="app-header">
+            <div>
+                <div class="eyebrow">MADAPORC / Personnel</div>
+                <h1>Formulaire Présence et Pointage - GestPorc</h1>
+                <p class="page-subtitle">Formulaire conforme au style Figma : simple, lisible et professionnel.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" th:href="@{/presences}">Retour</a>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Informations</h2>
+                    <p>Complétez les champs nécessaires puis enregistrez.</p>
+                </div>
+            </div>
+
+            <form method="post" th:action="@{/presences/save}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Employé</label><select name="employeId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Date présence</label><input type="date" name="datePresence" placeholder="Date présence"></div><div class="form-group"><label>Statut</label><select name="statutPresence"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Heure arrivée</label><input type="time" name="heureArrivee" placeholder="Heure arrivée"></div><div class="form-group"><label>Heure départ</label><input type="time" name="heureDepart" placeholder="Heure départ"></div><div class="form-group"><label>Observation</label><textarea name="observation" placeholder="Observation"></textarea></div>
+                </div>
+                <div class="actions" style="margin-top:22px">
+                    <button type="submit" class="btn">Enregistrer</button>
+                    <a class="btn btn-secondary" th:href="@{/presences}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

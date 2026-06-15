@@ -1,10 +1,9 @@
 package com.madaporc.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.madaporc.model.Role;
 
-/**
- * Repository placeholder pour Role.
- * À transformer plus tard en JpaRepository<Role, Long> après création de l'Entity JPA.
- */
-public interface RoleRepository {
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
+
 }

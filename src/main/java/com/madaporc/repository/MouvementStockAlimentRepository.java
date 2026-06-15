@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.MouvementStockAliment;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.MouvementStockAliment;
 
-/**
- * Repository placeholder pour MouvementStockAliment.
- * À transformer plus tard en JpaRepository<MouvementStockAliment, Long> après création de l'Entity JPA.
- */
-public interface MouvementStockAlimentRepository {
-}
+    public interface MouvementStockAlimentRepository extends JpaRepository<MouvementStockAliment, Long> {
+
+        List<MouvementStockAliment> findByIngredientId(Long ingredientId);
+
+    List<MouvementStockAliment> findByTypeMouvementStockId(Long typeMouvementStockId);
+    }

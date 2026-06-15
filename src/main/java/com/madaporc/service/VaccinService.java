@@ -1,119 +1,87 @@
 package com.madaporc.service;
 
+import java.math.*;
+import java.time.*;
+import java.util.*;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
 import com.madaporc.DTO.VaccinDTO;
 import com.madaporc.model.Vaccin;
-import com.madaporc.repository.VaccinRepository;
-import java.math.BigDecimal;
-import java.util.List;
-import java.time.LocalDateTime;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.madaporc.repository.*;
 
-/**
- * Service pour la gestion des vaccins.
- */
 @Service
-@RequiredArgsConstructor
-@Transactional
 public class VaccinService {
+    private final VaccinRepository repo;
+    private final VaccinationRepository vaccinationRepo;
 
-    private final VaccinRepository vaccinRepository;
-
-    /**
-     * Récupère tous les vaccins actifs.
-     */
-    public List<Vaccin> findAllVaccinsActifs() {
-        return vaccinRepository.findByActifTrue();
+    public VaccinService(VaccinRepository repo, VaccinationRepository vaccinationRepo) {
+        this.repo = repo;
+        this.vaccinationRepo = vaccinationRepo;
     }
 
-    /**
-     * Récupère tous les vaccins.
-     */
     public List<Vaccin> findAllVaccins() {
-        return vaccinRepository.findAll();
+        return repo.findAll();
     }
 
-    /**
-     * Crée un nouveau vaccin.
-     */
-    public String creer(VaccinDTO dto) {
-        if (vaccinRepository.findByLibelle(dto.getLibelle()).isPresent()) {
-            return "Un vaccin avec ce libellé existe déjà";
-        }
-        Vaccin vaccin = new Vaccin();
-        mapperDTOToEntity(dto, vaccin);
-        vaccinRepository.save(vaccin);
-        return "Vaccin créé avec succès";
+    public String creer(VaccinDTO d) {
+        repo.save(ent(d));
+        return null;
     }
 
-    /**
-     * Modifie un vaccin existant.
-     */
-    public String modifier(Long id, VaccinDTO dto) {
-        Vaccin vaccin = vaccinRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Vaccin non trouvé"));
-        mapperDTOToEntity(dto, vaccin);
-        vaccin.setDateModification(LocalDateTime.now());
-        vaccinRepository.save(vaccin);
-        return "Vaccin modifié avec succès";
+    public String modifier(Long id, VaccinDTO d) {
+        Vaccin v = ent(d);
+        v.setId(id);
+        repo.save(v);
+        return null;
     }
 
-    /**
-     * Désactive un vaccin.
-     */
     public String desactiverVaccin(Long id) {
-        Vaccin vaccin = vaccinRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Vaccin non trouvé"));
-        vaccin.setActif(false);
-        vaccin.setDateModification(LocalDateTime.now());
-        vaccinRepository.save(vaccin);
-        return "Vaccin désactivé avec succès";
+        repo.findById(id).ifPresent(v -> {
+            v.setActif(false);
+            repo.save(v);
+        });
+        return null;
     }
 
-    /**
-     * Compte les vaccins actifs.
-     */
     public long compterVaccinsActifs() {
-        return vaccinRepository.findByActifTrue().size();
+        return repo.findByActifTrue().size();
     }
 
-    /**
-     * Calcule le budget total des vaccins.
-     */
     public BigDecimal calculerBudgetVaccins() {
-        return vaccinRepository.findByActifTrue().stream()
-            .map(Vaccin::getPrixDose)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return repo.findAll().stream().map(v -> v.getPrix() == null ? BigDecimal.ZERO : v.getPrix())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Recherche des vaccins par mot-clé.
-     */
-    public List<Vaccin> rechercherVaccins(String motCle) {
-        return vaccinRepository.rechercherParMotCle(motCle);
+    public long compterRappelsCritiques(LocalDate dateLimite) {
+        return vaccinationRepo.countByDateRappelBefore(dateLimite);
     }
 
-    /**
-     * Obtient un vaccin par ID.
-     */
-    public Vaccin findById(Long id) {
-        return vaccinRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Vaccin non trouvé"));
+    private Vaccin ent(VaccinDTO d) {
+        Vaccin v = new Vaccin();
+        v.setId(d.getId());
+        v.setLibelle(d.getLibelle());
+        v.setPrix(d.getPrix());
+        v.setDelaiRappelJours(d.getDelaiRappelJours());
+        v.setDescription(d.getDescription());
+        v.setActif(d.getActif() == null ? true : d.getActif());
+        return v;
     }
 
-    private void mapperDTOToEntity(VaccinDTO dto, Vaccin vaccin) {
-        vaccin.setLibelle(dto.getLibelle());
-        vaccin.setDescription(dto.getDescription());
-        vaccin.setFabricant(dto.getFabricant());
-        vaccin.setPrixDose(dto.getPrixDose());
-        vaccin.setDelaiRappelJours(dto.getDelaiRappelJours());
-        vaccin.setAgeMinimumJours(dto.getAgeMinimumJours());
-        vaccin.setAgeMaximumJours(dto.getAgeMaximumJours());
-        vaccin.setTemperatureStockageMin(dto.getTemperatureStockageMin());
-        vaccin.setTemperatureStockageMax(dto.getTemperatureStockageMax());
-        if (dto.getActif() != null) {
-            vaccin.setActif(dto.getActif());
-        }
+    public void prepareVaccinFormModel(Model model, Long id) {
+    VaccinDTO dto = new VaccinDTO();
+
+    if (id != null) {
+        repo.findById(id).ifPresent(vaccin -> {
+            dto.setId(vaccin.getId());
+            dto.setLibelle(vaccin.getLibelle());
+            dto.setPrix(vaccin.getPrix());
+            dto.setDelaiRappelJours(vaccin.getDelaiRappelJours());
+            dto.setDescription(vaccin.getDescription());
+            dto.setActif(vaccin.getActif());
+        });
     }
+
+    model.addAttribute("vaccin", dto);
+}
 }

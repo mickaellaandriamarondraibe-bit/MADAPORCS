@@ -1,260 +1,58 @@
 <div th:fragment="sidebar" class="sidebar">
-    <nav
-        class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-body-md text-body-md w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flat no shadows hidden md:flex flex-col py-stack-md z-50">
-        <!-- Header -->
-        <div class="px-gutter mb-stack-lg">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center shrink-0">
-                    <span class="material-symbols-outlined text-on-primary" data-icon="agriculture"
-                        data-weight="fill">agriculture</span>
-                </div>
-                <div>
-                    <h1 class="font-headline-md text-headline-md font-bold text-on-primary">MADAPORC</h1>
-                    <p class="font-body-sm text-body-sm text-on-primary/70">Agri-Management</p>
-                </div>
-            </div>
+    <div class="brand">
+        <div class="brand-mark">🐖</div>
+        <div>
+            <div class="brand-title">MADAPORC</div>
+            <div class="brand-subtitle">GestPorc • Gestion d'élevage</div>
         </div>
-        <!-- Main Tabs -->
-        <ul class="flex-1 overflow-y-auto px-4 space-y-2">
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">dashboard</span>
-                        <span class="">Dashboard</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/rapports}">
-                            Rapports
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
-                        <span class="">Production</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/lots}">
-                            Lots
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/cycles}">
-                            Cycles
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">pets</span>
-                        <span class="">Reproduction</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/reproducteurs}">
-                            Reproducteurs
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/reproduction/evenements}">
-                            Evenements
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">monetization_on</span>
-                        <span class="">Commerce</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/clients}">
-                            Clients
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/ventes}">
-                            Ventes
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">analytics</span>
-                        <span class="">Finances</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/depenses}">
-                            Dépenses
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">inventory_2</span>
-                        <span class="">Ressources</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/ingredients}">
-                            Ingrédients
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/stocks/mouvements}">
-                            Mouvements stock
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/melanges}">
-                            Mélanges
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/distributions}">
-                            Distributions
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
-                        <span class="">Santé</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/vaccins}">
-                            Vaccins
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/vaccinations}">
-                            Vaccinations
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/sante/suivis}">
-                            Suivi sanitaire
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">groups</span>
-                        <span class="">Personnel</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/employes}">
-                            Employés
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/presences}">
-                            Présences
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/salaires}">
-                            Salaires
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <button
-                    class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors active:scale-95 duration-150">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined fill"
-                            style="font-variation-settings: 'FILL' 1;">settings</span>
-                        <span class="">Paramètres</span>
-                    </div>
-                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
-                </button>
-                <ul class="flex flex-col gap-1 mt-1 ml-8 border-l border-primary-container">
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/profil}">
-                            Profil
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary/70 hover:text-on-primary hover:bg-primary-container/10 transition-colors text-body-sm"
-                            th:href="@{/utilisateurs}">
-                            Utilisateurs
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!-- Footer Tabs -->
+    </div>
 
+    <nav>
+        <div class="nav-section">Accueil</div>
+        <a class="nav-link" th:href="@{/dashboard}"><span class="nav-icon">📊</span>Tableau de bord</a>
+
+        <div class="nav-section">Production</div>
+        <a class="nav-link" th:href="@{/lots}"><span class="nav-icon">🐷</span>Lots de porcs</a>
+        <a class="nav-link" th:href="@{/lots/mouvements}"><span class="nav-icon">↔️</span>Mouvements lots</a>
+        <a class="nav-link" th:href="@{/lots/pesees}"><span class="nav-icon">⚖️</span>Pesées</a>
+        <a class="nav-link" th:href="@{/cycles}"><span class="nav-icon">🔁</span>Cycles</a>
+
+        <div class="nav-section">Reproduction</div>
+        <a class="nav-link" th:href="@{/reproducteurs}"><span class="nav-icon">🐗</span>Reproducteurs</a>
+        <a class="nav-link" th:href="@{/reproduction/evenements}"><span class="nav-icon">🧬</span>Événements</a>
+
+        <div class="nav-section">Commerce</div>
+        <a class="nav-link" th:href="@{/clients}"><span class="nav-icon">👥</span>Clients</a>
+        <a class="nav-link" th:href="@{/ventes}"><span class="nav-icon">💳</span>Ventes</a>
+        <a class="nav-link" th:href="@{/factures}"><span class="nav-icon">🧾</span>Factures</a>
+        <a class="nav-link" th:href="@{/depenses}"><span class="nav-icon">💸</span>Dépenses</a>
+
+        <div class="nav-section">Ressources</div>
+        <a class="nav-link" th:href="@{/ingredients}"><span class="nav-icon">🌾</span>Ingrédients</a>
+        <a class="nav-link" th:href="@{/stocks/mouvements}"><span class="nav-icon">📦</span>Mouvements stock</a>
+        <a class="nav-link" th:href="@{/melanges}"><span class="nav-icon">🥣</span>Mélanges</a>
+        <a class="nav-link" th:href="@{/distributions}"><span class="nav-icon">🚚</span>Distributions</a>
+
+        <div class="nav-section">Santé</div>
+        <a class="nav-link" th:href="@{/vaccins}"><span class="nav-icon">💉</span>Vaccins</a>
+        <a class="nav-link" th:href="@{/vaccinations}"><span class="nav-icon">📅</span>Vaccinations</a>
+        <a class="nav-link" th:href="@{/sante/suivis}"><span class="nav-icon">🩺</span>Suivi sanitaire</a>
+        <a class="nav-link" th:href="@{/maladies}"><span class="nav-icon">🦠</span>Maladies</a>
+        <a class="nav-link" th:href="@{/traitements}"><span class="nav-icon">💊</span>Traitements</a>
+
+        <div class="nav-section">Personnel</div>
+        <a class="nav-link" th:href="@{/employes}"><span class="nav-icon">🧑‍🌾</span>Employés</a>
+        <a class="nav-link" th:href="@{/presences}"><span class="nav-icon">🕘</span>Présences</a>
+        <a class="nav-link" th:href="@{/salaires}"><span class="nav-icon">💰</span>Salaires</a>
+
+        <div class="nav-section">Administration</div>
+        <a class="nav-link" th:href="@{/rapports}"><span class="nav-icon">📈</span>Rapports</a>
+        <a class="nav-link" th:href="@{/profil}"><span class="nav-icon">👤</span>Profil</a>
+        <a class="nav-link" th:href="@{/utilisateurs}"><span class="nav-icon">🔐</span>Utilisateurs</a>
+        <a class="nav-link" th:href="@{/roles/permissions}"><span class="nav-icon">🛡️</span>Rôles & permissions</a>
     </nav>
+
+    <div class="sidebar-footer">
+        Interface alignée sur la maquette Figma : vert agriculture, fond clair, cartes, tableaux et formulaires.
+    </div>
 </div>

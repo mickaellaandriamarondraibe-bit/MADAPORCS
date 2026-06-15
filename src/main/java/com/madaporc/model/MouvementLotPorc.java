@@ -1,23 +1,10 @@
 package com.madaporc.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import lombok.Data;
 
-/**
- * Model placeholder pour la table mouvements_lots_porcs.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "mouvements_lots_porcs")
 public class MouvementLotPorc {
@@ -26,13 +13,13 @@ public class MouvementLotPorc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "lot_porc_id", nullable = false)
+    @Column(name = "lot_porc_id")
     private Long lotPorcId;
 
-    @ManyToOne
-    @JoinColumn(name = "type_mouvement_lot_id")
-    private TypeMouvementLot typeMouvementLotId;
+    @Column(name = "type_mouvement_lot_id")
+    private Long typeMouvementLotId;
 
+    @Column(name = "quantite")
     private Integer quantite;
 
     @Column(name = "quantite_male")
@@ -41,14 +28,15 @@ public class MouvementLotPorc {
     @Column(name = "quantite_femelle")
     private Integer quantiteFemelle;
 
-    private String motif;
-
-    @Column(name = "created_by", nullable = false)
-    private Long createdBy;
-
-    @Column(name = "date_mouvement", nullable = false)
+    @Column(name = "date_mouvement")
     private LocalDateTime dateMouvement;
 
+    @Column(name = "motif")
+    private String motif;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }

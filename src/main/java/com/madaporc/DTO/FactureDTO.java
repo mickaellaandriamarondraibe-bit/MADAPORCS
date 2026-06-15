@@ -1,14 +1,18 @@
 package com.madaporc.DTO;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class FactureDTO {
+
     private Long id;
+    private Long venteId;
+    private String numeroFacture;
+    private LocalDateTime dateFacture;
+    private BigDecimal montantTotal;
+    private BigDecimal montantPaye;
+    private BigDecimal resteAPayer;
 }

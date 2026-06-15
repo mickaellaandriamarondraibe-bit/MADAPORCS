@@ -1,14 +1,12 @@
 package com.madaporc.DTO;
 
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class RapportProductionDTO {
-    private Long id;
+
+    private long nombreCycles;
+    private int totalNaissances;
+    private int totalPertes;
+    private int totalVendables;
 }

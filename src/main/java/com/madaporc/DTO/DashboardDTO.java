@@ -1,14 +1,23 @@
 package com.madaporc.DTO;
 
+import java.math.BigDecimal;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
+@Data
 public class DashboardDTO {
-    private Long id;
+    private long lotsActifs;
+
+private int totalPorcs;
+
+private int porcsVendables;
+
+private long reproducteursActifs;
+
+private long casSanitairesEnCours;
+
+private BigDecimal ventesMois;
+
+private BigDecimal depensesMois;
+
+private BigDecimal beneficeNet;
 }

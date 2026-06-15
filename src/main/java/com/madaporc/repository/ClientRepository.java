@@ -1,10 +1,12 @@
 package com.madaporc.repository;
 
-import com.madaporc.model.Client;
+    import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+    import com.madaporc.model.Client;
 
-/**
- * Repository placeholder pour Client.
- * À transformer plus tard en JpaRepository<Client, Long> après création de l'Entity JPA.
- */
-public interface ClientRepository {
-}
+    public interface ClientRepository extends JpaRepository<Client, Long> {
+
+        List<Client> findByNomContainingIgnoreCase(String nom);
+
+    List<Client> findByTypeClient(String typeClient);
+    }

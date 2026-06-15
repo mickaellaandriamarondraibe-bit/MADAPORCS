@@ -1,10 +1,9 @@
 package com.madaporc.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.madaporc.model.Transport;
 
-/**
- * Repository placeholder pour Transport.
- * À transformer plus tard en JpaRepository<Transport, Long> après création de l'Entity JPA.
- */
-public interface TransportRepository {
+public interface TransportRepository extends JpaRepository<Transport, Long> {
+
+
 }
