@@ -1,14 +1,17 @@
 package com.madaporc.DTO;
 
-
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
-@Getter
-@Setter
 public class RapportStockDTO {
-    private Long id;
+    private Integer nombreIngredientsSousSeuil;
+
+    public RapportStockDTO() {}
+
+    public RapportStockDTO(Integer nombreIngredientsSousSeuil) {
+        this.nombreIngredientsSousSeuil = nombreIngredientsSousSeuil;
+    }
+
+    // Getters et Setters
+    public Integer getNombreIngredientsSousSeuil() { return nombreIngredientsSousSeuil; }
+    public void setNombreIngredientsSousSeuil(Integer nombreIngredientsSousSeuil) { 
+        this.nombreIngredientsSousSeuil = nombreIngredientsSousSeuil; 
+    }
 }
