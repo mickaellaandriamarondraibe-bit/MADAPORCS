@@ -41,6 +41,8 @@ public class MouvementLotService {
     private RaceRepository raceRepository;
     @Autowired
     private StatutLotRepository statutLotRepository;
+    @Autowired
+    private LotPorcService lotService;
 
     public MouvementLotPorcRepository getMouvementLotPorcRepository() {
         return mouvementLotRepository;
@@ -60,23 +62,36 @@ public class MouvementLotService {
         dto.setQuantiteMale(mouvementLotPorc.getQuantiteMale());
         dto.setQuantiteFemelle(mouvementLotPorc.getQuantiteFemelle());
         dto.setMotif(mouvementLotPorc.getMotif());
+        dto.setCreatedAt(mouvementLotPorc.getCreatedBy());
         dto.setDateMouvement(mouvementLotPorc.getDateMouvement());
         dto.setCreatedAt(LocalDateTime.now());
         return dto;
     }
 
+    public MouvementLotPorc convertToEntity(MouvementLotDTO dto) {
+        MouvementLotPorc mouvementLotPorc = new MouvementLotPorc();
+        mouvementLotPorc.setId(dto.getId());
+        mouvementLotPorc.setLotPorcId(dto.getLotPorcId());
+
+        TypeMouvementLot type =
+        typeMouvementLotRepository.findById(dto.getTypeMouvementLotId())
+        .orElseThrow(() -> new RuntimeException("Type mouvement introuvable"));
+
+        mouvementLotPorc.setTypeMouvementLotId(type);
+
+        mouvementLotPorc.setQuantite(dto.getQuantite());
+        mouvementLotPorc.setQuantiteMale(dto.getQuantiteMale());
+        mouvementLotPorc.setQuantiteFemelle(dto.getQuantiteFemelle());
+        mouvementLotPorc.setMotif(dto.getMotif());
+        mouvementLotPorc.setDateMouvement(dto.getDateMouvement());
+        mouvementLotPorc.setCreatedAt(dto.getCreatedAt());
+        return mouvementLotPorc;
+    }
+
     @Transactional
     public void ajouterMouvement(MouvementLotDTO dto, Long utilisateurId) {
-        MouvementLotPorc mvt = new MouvementLotPorc();
-        mvt.setLotPorcId(dto.getLotPorcId());
-        mvt.setTypeMouvementLotId(dto.getTypeMouvementLotId());
-        mvt.setQuantite(dto.getQuantiteMale() + dto.getQuantiteFemelle());
-        mvt.setQuantiteMale(dto.getQuantiteMale());
-        mvt.setQuantiteFemelle(dto.getQuantiteFemelle());
-        mvt.setMotif(dto.getMotif());
-        mvt.setDateMouvement(dto.getDateMouvement());
+        MouvementLotPorc mvt = convertToEntity(dto);
         mvt.setCreatedBy(utilisateurId);
-        mvt.setCreated_at(dto.getCreatedAt());
         mouvementLotRepository.save(mvt);
 
         TypeMouvementLot typeMvt = typeMouvementLotRepository.findById(dto.getTypeMouvementLotId()).orElse(null);
@@ -93,23 +108,20 @@ public class MouvementLotService {
         lotDTO.setNombreFemellesInitial(dto.getQuantiteFemelle());
         lotDTO.setNombreInitial(dto.getQuantiteMale() + dto.getQuantiteFemelle());
         lotDTO.setNombreActuel(dto.getQuantiteMale() + dto.getQuantiteFemelle());
-        lotDTO.setNombreInitial(dto.getQuantiteMale() + dto.getQuantiteFemelle());
         lotDTO.setDateNaissanceEstimee(dto.getDateMouvement());
         lotDTO.setObservation(null);
         lotDTO.setPoidsMoyenInitialKg(null);
         lotDTO.setPrixAchatTotal(null);
         
-        if (dto.getTypeMouvementLotId() == 1L ) { 
+        if (Long.valueOf(1L).equals(dto.getTypeMouvementLotId())) { 
             lotDTO.setDateAchat(null);
-
-            LotPorcService lotService = new LotPorcService();
             lotService.creer(lotDTO, utilisateurId);
-        } else if (dto.getTypeMouvementLotId() == 2L) { 
+        } 
+        else if (Long.valueOf(2L).equals(dto.getTypeMouvementLotId())) { 
             lotDTO.setDateAchat(dto.getDateMouvement());
-
-            LotPorcService lotService = new LotPorcService();
             lotService.creer(lotDTO, utilisateurId);
-        } else if (dto.getTypeMouvementLotId() == 3L || dto.getTypeMouvementLotId() == 4L) { 
+        } 
+        else if (Long.valueOf(3L).equals(dto.getTypeMouvementLotId()) || Long.valueOf(4L).equals(dto.getTypeMouvementLotId()) || Long.valueOf(5L).equals(dto.getTypeMouvementLotId())) { 
             LotPorcDTO lotDTOToUpdate = modifier(dto.getLotPorcId(), dto, utilisateurId, dto.getQuantiteMale(), dto.getQuantiteFemelle());
             lotService.modifier(dto.getLotPorcId(), lotDTOToUpdate);
         }
@@ -117,24 +129,28 @@ public class MouvementLotService {
 
     public LotPorcDTO modifier(Long lotId, MouvementLotDTO dto, Long utilisateurId, Integer quantiteMale, Integer quantiteFemelle) {
         LotPorc lot = lotPorcRepository.findById(lotId).orElse(null);
-        if (lot != null ) {
-            LotPorcDTO lotDTO = new LotPorcDTO();
-            lotDTO.setId(lot.getId());
-            lotDTO.setTypeEntree(lot.getTypeEntree());
-            lotDTO.setCodeLot(lot.getCodeLot());
-            lotDTO.setRaceId(lot.getRaceId());
-            lotDTO.setStatutLotId(lot.getStatutLotId());
-            lotDTO.setNombreMalesInitial(lot.getNombreMalesInitial());
-            lotDTO.setNombreFemellesInitial(lot.getNombreFemellesInitial());
-            lotDTO.setNombreInitial(lot.getNombreInitial());
-            lotDTO.setNombreActuel(lot.getNombreActuel() - (quantiteMale + quantiteFemelle));
-            lotDTO.setDateNaissanceEstimee(lot.getDateNaissanceEstimee());
-            lotDTO.setDateAchat(lot.getDateAchat());
-            lotDTO.setPrixAchatTotal(lot.getPrixAchatTotal());
-            lotDTO.setPoidsMoyenInitialKg(lot.getPoidsMoyenInitialKg());
-            lotDTO.setObservation(lot.getObservation());
-            return lotDTO;
+        
+        if (lot == null ) {
+            return null;
         }
+
+        LotPorcDTO lotDTO = new LotPorcDTO();
+        lotDTO.setId(lot.getId());
+        lotDTO.setTypeEntree(lot.getTypeEntree());
+        lotDTO.setCodeLot(lot.getCodeLot());
+        lotDTO.setRaceId(lot.getRaceId());
+        lotDTO.setStatutLotId(lot.getStatutLotId());
+        lotDTO.setNombreMalesInitial(lot.getNombreMalesInitial());
+        lotDTO.setNombreFemellesInitial(lot.getNombreFemellesInitial());
+        lotDTO.setNombreInitial(lot.getNombreInitial());
+        lotDTO.setNombreActuel(lot.getNombreActuel() - (quantiteMale + quantiteFemelle));
+        lotDTO.setDateNaissanceEstimee(lot.getDateNaissanceEstimee());
+        lotDTO.setDateAchat(lot.getDateAchat());
+        lotDTO.setPrixAchatTotal(lot.getPrixAchatTotal());
+        lotDTO.setPoidsMoyenInitialKg(lot.getPoidsMoyenInitialKg());
+        lotDTO.setObservation(lot.getObservation());
+        
+        return lotDTO;
     }
 
     public void supprimerMouvement(Long mouvementId) {
