@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -6,55 +7,90 @@
 </head>
 <body>
 
-    <h1>Liste des employés</h1>
+<h1>Liste des employés</h1>
 
-    <p>
-        <a th:href="@{/employes/new}">Ajouter employé</a>
-    </p>
+<form th:action="@{/employes}" method="get">
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Contact</th>
-                <th>Adresse</th>
-                <th>Date embauche</th>
-                <th>Salaire</th>
-                <th>Poste</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
 
-        <tbody>
-            <tr th:each="employe : ${employes}">
-                <td th:text="${employe.id}"></td>
-                <td th:text="${employe.nom}"></td>
-                <td th:text="${employe.prenom}"></td>
-                <td th:text="${employe.contact}"></td>
-                <td th:text="${employe.adresse}"></td>
-                <td th:text="${employe.dateEmbauche}"></td>
-                <td th:text="${employe.salaireBase}"></td>
+<input type="text"
+       name="motCle"
+       th:value="${motCle}"
+       placeholder="Nom ou prénom">
 
-                <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}"></td>
+<button type="submit">
+    Rechercher
+</button>
 
-                <td th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}"></td>
-                <td>
-                    <a th:href="@{/employes/edit/{id}(id=${employe.id})}">Modifier</a>
 
-                    <form th:action="@{/employes/desactiver/{id}(id=${employe.id})}" method="post" style="display:inline">
-                        <button type="submit">Désactiver</button>
-                    </form>
+</form>
 
-                    <form th:action="@{/employes/delete/{id}(id=${employe.id})}" method="post" style="display:inline">
-                        <button type="submit">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<br>
+
+<p>
+    <a th:href="@{/employes/form}">
+        Ajouter un employé
+    </a>
+</p>
+
+<table border="1">
+
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Contact</th>
+        <th>Adresse</th>
+        <th>Date embauche</th>
+        <th>Salaire</th>
+        <th>Poste</th>
+        <th>Statut</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+
+<tbody>
+
+    <tr th:each="employe : ${employes}">
+
+        <td th:text="${employe.id}"></td>
+        <td th:text="${employe.nom}"></td>
+        <td th:text="${employe.prenom}"></td>
+        <td th:text="${employe.contact}"></td>
+        <td th:text="${employe.adresse}"></td>
+        <td th:text="${employe.dateEmbauche}"></td>
+        <td th:text="${employe.salaireBase}"></td>
+
+        <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}">
+        </td>
+
+        <td th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}">
+        </td>
+
+        <td>
+
+            <a th:href="@{/employes/form(id=${employe.id})}">
+                Modifier
+            </a>
+
+            <form th:action="@{/employes/archiver(id=${employe.id})}"
+                  method="post"
+                  style="display:inline">
+
+                <button type="submit">
+                    Archiver
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</tbody>
+
+
+</table>
 
 </body>
 </html>

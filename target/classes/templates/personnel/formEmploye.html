@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Employé</title>
 </head>
+
 <body>
 
     <h1 th:text="${employe.id == null ? 'Ajouter employé' : 'Modifier employé'}"></h1>
@@ -42,18 +44,18 @@
         </p>
 
         <p>
-            <label>Poste</label>
-            <select name="posteEmployeId">
+            <select th:field="*{posteEmployeId}">
                 <option value="">-- Choisir --</option>
-                <option th:each="poste : ${postes}" th:value="${poste.id}" th:text="${poste.libelle}" th:selected="${employe.posteEmploye != null && employe.posteEmploye.id == poste.id}"></option>
+                <option th:each="poste : ${postes}" th:value="${poste.id}" th:text="${poste.libelle}">
+                </option>
             </select>
         </p>
 
         <p>
-            <label>Statut</label>
-            <select name="statutEmployeId">
-                <option value="">Choisir </option>
-                <option th:each="statut : ${statuts}" th:value="${statut.id}" th:text="${statut.libelle}" th:selected="${employe.statutEmploye != null && employe.statutEmploye.id == statut.id}"></option>
+            <select th:field="*{statutEmployeId}">
+                <option value="">-- Choisir --</option>
+                <option th:each="statut : ${statuts}" th:value="${statut.id}" th:text="${statut.libelle}">
+                </option>
             </select>
         </p>
 
@@ -62,4 +64,5 @@
     </form>
 
 </body>
+
 </html>
