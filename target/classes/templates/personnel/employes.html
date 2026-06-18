@@ -1,118 +1,161 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Employés - GestPorc</title>
+    <title>Liste des employés</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
+
 <body>
+
 <div class="app-shell">
+
+    <!-- SIDEBAR (si tu as fragment) -->
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main class="content">
+
+        <!-- HEADER -->
         <header class="app-header">
             <div>
                 <div class="eyebrow">MADAPORC / Personnel</div>
-                <h1>Gestion des Employés - GestPorc</h1>
-                <p class="page-subtitle">Gestion et suivi du module gestion des employés.</p>
+                <h1>Liste des employés</h1>
+                <p class="page-subtitle">Gestion des employés, postes et statuts</p>
             </div>
+
             <div class="header-actions">
-                <span class="btn btn-secondary">Gestionnaire</span>
-                <a class="btn" th:href="@{/logout}">Déconnexion</a>
+                <a class="btn btn-secondary" th:href="@{/employes/form}">+ Ajouter</a>
             </div>
         </header>
 
-        <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Actifs</div><div class="stat-value">18</div><div class="stat-note">En cours</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value">4</div><div class="stat-note">À surveiller</div></div>
-            <div class="stat-card"><div class="stat-label">Mois</div><div class="stat-value">12</div><div class="stat-note">Nouveaux</div></div>
-        </section>
-
+        <!-- FILTRES -->
         <section class="card">
-            <div class="card-header">
-                <div>
-                    <h2>Liste</h2>
-                    <p>Gestion et suivi du module gestion des employés.</p>
-                </div>
-                <div class="actions">
-                    <a class="btn" th:href="@{/employes/form}">+ Ajouter</a>
-                    <a class="btn btn-blue" href="#">Exporter</a>
-                </div>
-            </div>
 
-            <form class="filters" method="get">
+            <form class="filters" th:action="@{/employes}" method="get">
+
                 <div class="form-group">
                     <label>Recherche</label>
-                    <input name="motCle" placeholder="Rechercher">
+                    <input type="text" name="motCle" th:value="${motCle}" placeholder="Nom ou prénom">
                 </div>
+
+                <div class="form-group">
+                    <label>Poste</label>
+                    <select name="posteId">
+                        <option value="">Tous</option>
+                        <option th:each="p : ${postes}"
+                                th:value="${p.id}"
+                                th:text="${p.libelle}">
+                        </option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Statut</label>
-                    <select name="statut"><option value="">Tous</option><option>Actif</option><option>Inactif</option></select>
+                    <select name="statutId">
+                        <option value="">Tous</option>
+                        <option th:each="s : ${statuts}"
+                                th:value="${s.id}"
+                                th:text="${s.libelle}">
+                        </option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date">
+
+                <div>
+                    <button type="submit" class="btn btn-dark">Rechercher</button>
                 </div>
-                <button type="submit" class="btn btn-dark">Filtrer</button>
+
             </form>
 
+        </section>
+
+        <!-- TABLE -->
+        <section class="card">
+
+            <div class="card-header">
+                <div>
+                    <h2>Employés</h2>
+                    <p>Liste complète des employés enregistrés</p>
+                </div>
+            </div>
+
             <div class="table-wrap">
+
                 <table class="data-table">
+
                     <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nom</th>
-<th>Prénom</th>
-<th>Contact</th>
-<th>Poste</th>
-<th>Statut</th>
-<th>Salaire base</th>
-<th>Actions</th>
+                        <th>Prénom</th>
+                        <th>Contact</th>
+                        <th>Adresse</th>
+                        <th>Date embauche</th>
+                        <th>Salaire</th>
+                        <th>Poste</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
+
                     <tbody>
-                    <tr th:each="item : ${employes}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
+
+                    <tr th:each="employe : ${employes}">
+
+                        <td th:text="${employe.id}"></td>
+                        <td th:text="${employe.nom}"></td>
+                        <td th:text="${employe.prenom}"></td>
+                        <td th:text="${employe.contact}"></td>
+                        <td th:text="${employe.adresse}"></td>
+                        <td th:text="${employe.dateEmbauche}"></td>
+                        <td th:text="${employe.salaireBase}"></td>
+
+                        <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}"></td>
+
                         <td>
-                            <a class="link-action" th:href="@{/employes/1}">Voir</a>
-                            <a class="link-action" th:href="@{/employes/form(id=1)}">Modifier</a>
+                            <span class="badge"
+                                  th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}">
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a class="link-action"
+                               th:href="@{/employes/form(id=${employe.id})}">
+                                Modifier
+                            </a>
+
+                            <form th:action="@{/employes/archiver(id=${employe.id})}"
+                                  method="post"
+                                  style="display:inline">
+
+                                <button type="submit" class="btn btn-warning">
+                                    Archiver
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(employes)}">
+                        <td colspan="10" class="empty">
+                            Aucun employé trouvé
                         </td>
                     </tr>
-                    <tr th:if="${employes == null}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-                        <td>
-                            <a class="link-action" href="#">Voir</a>
-                            <a class="link-action" th:href="@{/employes/form}">Modifier</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${employes == null}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-                        <td>
-                            <a class="link-action" href="#">Voir</a>
-                            <a class="link-action" th:href="@{/employes/form}">Modifier</a>
-                        </td>
-                    </tr>
+
                     </tbody>
+
                 </table>
+
             </div>
+
         </section>
+
     </main>
+
 </div>
+
 </body>
 </html>

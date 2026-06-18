@@ -1,12 +1,28 @@
 package com.madaporc.repository;
 
-    import java.util.List;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-    import com.madaporc.model.Employe;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-    public interface EmployeRepository extends JpaRepository<Employe, Long> {
+import com.madaporc.model.Employe;
 
-        List<Employe> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCase(String nom, String prenom);
+public interface EmployeRepository extends JpaRepository<Employe, Long> {
 
-    List<Employe> findByStatutEmployeId(Long statutEmployeId);
-    }
+    List<Employe> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCase(String nom, String prenom);
+
+    @Query("""
+        SELECT e FROM Employe e
+        WHERE (:motCle IS NULL OR :motCle = '' OR
+               e.nom ILIKE CONCAT('%', CAST(:motCle AS string), '%')
+            OR e.prenom ILIKE CONCAT('%', CAST(:motCle AS string), '%'))
+        AND (:posteId IS NULL OR e.posteEmploye.id = :posteId)
+        AND (:statutId IS NULL OR e.statutEmploye.id = :statutId)
+    """)
+    List<Employe> rechercherEmployes(
+            @Param("motCle") String motCle,
+            @Param("posteId") Long posteId,
+            @Param("statutId") Long statutId
+    );
+}
