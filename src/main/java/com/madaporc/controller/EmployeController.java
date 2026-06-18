@@ -39,16 +39,12 @@ public class EmployeController {
             @RequestParam(required = false) Long statutId,
             Model model) {
 
-        List<Employe> employes =
-                employeService.rechercherEmployes(
-                        motCle,
-                        posteId,
-                        statutId);
+        List<Employe> employes = employeService.rechercherEmployes(motCle, posteId, statutId);
 
         model.addAttribute("employes", employes);
         model.addAttribute("motCle", motCle);
-        model.addAttribute("posteId", posteId);
-        model.addAttribute("statutId", statutId);
+        model.addAttribute("postes", posteEmployeRepository.findAll());
+        model.addAttribute("statuts", statutEmployeRepository.findAll());
 
         return "personnel/employes";
     }
@@ -94,8 +90,7 @@ public class EmployeController {
 
         if (id != null) {
 
-            Employe employe =
-                    employeService.findEmployeById(id);
+            Employe employe = employeService.findEmployeById(id);
 
             dto.setId(employe.getId());
             dto.setNom(employe.getNom());

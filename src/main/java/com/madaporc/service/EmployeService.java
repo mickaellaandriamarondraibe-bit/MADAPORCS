@@ -27,7 +27,7 @@ public class EmployeService {
 
     }
     public List<Employe> rechercherEmployes(String motCle, Long posteId, Long statutId){
-        return employeRepository.findAll();
+       return employeRepository.rechercherEmployes(motCle, posteId, statutId);
     }
 
     public Employe findEmployeById(Long id) {

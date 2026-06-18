@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -9,18 +8,31 @@
 
 <h1>Liste des employés</h1>
 
+<!-- 🔍 FILTRE COMPLET -->
 <form th:action="@{/employes}" method="get">
 
+    <input type="text"
+           name="motCle"
+           th:value="${motCle}"
+           placeholder="Nom ou prénom">
 
-<input type="text"
-       name="motCle"
-       th:value="${motCle}"
-       placeholder="Nom ou prénom">
+    <select name="posteId">
+        <option value="">Poste</option>
+        <option th:each="p : ${postes}"
+                th:value="${p.id}"
+                th:text="${p.libelle}">
+        </option>
+    </select>
 
-<button type="submit">
-    Rechercher
-</button>
+    <select name="statutId">
+        <option value="">Statut</option>
+        <option th:each="s : ${statuts}"
+                th:value="${s.id}"
+                th:text="${s.libelle}">
+        </option>
+    </select>
 
+    <button type="submit">Rechercher</button>
 
 </form>
 
@@ -35,60 +47,55 @@
 <table border="1">
 
 <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Contact</th>
-        <th>Adresse</th>
-        <th>Date embauche</th>
-        <th>Salaire</th>
-        <th>Poste</th>
-        <th>Statut</th>
-        <th>Actions</th>
-    </tr>
+<tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Contact</th>
+    <th>Adresse</th>
+    <th>Date embauche</th>
+    <th>Salaire</th>
+    <th>Poste</th>
+    <th>Statut</th>
+    <th>Actions</th>
+</tr>
 </thead>
 
 <tbody>
 
-    <tr th:each="employe : ${employes}">
+<tr th:each="employe : ${employes}">
 
-        <td th:text="${employe.id}"></td>
-        <td th:text="${employe.nom}"></td>
-        <td th:text="${employe.prenom}"></td>
-        <td th:text="${employe.contact}"></td>
-        <td th:text="${employe.adresse}"></td>
-        <td th:text="${employe.dateEmbauche}"></td>
-        <td th:text="${employe.salaireBase}"></td>
+    <td th:text="${employe.id}"></td>
+    <td th:text="${employe.nom}"></td>
+    <td th:text="${employe.prenom}"></td>
+    <td th:text="${employe.contact}"></td>
+    <td th:text="${employe.adresse}"></td>
+    <td th:text="${employe.dateEmbauche}"></td>
+    <td th:text="${employe.salaireBase}"></td>
 
-        <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}">
-        </td>
+    <td th:text="${employe.posteEmploye != null ? employe.posteEmploye.libelle : ''}"></td>
 
-        <td th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}">
-        </td>
+    <td th:text="${employe.statutEmploye != null ? employe.statutEmploye.libelle : ''}"></td>
 
-        <td>
+    <td>
 
-            <a th:href="@{/employes/form(id=${employe.id})}">
-                Modifier
-            </a>
+        <a th:href="@{/employes/form(id=${employe.id})}">
+            Modifier
+        </a>
 
-            <form th:action="@{/employes/archiver(id=${employe.id})}"
-                  method="post"
-                  style="display:inline">
+        <form th:action="@{/employes/archiver(id=${employe.id})}"
+              method="post"
+              style="display:inline">
 
-                <button type="submit">
-                    Archiver
-                </button>
+            <button type="submit">Archiver</button>
 
-            </form>
+        </form>
 
-        </td>
+    </td>
 
-    </tr>
+</tr>
 
 </tbody>
-
 
 </table>
 
