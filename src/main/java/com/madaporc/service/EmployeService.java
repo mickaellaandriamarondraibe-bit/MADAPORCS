@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.madaporc.DTO.EmployeDTO;
 import com.madaporc.model.Employe;
 import com.madaporc.model.PosteEmploye;
 import com.madaporc.model.StatutEmploye;
@@ -25,7 +26,7 @@ public class EmployeService {
         this.statutEmployeRepository = statutEmployeRepository;
 
     }
-    public List<Employe> findAllEmployes(){
+    public List<Employe> rechercherEmployes(String motCle, Long posteId, Long statutId){
         return employeRepository.findAll();
     }
 
@@ -33,29 +34,22 @@ public class EmployeService {
         return employeRepository.findById(id).orElseThrow();
     }
 
-    public void saveEmploye(Employe employe, Long posteEmployeId, Long statutEmployeId) {
-        PosteEmploye posteEmploye = null;
-        StatutEmploye statutEmploye = null;
-
-        if (posteEmployeId != null) {
-            posteEmploye = posteEmployeRepository.findById(posteEmployeId).orElse(null);
-        }
-
-        if (statutEmployeId != null) {
-            statutEmploye = statutEmployeRepository.findById(statutEmployeId).orElse(null);
-        }
-
-        employe.setPosteEmploye(posteEmploye);
-        employe.setStatutEmploye(statutEmploye);
-
+    public String creer(EmployeDTO dto) {
+        Employe employe = new Employe();
+        remplirEmployeDepuisDTO(employe, dto);
         employeRepository.save(employe);
+        return "employe cree avec succes";
     }
 
-    public void deleteEmploye(Long id) {
-        employeRepository.deleteById(id);
+    public String modifier(Long id, EmployeDTO dto){
+        Employe employe = employeRepository.findById(id).orElseThrow();
+        remplirEmployeDepuisDTO(employe, dto);
+        employeRepository.save(employe);
+        return "employe modifier";
     }
 
-    public void desactiverEmploye(Long id) {
+
+    public void archiverEmploye(Long id) {
         Employe employe = findEmployeById(id);
         StatutEmploye statutEmploye = statutEmployeRepository.findByLibelleIgnoreCase("Inactif").orElseGet(() -> {
             StatutEmploye statut = new StatutEmploye();
@@ -66,4 +60,27 @@ public class EmployeService {
         employe.setStatutEmploye(statutEmploye);
         employeRepository.save(employe);
     }
+
+    public void remplirEmployeDepuisDTO(Employe employe, EmployeDTO dto){
+        employe.setNom(dto.getNom());
+        employe.setPrenom(dto.getPrenom());
+        employe.setContact(dto.getContact());
+        employe.setAdresse(dto.getAdresse());
+        employe.setDateEmbauche(dto.getDateEmbauche());
+        employe.setSalaireBase(dto.getSalaireBase());
+
+        if(dto.getPosteEmployeId() != null){
+            PosteEmploye poste = posteEmployeRepository.findById(dto.getPosteEmployeId()).orElse(null);
+            employe.setPosteEmploye(poste);
+        }
+
+        if(dto.getStatutEmployeId() != null){
+            StatutEmploye statut = statutEmployeRepository.findById(dto.getStatutEmployeId()).orElse(null);
+            employe.setStatutEmploye(statut);
+        }
+
+
+
+    }
+
 }

@@ -5,9 +5,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
 @Getter
 @Setter
 public class EmployeDTO {
@@ -21,3 +18,6 @@ public class EmployeDTO {
     private LocalDate dateEmbauche;
     private BigDecimal salaireBase;
 }
+
+
+

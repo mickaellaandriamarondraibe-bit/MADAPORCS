@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.madaporc.DTO.EmployeDTO;
 import com.madaporc.model.Employe;
 import com.madaporc.repository.PosteEmployeRepository;
 import com.madaporc.repository.StatutEmployeRepository;
@@ -22,58 +22,107 @@ public class EmployeController {
     private final PosteEmployeRepository posteEmployeRepository;
     private final StatutEmployeRepository statutEmployeRepository;
 
-    public EmployeController(EmployeService employeService, PosteEmployeRepository posteEmployeRepository, StatutEmployeRepository statutEmployeRepository) {
+    public EmployeController(
+            EmployeService employeService,
+            PosteEmployeRepository posteEmployeRepository,
+            StatutEmployeRepository statutEmployeRepository) {
+
         this.employeService = employeService;
         this.posteEmployeRepository = posteEmployeRepository;
         this.statutEmployeRepository = statutEmployeRepository;
     }
 
     @GetMapping("/employes")
-    public String listEmployes(Model model) {
+    public String listEmployes(
+            @RequestParam(required = false) String motCle,
+            @RequestParam(required = false) Long posteId,
+            @RequestParam(required = false) Long statutId,
+            Model model) {
 
-        List<Employe> employes = employeService.findAllEmployes();
+        List<Employe> employes =
+                employeService.rechercherEmployes(
+                        motCle,
+                        posteId,
+                        statutId);
 
         model.addAttribute("employes", employes);
+        model.addAttribute("motCle", motCle);
+        model.addAttribute("posteId", posteId);
+        model.addAttribute("statutId", statutId);
 
         return "personnel/employes";
     }
 
-    @GetMapping("/employes/new")
-    public String newEmploye(Model model) {
-        model.addAttribute("employe", new Employe());
-        model.addAttribute("postes", posteEmployeRepository.findAll());
-        model.addAttribute("statuts", statutEmployeRepository.findAll());
+    @GetMapping("/employes/form")
+    public String showEmployeForm(
+            @RequestParam(required = false) Long id,
+            Model model) {
 
-        return "personnel/formEmploye";
-    }
-
-    @GetMapping("/employes/edit/{id}")
-    public String editEmploye(@PathVariable Long id, Model model) {
-        model.addAttribute("employe", employeService.findEmployeById(id));
-        model.addAttribute("postes", posteEmployeRepository.findAll());
-        model.addAttribute("statuts", statutEmployeRepository.findAll());
+        prepareEmployeFormModel(model, id);
 
         return "personnel/formEmploye";
     }
 
     @PostMapping("/employes/save")
-    public String saveEmploye(@ModelAttribute Employe employe, @RequestParam(required = false) Long posteEmployeId, @RequestParam(required = false) Long statutEmployeId) {
-        employeService.saveEmploye(employe, posteEmployeId, statutEmployeId);
+    public String saveEmploye(
+            @ModelAttribute EmployeDTO dto,
+            Model model) {
+
+        if (dto.getId() == null) {
+            employeService.creer(dto);
+        } else {
+            employeService.modifier(dto.getId(), dto);
+        }
 
         return "redirect:/employes";
     }
 
-    @PostMapping("/employes/delete/{id}")
-    public String deleteEmploye(@PathVariable Long id) {
-        employeService.deleteEmploye(id);
+    @PostMapping("/employes/archiver")
+    public String archiverEmploye(
+            @RequestParam Long id) {
+
+        employeService.archiverEmploye(id);
 
         return "redirect:/employes";
     }
 
-    @PostMapping("/employes/desactiver/{id}")
-    public String desactiverEmploye(@PathVariable Long id) {
-        employeService.desactiverEmploye(id);
+    private void prepareEmployeFormModel(
+            Model model,
+            Long id) {
 
-        return "redirect:/employes";
+        EmployeDTO dto = new EmployeDTO();
+
+        if (id != null) {
+
+            Employe employe =
+                    employeService.findEmployeById(id);
+
+            dto.setId(employe.getId());
+            dto.setNom(employe.getNom());
+            dto.setPrenom(employe.getPrenom());
+            dto.setContact(employe.getContact());
+            dto.setAdresse(employe.getAdresse());
+            dto.setDateEmbauche(employe.getDateEmbauche());
+            dto.setSalaireBase(employe.getSalaireBase());
+
+            if (employe.getPosteEmploye() != null) {
+                dto.setPosteEmployeId(
+                        employe.getPosteEmploye().getId());
+            }
+
+            if (employe.getStatutEmploye() != null) {
+                dto.setStatutEmployeId(
+                        employe.getStatutEmploye().getId());
+            }
+        }
+
+        model.addAttribute("employe", dto);
+        model.addAttribute(
+                "postes",
+                posteEmployeRepository.findAll());
+
+        model.addAttribute(
+                "statuts",
+                statutEmployeRepository.findAll());
     }
 }
