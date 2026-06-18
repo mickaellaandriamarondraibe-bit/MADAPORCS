@@ -1,8 +1,6 @@
+CREATE DATABASE madaporc;
 
-
-CREATE DATABASE MadaPorc;
-
-\c MadaPorc
+\c madaporc
 
 -- =============================================================
 -- 1. GESTION DES RÔLES ET PERMISSIONS
@@ -10,7 +8,7 @@ CREATE DATABASE MadaPorc;
 
 CREATE TABLE roles (
     id           SERIAL PRIMARY KEY,
-    libelle      VARCHAR(100) NOT NULL UNIQUE,e
+    libelle      VARCHAR(100) NOT NULL UNIQUE,
     niveau_acces INTEGER,
     description  TEXT,
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -110,6 +108,8 @@ CREATE TABLE mouvements_lots_porcs (
     created_by            INT REFERENCES utilisateurs(id) ON DELETE SET NULL,
     created_at            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+teto
 
 CREATE TABLE pesees_lots (
     id             SERIAL PRIMARY KEY,
@@ -462,4 +462,3 @@ CREATE TABLE salaires_employes (
     date_paiement   DATE,
     CONSTRAINT uq_salaire_employe_mois_annee UNIQUE (employe_id, mois, annee)
 );
-

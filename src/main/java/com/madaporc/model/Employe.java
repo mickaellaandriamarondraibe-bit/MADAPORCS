@@ -19,6 +19,7 @@ public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+<<<<<<< Updated upstream
     private String nom;
     private String prenom;
 
@@ -91,4 +92,7 @@ public class Employe {
     }
 
 
+=======
+    
+>>>>>>> Stashed changes
 }
