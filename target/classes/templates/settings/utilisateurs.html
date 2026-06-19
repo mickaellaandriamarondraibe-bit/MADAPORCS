@@ -4,17 +4,193 @@
     <meta charset="UTF-8">
     <title>Gestion des Utilisateurs - MADAPORC / GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h3 {
+            color: #2c3e50;
+            margin: 0;
+        }
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .status-actif {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-inactif {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 <main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Gestion des Utilisateurs - MADAPORC / GestPorc</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Gestion des Utilisateurs - MADAPORC / GestPorc
+    <div class="card">
+        <div class="card-header">
+            <h3>Liste des utilisateurs</h3>
+            <a th:href="@{/utilisateurs/form}" class="btn btn-primary">Ajouter un utilisateur</a>
         </div>
-        <p>Vue réservée selon le PDF : <strong>settings/utilisateurs</strong>.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${utilisateurs}">
+                    <td th:text="${user.nom}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role?.nom}"></td>
+                    <td>
+                        <span class="status-badge" 
+                              th:classappend="${user.statut?.nom == 'Actif' ? 'status-actif' : 'status-inactif'}"
+                              th:text="${user.statut?.nom}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{/utilisateurs/form(id=${user.id})}" style="color: #3498db; margin-right: 10px;">Modifier</a>
+                        <form th:action="@{/utilisateurs/desactiver/{id}(id=${user.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Désactiver</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="card" th:if="${showForm}">
+        <h3 th:text="${utilisateurEdit != null ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur'}"></h3>
+        <form th:action="@{/utilisateurs/save}" th:object="${utilisateurDTO}" method="post">
+            <input type="hidden" th:field="*{id}" th:value="${utilisateurEdit?.id}">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" th:field="*{nom}" th:value="${utilisateurEdit?.nom}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" th:value="${utilisateurEdit?.email}" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="motDePasse">Mot de passe</label>
+                    <input type="password" id="motDePasse" th:field="*{motDePasse}" th:required="${utilisateurEdit == null}">
+                </div>
+                <div class="form-group">
+                    <label for="roleId">Rôle</label>
+                    <select id="roleId" th:field="*{roleId}" required>
+                        <option value="">Sélectionner un rôle</option>
+                        <option th:each="role : ${roles}" 
+                                th:value="${role.id}" 
+                                th:text="${role.nom}"
+                                th:selected="${utilisateurEdit?.role?.id == role.id}"></option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group" th:if="${utilisateurEdit != null}">
+                <label for="statutUtilisateurId">Statut</label>
+                <select id="statutUtilisateurId" th:field="*{statutUtilisateurId}" required>
+                    <option th:each="statut : ${statuts}" 
+                            th:value="${statut.id}" 
+                            th:text="${statut.nom}"
+                            th:selected="${utilisateurEdit?.statut?.id == statut.id}"></option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a th:href="@{/utilisateurs}" style="margin-left: 10px; color: #7f8c8d;">Annuler</a>
+        </form>
     </div>
 </main>
 </body>

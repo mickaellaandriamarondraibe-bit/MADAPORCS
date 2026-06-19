@@ -4,18 +4,84 @@
     <meta charset="UTF-8">
     <title>Connexion - MADAPORC / GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-login:hover {
+            background: #2980b9;
+        }
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-<main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Connexion - MADAPORC / GestPorc</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Connexion - MADAPORC / GestPorc
+<div class="login-container">
+    <h2>Connexion MADAPORC</h2>
+    
+    <div th:if="${error}" class="error-message" th:text="${error}"></div>
+    
+    <form th:action="@{/login}" th:object="${loginDTO}" method="post">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="admin@madaporc.com" required>
         </div>
-        <p>Vue réservée selon le PDF : <strong>login</strong>.</p>
-    </div>
-</main>
+        
+        <div class="form-group">
+            <label for="motDePasse">Mot de passe</label>
+            <input type="password" id="motDePasse" th:field="*{motDePasse}" placeholder="admin123" required>
+        </div>
+        
+        <button type="submit" class="btn-login">Se connecter</button>
+    </form>
+</div>
 </body>
 </html>

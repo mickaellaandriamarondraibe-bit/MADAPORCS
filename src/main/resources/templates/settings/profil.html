@@ -4,17 +4,113 @@
     <meta charset="UTF-8">
     <title>Profil Utilisateur - MADAPORC / GestPorc</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .success-message {
+            color: #27ae60;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #efe;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 <main class="content">
-    <div class="placeholder-card">
-        <p class="tag">VUE PDF PLACEHOLDER</p>
-        <h1>Profil Utilisateur - MADAPORC / GestPorc</h1>
-        <div class="figma">
-            <strong>Référence Figma :</strong> Profil Utilisateur - MADAPORC / GestPorc
-        </div>
-        <p>Vue réservée selon le PDF : <strong>settings/profil</strong>.</p>
+    <h2>Mon Profil</h2>
+    
+    <div class="card">
+        <h3>Informations personnelles</h3>
+        <div th:if="${successProfil}" class="success-message" th:text="${successProfil}"></div>
+        <form th:action="@{/profil/save}" th:object="${profilUtilisateurDTO}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" th:field="*{nom}" th:value="${utilisateur?.nom}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" th:value="${utilisateur?.email}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Modifier le profil</button>
+        </form>
+    </div>
+    
+    <div class="card">
+        <h3>Changer le mot de passe</h3>
+        <div th:if="${successPassword}" class="success-message" th:text="${successPassword}"></div>
+        <form th:action="@{/profil/password}" th:object="${changerMotDePasseDTO}" method="post">
+            <div class="form-group">
+                <label for="ancienMotDePasse">Ancien mot de passe</label>
+                <input type="password" id="ancienMotDePasse" th:field="*{ancienMotDePasse}" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nouveauMotDePasse">Nouveau mot de passe</label>
+                    <input type="password" id="nouveauMotDePasse" th:field="*{nouveauMotDePasse}" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmation">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmation" th:field="*{confirmation}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+        </form>
     </div>
 </main>
 </body>
