@@ -16,6 +16,6 @@ public class VaccinationController {
 
     @GetMapping("/vaccinations")
     public String index(Model model, HttpSession session) {
-        return "sante/vaccinations";
+        return "vaccinations/list";
     }
 }

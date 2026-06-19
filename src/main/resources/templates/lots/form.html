@@ -29,9 +29,76 @@
                 </div>
             </div>
 
-            <form method="post" th:action="@{/lots/save}">
+            <div class="alert alert-error" th:if="${message}" th:text="${message}"></div>
+
+            <form method="post" th:action="@{/lots/save}" th:object="${lot}">
+                <input type="hidden" th:field="*{id}">
                 <div class="form-grid">
-                    <div class="form-group"><label>Code lot</label><input type="text" name="codeLot" placeholder="Code lot"></div><div class="form-group"><label>Race</label><select name="raceId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Statut</label><select name="statutLotId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Nombre initial</label><input type="number" name="nombreInitial" placeholder="Nombre initial"></div><div class="form-group"><label>Nombre actuel</label><input type="number" name="nombreActuel" placeholder="Nombre actuel"></div><div class="form-group"><label>Date naissance / achat</label><input type="date" name="dateEntree" placeholder="Date naissance / achat"></div><div class="form-group"><label>Poids moyen initial</label><input type="number" name="poidsMoyenInitialKg" placeholder="Poids moyen initial"></div><div class="form-group"><label>Observation</label><textarea name="observation" placeholder="Observation"></textarea></div>
+                    <div class="form-group">
+                        <label>Code lot</label>
+                        <input type="text" th:field="*{codeLot}" placeholder="Code lot">
+                    </div>
+                    <div class="form-group">
+                        <label>Type entrée</label>
+                        <select th:field="*{typeEntree}">
+                            <option value="">Sélectionner</option>
+                            <option value="Naissance">Naissance</option>
+                            <option value="Achat">Achat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Race</label>
+                        <select th:field="*{raceId}">
+                            <option value="">Sélectionner</option>
+                            <option th:each="race : ${races}" th:value="${race.id}" th:text="${race.libelle}">Large White</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Statut</label>
+                        <select th:field="*{statutLotId}">
+                            <option value="">Sélectionner</option>
+                            <option th:each="statut : ${statuts}" th:value="${statut.id}" th:text="${statut.libelle}">Actif</option>
+                        </select>
+                    </div>
+                    <div id="naissance-fields" class="form-grid" th:attr="style=${lot.typeEntree == 'Achat'} ? 'display:none;' : 'display:grid;'">
+                        <div class="form-group"><label>Nombre initial</label><input type="number" th:field="*{nombreInitial}" placeholder="Nombre initial"></div>
+                        <div class="form-group"><label>Mâles initiaux</label><input type="number" th:field="*{nombreMalesInitial}" placeholder="Mâles initiaux"></div>
+                        <div class="form-group"><label>Femelles initiales</label><input type="number" th:field="*{nombreFemellesInitial}" placeholder="Femelles initiales"></div>
+                        <div class="form-group"><label>Mâles morts</label><input type="number" th:field="*{nombreMalesMorts}" placeholder="Mâles morts"></div>
+                        <div class="form-group"><label>Femelles mortes</label><input type="number" th:field="*{nombreFemellesMortes}" placeholder="Femelles mortes"></div>
+                        <div class="form-group"><label>Date naissance estimée</label><input type="date" th:field="*{dateNaissanceEstimee}"></div>
+                    </div>
+                    <div id="achat-fields" class="form-grid" th:attr="style=${lot.typeEntree == 'Naissance'} ? 'display:none;' : 'display:grid;'">
+                        <div class="form-group"><label>Nombre actuel</label><input type="number" th:field="*{nombreActuel}" placeholder="Nombre actuel"></div>
+                        <div class="form-group"><label>Mâles actuels</label><input type="number" th:field="*{nombreMalesActuel}" placeholder="Mâles actuels"></div>
+                        <div class="form-group"><label>Femelles actuelles</label><input type="number" th:field="*{nombreFemellesActuel}" placeholder="Femelles actuelles"></div>
+                        <div class="form-group"><label>Date achat</label><input type="date" th:field="*{dateAchat}"></div>
+                        <div class="form-group"><label>Prix achat total</label><input type="number" step="0.01" th:field="*{prixAchatTotal}" placeholder="Prix achat total"></div>
+                    </div>
+                    <div class="form-group"><label>Poids moyen initial</label><input type="number" step="0.01" th:field="*{poidsMoyenInitialKg}" placeholder="Poids moyen initial"></div>
+                    <div class="form-group"><label>Observation</label><textarea th:field="*{observation}" placeholder="Observation"></textarea></div>
+                    <script>
+                        const typeSelect = document.querySelector('select[name="typeEntree"]');
+                        const naissanceFields = document.getElementById('naissance-fields');
+                        const achatFields = document.getElementById('achat-fields');
+                        function toggleLotFields() {
+                            const type = typeSelect.value;
+                            if (type === 'Achat') {
+                                naissanceFields.style.display = 'none';
+                                achatFields.style.display = 'grid';
+                            } else if (type === 'Naissance') {
+                                naissanceFields.style.display = 'grid';
+                                achatFields.style.display = 'none';
+                            } else {
+                                naissanceFields.style.display = 'none';
+                                achatFields.style.display = 'none';
+                            }
+                        }
+                        if (typeSelect) {
+                            typeSelect.addEventListener('change', toggleLotFields);
+                            toggleLotFields();
+                        }
+                    </script>
                 </div>
                 <div class="actions" style="margin-top:22px">
                     <button type="submit" class="btn">Enregistrer</button>

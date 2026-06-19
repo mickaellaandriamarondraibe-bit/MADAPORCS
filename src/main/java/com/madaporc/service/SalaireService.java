@@ -157,7 +157,7 @@ public class SalaireService {
             return "Salaire introuvable.";
         }
 
-        salaire.setStatutPaiement("Payé");
+        salaire.setStatutPaiement("Paye");
         salaire.setDatePaiement(datePaiement == null ? LocalDate.now() : datePaiement);
 
         salaireRepository.save(salaire);

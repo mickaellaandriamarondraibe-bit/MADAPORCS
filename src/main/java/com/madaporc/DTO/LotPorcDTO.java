@@ -30,6 +30,10 @@ import java.time.LocalDate;
 
     private Integer nombreMorts;
 
+    private Integer nombreMalesMorts;
+
+    private Integer nombreFemellesMortes;
+
     private LocalDate dateNaissanceEstimee;
 
     private LocalDate dateAchat;

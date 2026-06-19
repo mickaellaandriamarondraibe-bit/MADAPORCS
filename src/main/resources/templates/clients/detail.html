@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail Gestion des Clients - GestPorc</title>
+    <title th:text="${client != null ? 'Détail client - ' + client.nom : 'Client introuvable'}">Détail client</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
@@ -12,28 +12,52 @@
     <main class="content">
         <header class="app-header">
             <div>
-                <div class="eyebrow">MADAPORC / Commerce</div>
-                <h1>Détail Gestion des Clients - GestPorc</h1>
-                <p class="page-subtitle">Vue détail avec informations générales, historique et actions rapides.</p>
+                <div class="eyebrow">MADAPORC / Commerce / Clients</div>
+                <h1 th:text="${client != null ? client.nom : 'Client introuvable'}">Détail client</h1>
+                <p class="page-subtitle">Informations complètes et actions rapides pour ce client.</p>
             </div>
             <div class="header-actions">
                 <a class="btn btn-secondary" th:href="@{/clients}">Retour</a>
-                <a class="btn" th:href="@{/clients/form}">Modifier</a>
+                <a class="btn" th:href="@{/clients/form(id=${client.id})}" th:if="${client != null}">Modifier</a>
             </div>
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:24px">Actif</div><div class="stat-note">Mis à jour</div></div>
-            <div class="stat-card"><div class="stat-label">Référence</div><div class="stat-value" style="font-size:24px">MAD-001</div><div class="stat-note">Code interne</div></div>
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="font-size:24px">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value" style="font-size:24px">0</div><div class="stat-note">Normal</div></div>
+            <div class="stat-card"><div class="stat-label">Type client</div><div class="stat-value" th:text="${client != null ? client.typeClient : 'N/A'}">Type</div><div class="stat-note">Catégorie</div></div>
+            <div class="stat-card"><div class="stat-label">Contact</div><div class="stat-value" th:text="${client != null ? client.contact : 'N/A'}">Contact</div><div class="stat-note">Téléphone</div></div>
+            <div class="stat-card"><div class="stat-label">Email</div><div class="stat-value" th:text="${client != null ? client.email : 'N/A'}">Email</div><div class="stat-note">Adresse mail</div></div>
+            <div class="stat-card"><div class="stat-label">Adresse</div><div class="stat-value" th:text="${client != null ? client.adresse : 'N/A'}">Adresse</div><div class="stat-note">Localisation</div></div>
         </section>
 
-        <section class="card">
-            <div class="card-header"><div><h2>Informations générales</h2><p>Détails principaux du module.</p></div></div>
+        <section class="card" th:if="${client != null}">
+            <div class="card-header">
+                <div>
+                    <h2>Informations générales</h2>
+                    <p>Détails principaux du client.</p>
+                </div>
+            </div>
             <div class="grid grid-2">
-                <div class="panel"><h3>Identification</h3><p><strong>Code :</strong> MAD-001</p><p><strong>Libellé :</strong> Donnée exemple</p></div>
-                <div class="panel"><h3>Observations</h3><p>Cette page est prête à recevoir les données du contrôleur.</p></div>
+                <div class="panel">
+                    <h3>Identité</h3>
+                    <p><strong>Nom :</strong> <span th:text="${client.nom}">Nom client</span></p>
+                    <p><strong>Type :</strong> <span th:text="${client.typeClient}">Type client</span></p>
+                </div>
+                <div class="panel">
+                    <h3>Coordonnées</h3>
+                    <p><strong>Contact :</strong> <span th:text="${client.contact}">Téléphone</span></p>
+                    <p><strong>Email :</strong> <span th:text="${client.email}">Email</span></p>
+                </div>
+            </div>
+            <div class="panel">
+                <h3>Adresse</h3>
+                <p th:text="${client.adresse}">Adresse complète du client</p>
+            </div>
+        </section>
+
+        <section class="card" th:if="${client == null}">
+            <div class="panel">
+                <h3>Client introuvable</h3>
+                <p>Le client demandé n'existe pas ou a été supprimé.</p>
             </div>
         </section>
     </main>

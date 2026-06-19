@@ -14,8 +14,8 @@
         <header class="app-header">
             <div>
                 <div class="eyebrow">MADAPORC / Commerce</div>
-                <h1>Gestion des Clients - GestPorc</h1>
-                <p class="page-subtitle">Gestion et suivi du module gestion des clients.</p>
+                <h1>Gestion des Clients</h1>
+                <p class="page-subtitle">Suivi des clients, recherche et actions rapides.</p>
             </div>
             <div class="header-actions">
                 <span class="btn btn-secondary">Gestionnaire</span>
@@ -24,17 +24,17 @@
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Actifs</div><div class="stat-value">18</div><div class="stat-note">En cours</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value">4</div><div class="stat-note">À surveiller</div></div>
-            <div class="stat-card"><div class="stat-label">Mois</div><div class="stat-value">12</div><div class="stat-note">Nouveaux</div></div>
+            <div class="stat-card"><div class="stat-label">Total clients</div><div class="stat-value" th:text="${#lists.size(clients)}">0</div><div class="stat-note">En base</div></div>
+            <div class="stat-card"><div class="stat-label">Type principal</div><div class="stat-value" th:text="${typeClient != null && typeClient != '' ? typeClient : 'Tous'}">Tous</div><div class="stat-note">Filtre actif</div></div>
+            <div class="stat-card"><div class="stat-label">Recherche</div><div class="stat-value" th:text="${motCle != null && motCle != '' ? motCle : 'Aucun'}">Aucun</div><div class="stat-note">Mot-clé</div></div>
+            <div class="stat-card"><div class="stat-label">Actions</div><div class="stat-value">Rapides</div><div class="stat-note">Ajouter / Exporter</div></div>
         </section>
 
         <section class="card">
             <div class="card-header">
                 <div>
-                    <h2>Liste</h2>
-                    <p>Gestion et suivi du module gestion des clients.</p>
+                    <h2>Liste des clients</h2>
+                    <p>Filtrez, consultez et modifiez les fiches clients.</p>
                 </div>
                 <div class="actions">
                     <a class="btn" th:href="@{/clients/form}">+ Ajouter</a>
@@ -45,15 +45,16 @@
             <form class="filters" method="get">
                 <div class="form-group">
                     <label>Recherche</label>
-                    <input name="motCle" placeholder="Rechercher">
+                    <input name="motCle" th:value="${motCle}" placeholder="Rechercher par nom">
                 </div>
                 <div class="form-group">
-                    <label>Statut</label>
-                    <select name="statut"><option value="">Tous</option><option>Actif</option><option>Inactif</option></select>
-                </div>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date">
+                    <label>Type client</label>
+                    <select name="typeClient">
+                        <option value="" th:selected="${typeClient == null or typeClient == ''}">Tous</option>
+                        <option value="Particulier" th:selected="${typeClient == 'Particulier'}">Particulier</option>
+                        <option value="Entreprise" th:selected="${typeClient == 'Entreprise'}">Entreprise</option>
+                        <option value="Revendeur" th:selected="${typeClient == 'Revendeur'}">Revendeur</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-dark">Filtrer</button>
             </form>
@@ -63,46 +64,27 @@
                     <thead>
                     <tr>
                         <th>Nom</th>
-<th>Type</th>
-<th>Contact</th>
-<th>Email</th>
-<th>Adresse</th>
-<th>Actions</th>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Adresse</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="item : ${clients}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
+                        <td th:text="${item.nom}">Nom client</td>
+                        <td th:text="${item.typeClient}">Type client</td>
+                        <td th:text="${item.contact}">Contact</td>
+                        <td th:text="${item.email}">Email</td>
+                        <td th:text="${item.adresse}">Adresse</td>
                         <td>
-                            <a class="link-action" th:href="@{/clients/1}">Voir</a>
-                            <a class="link-action" th:href="@{/clients/form(id=1)}">Modifier</a>
+                            <a class="link-action" th:href="@{/clients/{id}(id=${item.id})}">Voir</a>
+                            <a class="link-action" th:href="@{/clients/form(id=${item.id})}">Modifier</a>
                         </td>
                     </tr>
-                    <tr th:if="${clients == null}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-                        <td>
-                            <a class="link-action" href="#">Voir</a>
-                            <a class="link-action" th:href="@{/clients/form}">Modifier</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${clients == null}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-                        <td>
-                            <a class="link-action" href="#">Voir</a>
-                            <a class="link-action" th:href="@{/clients/form}">Modifier</a>
-                        </td>
+                    <tr th:if="${#lists.isEmpty(clients)}">
+                        <td colspan="6" class="empty">Aucun client trouvé.</td>
                     </tr>
                     </tbody>
                 </table>

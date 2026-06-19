@@ -18,13 +18,13 @@ public class EvenementReproductionController {
     @GetMapping("/reproduction/evenements")
     public String listEvenements(@RequestParam(required = false) Long typeId, Model model) {
         model.addAttribute("evenements", service.rechercherEvenements(typeId));
-        return "reproduction/evenements";
+        return "reproduction/evenements/list";
     }
 
     @GetMapping("/reproduction/evenements/form")
     public String showEvenementForm(@RequestParam(required = false) Long id, Model model) {
         model.addAttribute("evenement", new EvenementReproductionDTO());
-        return "reproduction/evenements";
+        return "reproduction/evenements/list";
     }
 
     @PostMapping("/reproduction/evenements/save")
@@ -32,6 +32,6 @@ public class EvenementReproductionController {
         String e = dto.getId() == null ? service.ajouter(dto, (Long) session.getAttribute("userId"))
                 : service.modifier(dto.getId(), dto);
         model.addAttribute("message", e);
-        return "reproduction/evenements";
+        return "reproduction/evenements/list";
     }
 }

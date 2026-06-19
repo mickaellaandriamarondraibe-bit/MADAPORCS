@@ -50,6 +50,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/EmployeController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/EvenementReproductionController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/IngredientController.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/LinkFallbackController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/LotPorcController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/MaladieController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/MelangeController.java
@@ -95,6 +96,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Reproducteur.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Role.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/RolePermission.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/RolePermissionId.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/SalaireEmploye.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Sexe.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/StatutEmploye.java
@@ -171,6 +173,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MouvementLotService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MouvementStockService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PaiementFactureService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PdfExportService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PeseeLotService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PresenceService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/ProfilService.java

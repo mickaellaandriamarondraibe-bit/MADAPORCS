@@ -64,10 +64,6 @@ public class TraitementService {
 
         Traitement traitement = convertirDtoVersEntity(dto);
 
-        if (traitement.getActif() == null) {
-            traitement.setActif(true);
-        }
-
         traitementRepository.save(traitement);
 
         return null;
@@ -103,8 +99,7 @@ public class TraitementService {
             return "Traitement introuvable.";
         }
 
-        traitement.setActif(false);
-        traitementRepository.save(traitement);
+        traitementRepository.delete(traitement);
 
         return null;
     }

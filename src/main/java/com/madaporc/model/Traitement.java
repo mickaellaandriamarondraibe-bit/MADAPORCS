@@ -28,7 +28,4 @@ public class Traitement {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "actif")
-    private Boolean actif = true;
 }

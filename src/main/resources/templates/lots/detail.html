@@ -18,22 +18,42 @@
             </div>
             <div class="header-actions">
                 <a class="btn btn-secondary" th:href="@{/lots}">Retour</a>
-                <a class="btn" th:href="@{/lots/form}">Modifier</a>
+                <a class="btn" th:href="@{/lots/form(id=${lot.id})}">Modifier</a>
             </div>
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:24px">Actif</div><div class="stat-note">Mis à jour</div></div>
-            <div class="stat-card"><div class="stat-label">Référence</div><div class="stat-value" style="font-size:24px">MAD-001</div><div class="stat-note">Code interne</div></div>
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="font-size:24px">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value" style="font-size:24px">0</div><div class="stat-note">Normal</div></div>
+            <div class="stat-card"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:24px" th:text="${lot.statutLibelle}">Actif</div><div class="stat-note">Mis à jour</div></div>
+            <div class="stat-card"><div class="stat-label">Référence</div><div class="stat-value" style="font-size:24px" th:text="${lot.codeLot}">LT001</div><div class="stat-note">Code interne</div></div>
+            <div class="stat-card"><div class="stat-label">Effectif actuel</div><div class="stat-value" style="font-size:24px" th:text="${lot.nombreActuel}">24</div><div class="stat-note">Porcs</div></div>
+            <div class="stat-card"><div class="stat-label">Mortalité</div><div class="stat-value" style="font-size:24px" th:text="${lot.tauxMortalite + ' %'}">0 %</div><div class="stat-note">Taux</div></div>
         </section>
 
         <section class="card">
             <div class="card-header"><div><h2>Informations générales</h2><p>Détails principaux du module.</p></div></div>
             <div class="grid grid-2">
-                <div class="panel"><h3>Identification</h3><p><strong>Code :</strong> MAD-001</p><p><strong>Libellé :</strong> Donnée exemple</p></div>
-                <div class="panel"><h3>Observations</h3><p>Cette page est prête à recevoir les données du contrôleur.</p></div>
+                <div class="panel">
+                    <h3>Identification</h3>
+                    <p><strong>Code :</strong> <span th:text="${lot.codeLot}">LT001</span></p>
+                    <p><strong>Type entrée :</strong> <span th:text="${lot.typeEntree}">Naissance</span></p>
+                    <p><strong>Race :</strong> <span th:text="${lot.raceLibelle}">Large White</span></p>
+                    <p><strong>Statut :</strong> <span th:text="${lot.statutLibelle}">Actif</span></p>
+                </div>
+                <div class="panel">
+                    <h3>Effectifs et poids</h3>
+                    <p><strong>Initial :</strong> <span th:text="${lot.nombreInitial}">20</span></p>
+                    <p><strong>Actuel :</strong> <span th:text="${lot.nombreActuel}">20</span></p>
+                    <p><strong>Mâles initiaux :</strong> <span th:text="${lot.nombreMalesInitial ?: 0}">0</span></p>
+                    <p><strong>Femelles initiales :</strong> <span th:text="${lot.nombreFemellesInitial ?: 0}">0</span></p>
+                    <p><strong>Poids moyen :</strong> <span th:text="${lot.poidsMoyenActuelKg != null ? lot.poidsMoyenActuelKg : lot.poidsMoyenInitialKg}">0</span> kg</p>
+                </div>
+                <div class="panel">
+                    <h3>Dates</h3>
+                    <p><strong>Naissance estimée :</strong> <span th:text="${lot.dateNaissanceEstimee ?: '-'}">-</span></p>
+                    <p><strong>Achat :</strong> <span th:text="${lot.dateAchat ?: '-'}">-</span></p>
+                    <p><strong>Prix achat :</strong> <span th:text="${lot.prixAchatTotal ?: '-'}">-</span></p>
+                </div>
+                <div class="panel"><h3>Observations</h3><p th:text="${lot.observation ?: 'Aucune observation.'}">Aucune observation.</p></div>
             </div>
         </section>
     </main>

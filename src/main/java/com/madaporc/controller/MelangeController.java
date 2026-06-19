@@ -16,6 +16,6 @@ public class MelangeController {
 
     @GetMapping("/melanges")
     public String index(Model model, HttpSession session) {
-        return "ressources/melanges";
+        return "melanges/list";
     }
 }

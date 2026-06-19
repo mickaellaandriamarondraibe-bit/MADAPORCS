@@ -24,10 +24,10 @@
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Actifs</div><div class="stat-value">18</div><div class="stat-note">En cours</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value">4</div><div class="stat-note">À surveiller</div></div>
-            <div class="stat-card"><div class="stat-label">Mois</div><div class="stat-value">12</div><div class="stat-note">Nouveaux</div></div>
+            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" th:text="${totalMouvements}">0</div><div class="stat-note">Mouvements</div></div>
+            <div class="stat-card"><div class="stat-label">Dernier lot</div><div class="stat-value" th:text="${mouvements != null && !#lists.isEmpty(mouvements) ? lotLibelles[mouvements[0].lotPorcId] : '-'}">-</div><div class="stat-note">Récemment</div></div>
+            <div class="stat-card"><div class="stat-label">Types</div><div class="stat-value" th:text="${typesMouvement != null ? typesMouvement.size() : 0}">0</div><div class="stat-note">Catégories</div></div>
+            <div class="stat-card"><div class="stat-label">Date</div><div class="stat-value" th:text="${date != null ? date : 'Toutes'}">Toutes</div><div class="stat-note">Filtre</div></div>
         </section>
 
         <section class="card">
@@ -38,22 +38,29 @@
                 </div>
                 <div class="actions">
                     <a class="btn" th:href="@{/lots/mouvements/form}">+ Ajouter</a>
-                    <a class="btn btn-blue" href="#">Exporter</a>
+                    <a class="btn btn-blue" th:href="@{/lots/mouvements}">Exporter</a>
                 </div>
             </div>
 
             <form class="filters" method="get">
                 <div class="form-group">
                     <label>Recherche</label>
-                    <input name="motCle" placeholder="Rechercher">
+                    <input name="motCle" th:value="${motCle}" placeholder="Rechercher">
                 </div>
                 <div class="form-group">
-                    <label>Statut</label>
-                    <select name="statut"><option value="">Tous</option><option>Actif</option><option>Inactif</option></select>
+                    <label>Type</label>
+                    <select name="typeMouvementId">
+                        <option value="">Tous</option>
+                        <option th:each="type : ${typesMouvement}"
+                                th:value="${type.id}"
+                                th:text="${type.libelle}"
+                                th:selected="${type.id == typeMouvementId}">
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Date</label>
-                    <input type="date" name="date">
+                    <input type="date" name="date" th:value="${date}">
                 </div>
                 <button type="submit" class="btn btn-dark">Filtrer</button>
             </form>
@@ -73,18 +80,21 @@
                     </thead>
                     <tbody>
                     <tr th:each="item : ${mouvements}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
+                        <td th:text="${lotLibelles[item.lotPorcId] ?: item.lotPorcId}">1</td>
+                        <td th:text="${typeLibelles[item.typeMouvementLotId] ?: item.typeMouvementLotId}">Entrée</td>
+                        <td th:text="${item.quantite}">12</td>
+                        <td th:text="${item.dateMouvement == null ? '' : #temporals.format(item.dateMouvement, 'dd/MM/yyyy HH:mm')}">15/06/2026 10:00</td>
+                        <td th:text="${item.motif}">Ajustement</td>
+                        <td th:text="${item.createdBy}">1</td>
                         <td>
-                            <a class="link-action" th:href="@{/lots/mouvements/1}">Voir</a>
-                            <a class="link-action" th:href="@{/lots/mouvements/form(id=1)}">Modifier</a>
+                            <a class="link-action" th:href="@{/lots/mouvements/detail/{id}(id=${item.id})}">Voir</a>
+                            <a class="link-action" th:href="@{/lots/mouvements/form(id=${item.id})}">Modifier</a>
                         </td>
                     </tr>
-                    <tr th:if="${mouvements == null}">
+                    <tr th:if="${mouvements == null || #lists.isEmpty(mouvements)}">
+                        <td colspan="7">Aucun mouvement enregistré.</td>
+                    </tr>
+                    <tr th:remove="all">
                         <td>Donnée</td>
 <td>Donnée</td>
 <td>Donnée</td>
@@ -96,7 +106,7 @@
                             <a class="link-action" th:href="@{/lots/mouvements/form}">Modifier</a>
                         </td>
                     </tr>
-                    <tr th:if="${mouvements == null}">
+                    <tr th:remove="all">
                         <td>Donnée</td>
 <td>Donnée</td>
 <td>Donnée</td>

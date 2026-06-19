@@ -16,6 +16,6 @@ public class ProfilController {
 
     @GetMapping("/profil")
     public String index(Model model, HttpSession session) {
-        return "settings/profil";
+        return "profil";
     }
 }

@@ -17,15 +17,18 @@ public class VenteService {
     private final LotPorcRepository lotRepo;
     private final PaiementRepository paiementRepo;
     private final MouvementLotPorcRepository mouvRepo;
+    private final CycleProductionService cycleProductionService;
 
     public VenteService(VenteRepository repo, DetailVenteRepository detailRepo, ClientRepository clientRepo,
-            LotPorcRepository lotRepo, PaiementRepository paiementRepo, MouvementLotPorcRepository mouvRepo) {
+            LotPorcRepository lotRepo, PaiementRepository paiementRepo, MouvementLotPorcRepository mouvRepo,
+            CycleProductionService cycleProductionService) {
         this.repo = repo;
         this.detailRepo = detailRepo;
         this.clientRepo = clientRepo;
         this.lotRepo = lotRepo;
         this.paiementRepo = paiementRepo;
         this.mouvRepo = mouvRepo;
+        this.cycleProductionService = cycleProductionService;
     }
 
     public List<Vente> findAllVentes() {
@@ -95,9 +98,10 @@ public class VenteService {
             return "Vente introuvable.";
         for (DetailVente d : detailRepo.findByVenteId(id)) {
             mettreAJourLotApresVente(d);
+            cycleProductionService.appliquerVenteAuCycle(d);
             creerMouvementLotApresVente(d, v.getCreatedBy());
         }
-        v.setStatutVente("Validée");
+        v.setStatutVente("Validee");
         repo.save(v);
         return null;
     }
@@ -106,7 +110,7 @@ public class VenteService {
         Vente v = repo.findById(id).orElse(null);
         if (v == null)
             return "Vente introuvable.";
-        v.setStatutVente("Annulée");
+        v.setStatutVente("Annulee");
         repo.save(v);
         return null;
     }

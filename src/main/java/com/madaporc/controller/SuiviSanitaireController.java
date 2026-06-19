@@ -16,6 +16,6 @@ public class SuiviSanitaireController {
 
     @GetMapping("/sante/suivis")
     public String index(Model model, HttpSession session) {
-        return "sante/suivisSanitaires";
+        return "sante/suivis/list";
     }
 }

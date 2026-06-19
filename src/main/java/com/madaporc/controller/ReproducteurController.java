@@ -19,13 +19,13 @@ public class ReproducteurController {
     public String listReproducteurs(@RequestParam(required = false) String motCle,
             @RequestParam(required = false) Long sexeId, @RequestParam(required = false) Long statutId, Model model) {
         model.addAttribute("reproducteurs", service.rechercherReproducteurs(motCle, sexeId, statutId));
-        return "reproducteurs/listeReproducteurs";
+        return "reproducteurs/list";
     }
 
     @GetMapping("/reproducteurs/form")
     public String showForm(@RequestParam(required = false) Long id, Model model) {
         service.prepareReproducteurFormModel(model, id);
-        return "reproducteurs/listeReproducteurs";
+        return "reproducteurs/form";
     }
 
     @PostMapping("/reproducteurs/save")
@@ -33,7 +33,7 @@ public class ReproducteurController {
         String e = dto.getId() == null ? service.creer(dto, (Long) session.getAttribute("userId"))
                 : service.modifier(dto.getId(), dto);
         model.addAttribute("message", e);
-        return "reproducteurs/listeReproducteurs";
+        return "reproducteurs/list";
     }
 
     @PostMapping("/reproducteurs/archive/{id}")
@@ -45,6 +45,6 @@ public class ReproducteurController {
     @GetMapping("/reproducteurs/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("reproducteur", service.getDetailReproducteur(id));
-        return "reproducteurs/detailReproducteur";
+        return "reproducteurs/detail";
     }
 }

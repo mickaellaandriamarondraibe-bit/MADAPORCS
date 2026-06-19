@@ -74,16 +74,16 @@
                     </thead>
                     <tbody>
                     <tr th:each="item : ${cycles}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
+                        <td th:text="${item.codeCycle}">Code cycle</td>
+                        <td th:text="${item.lotPorcId}">Lot</td>
+                        <td th:text="${item.dateDebut}">Date début</td>
+                        <td th:text="${item.nombreNaissances}">Naissances</td>
+                        <td th:text="${item.nombrePertes}">Pertes</td>
+                        <td th:text="${item.nombreVendables}">Vendables</td>
+                        <td th:text="${item.statutCycle}">Statut</td>
                         <td>
-                            <a class="link-action" th:href="@{/cycles/1}">Voir</a>
-                            <a class="link-action" th:href="@{/cycles/form(id=1)}">Modifier</a>
+                            <a class="link-action" th:href="@{/cycles/{id}(id=${item.id})}">Voir</a>
+                            <a class="link-action" th:href="@{/cycles/form(id=${item.id})}">Modifier</a>
                         </td>
                     </tr>
                     <tr th:if="${cycles == null}">

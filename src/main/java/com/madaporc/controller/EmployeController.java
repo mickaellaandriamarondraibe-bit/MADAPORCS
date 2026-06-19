@@ -16,6 +16,6 @@ public class EmployeController {
 
     @GetMapping("/employes")
     public String index(Model model, HttpSession session) {
-        return "personnel/employes";
+        return "employes/list";
     }
 }

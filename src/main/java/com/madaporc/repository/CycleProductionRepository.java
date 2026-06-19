@@ -14,6 +14,10 @@ import org.springframework.data.jpa.repository.Query;
 
     List<CycleProduction> findByDateDebutBetween(LocalDate debut, LocalDate fin);
 
+    List<CycleProduction> findByLotPorcId(Long lotPorcId);
+
+    List<CycleProduction> findByLotPorcIdAndStatutCycleNot(Long lotPorcId, String statutCycle);
+
     @Query("select coalesce(sum(c.nombreVendables),0) from CycleProduction c where c.statutCycle <> 'Clôturé'")
     Integer sumNombreVendablesActifs();
     }

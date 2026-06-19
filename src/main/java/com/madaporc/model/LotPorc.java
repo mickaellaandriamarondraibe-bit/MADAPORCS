@@ -48,6 +48,12 @@ public class LotPorc {
     @Column(name = "nombre_morts")
     private Integer nombreMorts;
 
+    @Column(name = "nombre_males_morts")
+    private Integer nombreMalesMorts;
+
+    @Column(name = "nombre_femelles_mortes")
+    private Integer nombreFemellesMortes;
+
     @Column(name = "date_naissance_estimee")
     private LocalDate dateNaissanceEstimee;
 

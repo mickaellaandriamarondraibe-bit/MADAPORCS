@@ -31,7 +31,7 @@ public class PaiementFactureController {
         model.addAttribute("facture", service.getFacture(venteId));
         model.addAttribute("paiement", new PaiementDTO());
 
-        return "commerce/factureDetail";
+        return "factures/detail";
     }
 
     @PostMapping("/paiements/save")
@@ -43,7 +43,7 @@ public class PaiementFactureController {
             model.addAttribute("facture", service.getFacture(dto.getVenteId()));
             model.addAttribute("paiement", dto);
 
-            return "commerce/factureDetail";
+            return "factures/detail";
         }
 
         return "redirect:/factures/detail/" + dto.getVenteId();
@@ -58,7 +58,7 @@ public class PaiementFactureController {
             model.addAttribute("facture", service.getFacture(venteId));
             model.addAttribute("paiement", new PaiementDTO());
 
-            return "commerce/factureDetail";
+            return "factures/detail";
         }
 
         return "redirect:/factures/detail/" + venteId;
@@ -68,6 +68,6 @@ public class PaiementFactureController {
     public String exporterFacturePdf(@PathVariable Long venteId, Model model) {
         model.addAttribute("facture", service.getFacture(venteId));
 
-        return "commerce/factureDetail";
+        return "factures/detail";
     }
 }

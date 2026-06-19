@@ -1,5 +1,6 @@
 package com.madaporc.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,29 @@ public class MouvementLotService {
         return repo.findByLotPorcIdOrderByDateMouvementDesc(lotId);
     }
 
+    public List<MouvementLotPorc> rechercherMouvements(String motCle, Long typeMouvementId, LocalDate date, Long lotId) {
+        return repo.findAllByOrderByDateMouvementDesc().stream()
+                .filter(m -> lotId == null || lotId.equals(m.getLotPorcId()))
+                .filter(m -> typeMouvementId == null || typeMouvementId.equals(m.getTypeMouvementLotId()))
+                .filter(m -> date == null || m.getDateMouvement() != null && m.getDateMouvement().toLocalDate().equals(date))
+                .filter(m -> motCle == null || motCle.isBlank() || matchesMouvementSearch(m, motCle))
+                .toList();
+    }
+
+    private boolean matchesMouvementSearch(MouvementLotPorc mouvement, String motCle) {
+        String normalized = motCle.trim().toLowerCase();
+        boolean motifMatch = mouvement.getMotif() != null && mouvement.getMotif().toLowerCase().contains(normalized);
+        Long lotPorcId = mouvement.getLotPorcId();
+        boolean lotMatch = lotPorcId != null && lotRepo.findById(lotPorcId)
+                .map(l -> l.getCodeLot() != null && l.getCodeLot().toLowerCase().contains(normalized))
+                .orElse(false);
+        return motifMatch || lotMatch;
+    }
+
     public String verifierQuantiteDisponible(Long lotId, Integer quantite, String typeMouvement) {
+        if (lotId == null) {
+            return "Lot introuvable.";
+        }
         LotPorc l = lotRepo.findById(lotId).orElse(null);
         if (l == null)
             return "Lot introuvable.";
@@ -51,6 +74,9 @@ public class MouvementLotService {
     }
 
     public void mettreAJourEffectifLot(Long lotId, Integer q, String type) {
+        if (lotId == null) {
+            return;
+        }
         LotPorc l = lotRepo.findById(lotId).orElse(null);
         if (l == null || q == null)
             return;

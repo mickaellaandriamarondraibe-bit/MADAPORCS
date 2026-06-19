@@ -16,6 +16,6 @@ public class DistributionAlimentController {
 
     @GetMapping("/distributions")
     public String index(Model model, HttpSession session) {
-        return "ressources/distributions";
+        return "distributions/list";
     }
 }

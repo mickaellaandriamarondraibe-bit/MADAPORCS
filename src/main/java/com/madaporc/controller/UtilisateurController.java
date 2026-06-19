@@ -16,6 +16,6 @@ public class UtilisateurController {
 
     @GetMapping("/utilisateurs")
     public String index(Model model, HttpSession session) {
-        return "settings/utilisateurs";
+        return "utilisateurs/list";
     }
 }

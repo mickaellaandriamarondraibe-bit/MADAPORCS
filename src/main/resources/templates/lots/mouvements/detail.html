@@ -18,22 +18,40 @@
             </div>
             <div class="header-actions">
                 <a class="btn btn-secondary" th:href="@{/lots/mouvements}">Retour</a>
-                <a class="btn" th:href="@{/lots/mouvements/form}">Modifier</a>
+                <a class="btn" th:href="@{/lots/mouvements/form(id=${mouvement.id})}">Modifier</a>
             </div>
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:24px">Actif</div><div class="stat-note">Mis à jour</div></div>
-            <div class="stat-card"><div class="stat-label">Référence</div><div class="stat-value" style="font-size:24px">MAD-001</div><div class="stat-note">Code interne</div></div>
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="font-size:24px">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value" style="font-size:24px">0</div><div class="stat-note">Normal</div></div>
+            <div class="stat-card"><div class="stat-label">Type</div><div class="stat-value" style="font-size:24px" th:text="${typeMouvement != null ? typeMouvement.libelle : '-'}">Naissance</div><div class="stat-note">Mouvement</div></div>
+            <div class="stat-card"><div class="stat-label">Lot</div><div class="stat-value" style="font-size:24px" th:text="${lot != null ? lot.codeLot : mouvement.lotPorcId}">LT001</div><div class="stat-note">Code lot</div></div>
+            <div class="stat-card"><div class="stat-label">Quantité</div><div class="stat-value" style="font-size:24px" th:text="${mouvement.quantite}">24</div><div class="stat-note">Porcs</div></div>
+            <div class="stat-card"><div class="stat-label">Date</div><div class="stat-value" style="font-size:24px" th:text="${mouvement.dateMouvement == null ? '-' : #temporals.format(mouvement.dateMouvement, 'dd/MM/yyyy')}">16/06/2026</div><div class="stat-note">Mouvement</div></div>
         </section>
 
         <section class="card">
             <div class="card-header"><div><h2>Informations générales</h2><p>Détails principaux du module.</p></div></div>
             <div class="grid grid-2">
-                <div class="panel"><h3>Identification</h3><p><strong>Code :</strong> MAD-001</p><p><strong>Libellé :</strong> Donnée exemple</p></div>
-                <div class="panel"><h3>Observations</h3><p>Cette page est prête à recevoir les données du contrôleur.</p></div>
+                <div class="panel">
+                    <h3>Identification</h3>
+                    <p><strong>ID mouvement :</strong> <span th:text="${mouvement.id}">1</span></p>
+                    <p><strong>Lot :</strong> <span th:text="${lot != null ? lot.codeLot : mouvement.lotPorcId}">LT001</span></p>
+                    <p><strong>Type :</strong> <span th:text="${typeMouvement != null ? typeMouvement.libelle : mouvement.typeMouvementLotId}">Naissance</span></p>
+                    <p><strong>Date :</strong> <span th:text="${mouvement.dateMouvement == null ? '-' : #temporals.format(mouvement.dateMouvement, 'dd/MM/yyyy HH:mm')}">16/06/2026 00:00</span></p>
+                </div>
+                <div class="panel">
+                    <h3>Quantités</h3>
+                    <p><strong>Total :</strong> <span th:text="${mouvement.quantite}">24</span></p>
+                    <p><strong>Mâles :</strong> <span th:text="${mouvement.quantiteMale ?: 0}">0</span></p>
+                    <p><strong>Femelles :</strong> <span th:text="${mouvement.quantiteFemelle ?: 0}">0</span></p>
+                    <p><strong>Responsable :</strong> <span th:text="${mouvement.createdBy ?: '-'}">-</span></p>
+                </div>
+                <div class="panel">
+                    <h3>Lot concerné</h3>
+                    <p><strong>Effectif actuel :</strong> <span th:text="${lot != null ? lot.nombreActuel : '-'}">20</span></p>
+                    <p><strong>Type entrée :</strong> <span th:text="${lot != null ? lot.typeEntree : '-'}">Naissance</span></p>
+                </div>
+                <div class="panel"><h3>Motif</h3><p th:text="${mouvement.motif ?: 'Aucun motif.'}">Aucun motif.</p></div>
             </div>
         </section>
     </main>

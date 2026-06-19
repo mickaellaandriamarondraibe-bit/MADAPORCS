@@ -7,29 +7,10 @@
 </head>
 <body>
 
-<div class="app-layout">
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-logo">🐷</div>
-            <div>
-                <strong>MADAPORC</strong>
-                <span>GestPorc • Gestion d'élevage</span>
-            </div>
-        </div>
-
-        <nav class="menu">
-            <a href="/dashboard">📊 Tableau de bord</a>
-
-            <div class="menu-title">Commerce</div>
-            <a class="active" href="/clients">👥 Clients</a>
-            <a href="/ventes">💳 Ventes</a>
-            <a href="/factures">🧾 Factures</a>
-            <a href="/depenses">💸 Dépenses</a>
-        </nav>
-    </aside>
-
-    <main class="main-content">
+    <main class="content">
 
         <header class="topbar">
             <div>
@@ -83,9 +64,9 @@
                     <textarea th:field="*{adresse}" rows="4" placeholder="Adresse du client"></textarea>
                 </div>
 
-                <div class="form-actions">
-                    <a href="/clients" class="btn btn-secondary">Annuler</a>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <div class="actions" style="grid-column: 1 / -1; justify-content: flex-end; gap: 12px;">
+                    <a th:href="@{/clients}" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-blue">Enregistrer</button>
                 </div>
 
             </form>

@@ -16,6 +16,6 @@ public class SalaireController {
 
     @GetMapping("/salaires")
     public String index(Model model, HttpSession session) {
-        return "personnel/salaires";
+        return "salaires/list";
     }
 }

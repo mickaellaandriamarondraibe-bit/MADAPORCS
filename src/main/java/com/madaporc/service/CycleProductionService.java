@@ -1,25 +1,33 @@
 package com.madaporc.service;
 
-import java.math.*;
-import java.time.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import com.madaporc.DTO.CycleProductionDTO;
 import com.madaporc.model.CycleProduction;
-import com.madaporc.repository.*;
+import com.madaporc.model.DetailVente;
+import com.madaporc.model.LotPorc;
+import com.madaporc.repository.CycleProductionRepository;
 
 @Service
 public class CycleProductionService {
     private final CycleProductionRepository repo;
-    private final LotPorcRepository lotRepo;
 
-    public CycleProductionService(CycleProductionRepository repo, LotPorcRepository lotRepo) {
+    public CycleProductionService(CycleProductionRepository repo) {
         this.repo = repo;
-        this.lotRepo = lotRepo;
     }
 
     public List<CycleProduction> findAllCycles() {
         return repo.findAllByOrderByDateDebutDesc();
+    }
+
+    public CycleProductionDTO findById(Long id) {
+        if (id == null)
+            return new CycleProductionDTO();
+        return repo.findById(id).map(this::convertToDTO).orElse(new CycleProductionDTO());
     }
 
     public String creer(CycleProductionDTO dto) {
@@ -45,10 +53,75 @@ public class CycleProductionService {
     }
 
     public int calculerNombreVendables(Long id) {
+        if (id == null)
+            return 0;
         return repo.findById(id).map(c -> c.getNombreVendables() == null ? 0 : c.getNombreVendables()).orElse(0);
     }
 
+    public void synchroniserCycleAvecLot(LotPorc lot) {
+        if (lot == null || lot.getId() == null)
+            return;
+        List<CycleProduction> cycles = repo.findByLotPorcIdAndStatutCycleNot(lot.getId(), "Clôturé");
+        if (cycles == null || cycles.isEmpty())
+            return;
+        for (CycleProduction c : cycles) {
+            if ("Naissance".equalsIgnoreCase(lot.getTypeEntree())) {
+                c.setNombreNaissances(nz(lot.getNombreInitial()));
+            }
+            c.setNombrePertes(nz(lot.getNombreMorts()));
+            c.setNombreVivants(nz(lot.getNombreActuel()));
+            c.setNombreVendables(nz(lot.getNombreActuel()));
+            repo.save(c);
+        }
+    }
+
+    public void creerCycleDepuisLotSiAbsent(LotPorc lot) {
+        if (lot == null || lot.getId() == null)
+            return;
+        if (!repo.findByLotPorcId(lot.getId()).isEmpty())
+            return;
+        CycleProduction cycle = new CycleProduction();
+        cycle.setCodeCycle("CYCLE-" + lot.getId());
+        cycle.setLotPorcId(lot.getId());
+        if ("Achat".equalsIgnoreCase(lot.getTypeEntree())) {
+            cycle.setDateDebut(lot.getDateAchat());
+            cycle.setNombreNaissances(null);
+        } else {
+            cycle.setDateDebut(lot.getDateNaissanceEstimee());
+            cycle.setNombreNaissances(nz(lot.getNombreInitial()));
+        }
+        cycle.setNombrePertes(nz(lot.getNombreMorts()));
+        cycle.setNombreVivants(nz(lot.getNombreActuel()));
+        cycle.setNombreVendables(nz(lot.getNombreActuel()));
+        cycle.setStatutCycle("En cours");
+        cycle.setObservation("Cycle créé automatiquement depuis le lot.");
+        cycle.setCreatedAt(LocalDateTime.now());
+        repo.save(cycle);
+    }
+
+    public void appliquerVenteAuCycle(DetailVente detail) {
+        if (detail == null || detail.getLotPorcId() == null)
+            return;
+        int sold = detail.getNombrePorcsVendus() == null ? 0 : detail.getNombrePorcsVendus();
+        if (sold <= 0)
+            return;
+        List<CycleProduction> cycles = repo.findByLotPorcIdAndStatutCycleNot(detail.getLotPorcId(), "Clôturé");
+        if (cycles == null || cycles.isEmpty())
+            return;
+        for (CycleProduction c : cycles) {
+            c.setNombreVivants(Math.max(0, nz(c.getNombreVivants()) - sold));
+            c.setNombreVendables(Math.max(0, nz(c.getNombreVendables()) - sold));
+            repo.save(c);
+        }
+    }
+
+    private int nz(Integer value) {
+        return value == null ? 0 : value;
+    }
+
     public BigDecimal calculerTauxPerte(Long id) {
+        if (id == null)
+            return BigDecimal.ZERO;
         CycleProduction c = repo.findById(id).orElse(null);
         if (c == null || c.getNombreNaissances() == null || c.getNombreNaissances() == 0)
             return BigDecimal.ZERO;
@@ -58,6 +131,8 @@ public class CycleProductionService {
     }
 
     public void cloturerCycle(Long id, LocalDate dateFinReelle) {
+        if (id == null)
+            return;
         repo.findById(id).ifPresent(c -> {
             c.setDateFinReelle(dateFinReelle);
             c.setStatutCycle("Clôturé");
@@ -80,5 +155,22 @@ public class CycleProductionService {
         c.setStatutCycle(d.getStatutCycle());
         c.setObservation(d.getObservation());
         return c;
+    }
+
+    private CycleProductionDTO convertToDTO(CycleProduction c) {
+        CycleProductionDTO dto = new CycleProductionDTO();
+        dto.setId(c.getId());
+        dto.setCodeCycle(c.getCodeCycle());
+        dto.setLotPorcId(c.getLotPorcId());
+        dto.setDateDebut(c.getDateDebut());
+        dto.setDateFinPrevue(c.getDateFinPrevue());
+        dto.setDateFinReelle(c.getDateFinReelle());
+        dto.setNombreNaissances(c.getNombreNaissances());
+        dto.setNombrePertes(c.getNombrePertes());
+        dto.setNombreVivants(c.getNombreVivants());
+        dto.setNombreVendables(c.getNombreVendables());
+        dto.setStatutCycle(c.getStatutCycle());
+        dto.setObservation(c.getObservation());
+        return dto;
     }
 }

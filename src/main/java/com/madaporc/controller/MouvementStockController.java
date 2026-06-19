@@ -68,4 +68,9 @@ public class MouvementStockController {
         model.addAttribute("mouvement", service.findById(id).orElse(null));
         return "stocks/mouvements/detail";
     }
+
+    @GetMapping("/{id}")
+    public String detailAlias(@PathVariable Long id) {
+        return "redirect:/stocks/mouvements/detail/" + id;
+    }
 }

@@ -13,8 +13,8 @@ public class Race {
     private Long id;
 
     @Column(name = "libelle")
-private String libelle;
+    private String libelle;
 
-@Column(name = "description")
-private String description;
+    @Column(name = "description")
+    private String description;
 }

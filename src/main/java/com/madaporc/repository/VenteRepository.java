@@ -17,6 +17,6 @@ import org.springframework.data.repository.query.Param;
 
     List<Vente> findByDateVenteBetween(LocalDateTime debut, LocalDateTime fin);
 
-    @Query("select coalesce(sum(v.montantTotal),0) from Vente v where v.dateVente between :debut and :fin and v.statutVente <> 'Annulée'")
+    @Query("select coalesce(sum(v.montantTotal),0) from Vente v where v.dateVente between :debut and :fin and v.statutVente <> 'Annulee'")
     BigDecimal sumMontantByDateBetween(@Param("debut") LocalDateTime debut, @Param("fin") LocalDateTime fin);
     }

@@ -62,4 +62,9 @@ public class ClientController {
         model.addAttribute("client", clientService.findClient(id).orElse(null));
         return "clients/detail";
     }
+
+    @GetMapping("/{id}")
+    public String detailAlias(@PathVariable Long id) {
+        return "redirect:/clients/detail/" + id;
+    }
 }

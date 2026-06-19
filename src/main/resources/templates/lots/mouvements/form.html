@@ -29,9 +29,28 @@
                 </div>
             </div>
 
-            <form method="post" th:action="@{/lots/mouvements/save}">
+            <div class="alert alert-error" th:if="${erreur}" th:text="${erreur}"></div>
+
+            <form method="post" th:action="@{/lots/mouvements/save}" th:object="${mouvement}">
+                <input type="hidden" th:field="*{id}">
                 <div class="form-grid">
-                    <div class="form-group"><label>Lot</label><select name="lotPorcId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Type mouvement</label><select name="typeMouvementLotId"><option value="">Sélectionner</option><option>Actif</option><option>En cours</option><option>Archivé</option></select></div><div class="form-group"><label>Quantité</label><input type="number" name="quantite" placeholder="Quantité"></div><div class="form-group"><label>Date mouvement</label><input type="datetime-local" name="dateMouvement" placeholder="Date mouvement"></div><div class="form-group"><label>Motif</label><textarea name="motif" placeholder="Motif"></textarea></div>
+                    <div class="form-group">
+                        <label>Lot</label>
+                        <select th:field="*{lotPorcId}">
+                            <option value="">Sélectionner</option>
+                            <option th:each="lot : ${lots}" th:value="${lot.id}" th:text="${lot.codeLot}">LOT-001</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Type mouvement</label>
+                        <select th:field="*{typeMouvementLotId}">
+                            <option value="">Sélectionner</option>
+                            <option th:each="type : ${typesMouvement}" th:value="${type.id}" th:text="${type.libelle}">Entrée</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Quantité</label><input type="number" th:field="*{quantite}" placeholder="Quantité"></div>
+                    <div class="form-group"><label>Date mouvement</label><input type="datetime-local" th:field="*{dateMouvement}" placeholder="Date mouvement"></div>
+                    <div class="form-group"><label>Motif</label><textarea th:field="*{motif}" placeholder="Motif"></textarea></div>
                 </div>
                 <div class="actions" style="margin-top:22px">
                     <button type="submit" class="btn">Enregistrer</button>

@@ -16,6 +16,6 @@ public class PresenceController {
 
     @GetMapping("/presences")
     public String index(Model model, HttpSession session) {
-        return "personnel/presences";
+        return "presences/list";
     }
 }

@@ -26,7 +26,7 @@ mvn spring-boot:run
 Puis ouvrir :
 
 ```text
-http://localhost:8080/
+http://localhost:8082/
 ```
 
 ## Voir la liste complète des fichiers

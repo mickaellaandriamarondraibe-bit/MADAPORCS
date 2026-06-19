@@ -24,10 +24,10 @@
         </header>
 
         <section class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">24</div><div class="stat-note">Données</div></div>
-            <div class="stat-card"><div class="stat-label">Actifs</div><div class="stat-value">18</div><div class="stat-note">En cours</div></div>
-            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value">4</div><div class="stat-note">À surveiller</div></div>
-            <div class="stat-card"><div class="stat-label">Mois</div><div class="stat-value">12</div><div class="stat-note">Nouveaux</div></div>
+            <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" th:text="${totalLots}">0</div><div class="stat-note">Données</div></div>
+            <div class="stat-card"><div class="stat-label">Actifs</div><div class="stat-value" th:text="${totalLotsActifs}">0</div><div class="stat-note">En cours</div></div>
+            <div class="stat-card"><div class="stat-label">Alertes</div><div class="stat-value" th:text="${lotsEnAlerte}">0</div><div class="stat-note">À surveiller</div></div>
+            <div class="stat-card"><div class="stat-label">Nouveaux</div><div class="stat-value" th:text="${lotsNouveauxCeMois}">0</div><div class="stat-note">Ce mois</div></div>
         </section>
 
         <section class="card">
@@ -38,22 +38,40 @@
                 </div>
                 <div class="actions">
                     <a class="btn" th:href="@{/lots/form}">+ Ajouter</a>
-                    <a class="btn btn-blue" href="#">Exporter</a>
+                    <a class="btn btn-blue" th:href="@{/lots/export(motCle=${motCle}, raceId=${raceId}, statutId=${statutId}, date=${date})}">Exporter</a>
                 </div>
             </div>
 
             <form class="filters" method="get">
                 <div class="form-group">
                     <label>Recherche</label>
-                    <input name="motCle" placeholder="Rechercher">
+                    <input name="motCle" th:value="${motCle}" placeholder="Rechercher">
+                </div>
+                <div class="form-group">
+                    <label>Race</label>
+                    <select name="raceId">
+                        <option value="">Tous</option>
+                        <option th:each="race : ${races}"
+                                th:value="${race.id}"
+                                th:text="${race.libelle}"
+                                th:selected="${race.id == raceId}">
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Statut</label>
-                    <select name="statut"><option value="">Tous</option><option>Actif</option><option>Inactif</option></select>
+                    <select name="statutId">
+                        <option value="">Tous</option>
+                        <option th:each="statut : ${statuts}"
+                                th:value="${statut.id}"
+                                th:text="${statut.libelle}"
+                                th:selected="${statut.id == statutId}">
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date">
+                    <label>Date création</label>
+                    <input type="date" name="date" th:value="${date}">
                 </div>
                 <button type="submit" class="btn btn-dark">Filtrer</button>
             </form>
@@ -73,30 +91,21 @@
                     </thead>
                     <tbody>
                     <tr th:each="item : ${lots}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
+                        <td th:text="${item.codeLot}">LT001</td>
+<td th:text="${raceLibelles[item.raceId] ?: '-'}">Large White</td>
+<td th:text="${item.nombreInitial}">20</td>
+<td th:text="${item.nombreActuel}">20</td>
+<td th:text="${item.poidsMoyenActuelKg != null ? item.poidsMoyenActuelKg : item.poidsMoyenInitialKg}">20.00</td>
+<td th:text="${statutLibelles[item.statutLotId] ?: '-'}">Actif</td>
                         <td>
-                            <a class="link-action" th:href="@{/lots/1}">Voir</a>
-                            <a class="link-action" th:href="@{/lots/form(id=1)}">Modifier</a>
+                            <a class="link-action" th:href="@{/lots/detail/{id}(id=${item.id})}">Voir</a>
+                            <a class="link-action" th:href="@{/lots/form(id=${item.id})}">Modifier</a>
                         </td>
                     </tr>
-                    <tr th:if="${lots == null}">
-                        <td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-<td>Donnée</td>
-                        <td>
-                            <a class="link-action" href="#">Voir</a>
-                            <a class="link-action" th:href="@{/lots/form}">Modifier</a>
-                        </td>
+                    <tr th:if="${lots == null || #lists.isEmpty(lots)}">
+                        <td colspan="7">Aucun lot enregistré.</td>
                     </tr>
-                    <tr th:if="${lots == null}">
+                    <tr th:remove="all">
                         <td>Donnée</td>
 <td>Donnée</td>
 <td>Donnée</td>
