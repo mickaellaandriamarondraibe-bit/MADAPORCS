@@ -1,3 +1,0 @@
-- si naissance on doit preciser les parents (formulaire de creation de lot porc)
-- un achat doit etre un depense (formulaire de creation de lot porc)
--
