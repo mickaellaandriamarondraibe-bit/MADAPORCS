@@ -69,13 +69,13 @@ public class GroupeReproduction {
     @Column(name = "nb_porcelets_morts")
     private Integer nbPorceletsMorts;
 
+    @Column(name = "statut")
     private String statut;
-
+    
+    @Column(name = "observation")
     private String observation;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private Utilisateur createdBy;
+   
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
