@@ -16,17 +16,27 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+            
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/css/**", "/js/**", "/WEB-INF/**").permitAll()
                 .anyRequest().authenticated()
             )
+            
             .formLogin(form -> form
                 .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("email")
+                .passwordParameter("motDePasse")
+                .defaultSuccessUrl("/dashboard/index", true)
                 .permitAll()
             )
+            
             .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
                 .permitAll()
             );
+
         return http.build();
     }
 

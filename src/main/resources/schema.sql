@@ -3,10 +3,10 @@
 -- Spring Boot MVC + JSP + PostgreSQL
 -- =====================================================
 
--- DROP DATABASE IF EXISTS madaporc;
--- CREATE DATABASE madaporc;
+DROP DATABASE IF EXISTS madaporc;
+CREATE DATABASE madaporc;
 
--- \c madaporc;
+\c madaporc;
 
 -- =====================================================
 -- NETTOYAGE
