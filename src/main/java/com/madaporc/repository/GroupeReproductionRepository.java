@@ -6,4 +6,5 @@ import com.madaporc.model.GroupeReproduction;
 
 public interface  GroupeReproductionRepository extends JpaRepository<GroupeReproduction, Integer> {
     
+    
 }
