@@ -13,7 +13,7 @@ VALUES (
     'Administrateur',
     'MADAPORC',
     'admin@madaporc.local',
-    'admin123',
+    '$2a$10$Rd4XjgqiGoS5e3sYu7T8OeLGXy6RMe2/6dgQZphKGoMVxVCZ5XMvC',
     (SELECT id FROM roles WHERE nom = 'ADMIN')
 )
 ON CONFLICT (email) DO NOTHING;
