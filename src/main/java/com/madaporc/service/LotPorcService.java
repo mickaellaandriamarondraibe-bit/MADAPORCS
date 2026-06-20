@@ -7,6 +7,8 @@ import com.madaporc.dto.LotDetailDTO;
 import com.madaporc.dto.LotFiltreDTO;
 import com.madaporc.dto.LotPorcDTO;
 import com.madaporc.model.LotPorc;
+import com.madaporc.model.Race;
+
 import java.util.List;
 import java.util.ArrayList;
 import com.madaporc.repository.*;
@@ -14,9 +16,11 @@ import com.madaporc.repository.*;
 @Service
 public class LotPorcService {
     private final LotPorcRepository lotPorcRepository;
+    private final RaceRepository raceRepository;
 
-    public LotPorcService(LotPorcRepository lotPorcRepository) {
+    public LotPorcService(LotPorcRepository lotPorcRepository, RaceRepository raceRepository) {
         this.lotPorcRepository = lotPorcRepository;
+        this.raceRepository = raceRepository;
     }
 
     public List<LotPorc> rechercherLots(LotFiltreDTO filtre) {
@@ -74,6 +78,10 @@ public class LotPorcService {
             lot.setEffectifActuel(dto.getEffectifActuel());
         }
 
+        Race race = raceRepository.findById(dto.getRaceId()).orElseThrow(() -> new IllegalArgumentException("Race non trouve"));
+        lot.setRace(race);
+        lot.setDateCreation(dto.getDateCreation());
+        
         lotPorcRepository.save(lot);
 
         return "redirect:/lots";
@@ -85,7 +93,7 @@ public class LotPorcService {
             return "redirect:/lots?error=notfound";
         }
 
-        lotPorcRepository.updateById(id, dto.getCodeLot(), dto.getDateCreation(), dto.getSexe(), dto.getObjectif(), dto.getOrigine());
+        lotPorcRepository.updateById(id, dto.getCodeLot(), dto.getDateCreation(), dto.getSexe(), dto.getObjectif());
 
         return "redirect:/lots";
     }
