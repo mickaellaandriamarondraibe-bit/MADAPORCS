@@ -11,4 +11,7 @@ public class Race {
 
     @Column(name = "nom", nullable = false)
     private String nom;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 }
