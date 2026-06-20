@@ -1,12 +1,14 @@
 package com.madaporc.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class LotPorcDTO {
+public class LotDetailDTO {
     private Long id;
     private String codeLot;
     private LocalDate dateCreation;
     private Long raceId;
+    private String raceNom;
     private String sexe;
     private String objectif;
     private String origine;
@@ -14,10 +16,13 @@ public class LotPorcDTO {
     private Integer effectifActuel;
     private String statut;
     private Long lotParentId;
+    private String codeLotParent;
     private Long groupeReproductionOrigineId;
     private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public LotPorcDTO() {
+    public LotDetailDTO() {
     }
 
     public Long getId() {
@@ -50,6 +55,14 @@ public class LotPorcDTO {
 
     public void setRaceId(Long raceId) {
         this.raceId = raceId;
+    }
+
+    public String getRaceNom() {
+        return raceNom;
+    }
+
+    public void setRaceNom(String raceNom) {
+        this.raceNom = raceNom;
     }
 
     public String getSexe() {
@@ -108,6 +121,14 @@ public class LotPorcDTO {
         this.lotParentId = lotParentId;
     }
 
+    public String getCodeLotParent() {
+        return codeLotParent;
+    }
+
+    public void setCodeLotParent(String codeLotParent) {
+        this.codeLotParent = codeLotParent;
+    }
+
     public Long getGroupeReproductionOrigineId() {
         return groupeReproductionOrigineId;
     }
@@ -120,7 +141,23 @@ public class LotPorcDTO {
         return description;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
