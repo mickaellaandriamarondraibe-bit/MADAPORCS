@@ -52,11 +52,28 @@ public class LotPorcService {
     public String creerLot(LotPorcDTO dto) {
         LotPorc lot = new LotPorc();
 
+        if(existeCodeLot(dto.getCodeLot())) {
+            return "redirect:/lots/form?error=codeLotExiste";
+        }
+
         lot.setCodeLot(dto.getCodeLot());
         lot.setDateCreation(dto.getDateCreation());
         lot.setSexe(dto.getSexe());
         lot.setObjectif(dto.getObjectif());
         lot.setOrigine(dto.getOrigine());
+        lot.setStatut(dto.getStatut());
+        if(dto.getEffectifInitial() == null || dto.getEffectifInitial() <= 0) {
+            return "redirect:/lots/form?error=effectifInitialInvalide";
+        } else {
+            lot.setEffectifInitial(dto.getEffectifInitial());
+        }
+        
+        if(dto.getEffectifActuel() == null || dto.getEffectifActuel() < 0) {
+            return "redirect:/lots/form?error=effectifActuelInvalide";
+        } else {
+            lot.setEffectifActuel(dto.getEffectifActuel());
+        }
+
         lotPorcRepository.save(lot);
 
         return "redirect:/lots";
