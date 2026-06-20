@@ -1,4 +1,4 @@
-package model;
+package com.madaporc.model;
 
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;

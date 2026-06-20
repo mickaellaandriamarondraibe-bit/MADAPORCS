@@ -1,6 +1,6 @@
-package model;
+package com.madaporc.model;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
@@ -18,7 +18,7 @@ import com.madaporc.model.LotPorc;
 public class AnalyseReproductionLot {
 
     @Id
-    private BigDecimal id;
+    private BigInteger id;
 
     @Column(name="lot_id")
     @ManyToOne
@@ -68,11 +68,11 @@ public class AnalyseReproductionLot {
     public AnalyseReproductionLot() {
     }
 
-    public BigDecimal getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
