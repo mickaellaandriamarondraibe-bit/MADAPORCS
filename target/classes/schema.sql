@@ -776,9 +776,9 @@ VALUES
 
 INSERT INTO maladies(nom, description)
 VALUES
-('Diarrhée', 'Trouble digestif observé sur les lots.'),
-('Toux', 'Symptôme respiratoire.'),
-('Fièvre', 'État sanitaire nécessitant une surveillance.');
+('Diarrhee', 'Trouble digestif observe sur les lots.'),
+('Toux', 'Symptome respiratoire.'),
+('Fievre', 'Etat sanitaire necessitant une surveillance.');
 
 INSERT INTO traitements(maladie_id, nom, description)
 VALUES
