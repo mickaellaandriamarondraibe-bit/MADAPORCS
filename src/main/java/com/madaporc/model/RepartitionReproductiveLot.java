@@ -1,6 +1,5 @@
 package com.madaporc.model;
 
-import java.math.BigInteger;
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 @Table(name="repartitions_reproductives_lots")
 public class RepartitionReproductiveLot {
     @Id
-    private BigInteger id;
+    private Long id;
 
     @Column(name="lot_id")
     @ManyToOne
@@ -32,11 +31,11 @@ public class RepartitionReproductiveLot {
     @Column(name="date_mis_a_jour")
     private LocalDateTime dateMiseAJour;
 
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

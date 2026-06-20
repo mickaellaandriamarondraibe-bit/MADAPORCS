@@ -4,17 +4,17 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 public class RepartitionReproductiveDTO {
-    private BigInteger id;
+    private Long id;
     private String lotPorc;
     private String statutReproductif;
     private Integer quantite;
     private LocalDateTime dateMiseAJour;
 
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
