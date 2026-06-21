@@ -21,7 +21,7 @@ public class AuthService {
 
     public String connecter(LoginDTO dto, HttpSession session) {
         Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findByEmail(dto.getEmail());
-        
+
         if (utilisateurOpt.isPresent()) {
             Utilisateur utilisateur = utilisateurOpt.get();
             if (utilisateur.getActif() && verifierMotDePasse(dto.getMotDePasse(), utilisateur.getMotDePasse())) {
@@ -31,7 +31,7 @@ public class AuthService {
                 return "redirect:/";
             }
         }
-        
+
         return "login";
     }
 

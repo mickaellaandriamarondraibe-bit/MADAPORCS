@@ -79,27 +79,27 @@
             <c:if test="${utilisateurDTO.id != null}">
                 <input type="hidden" name="id" value="${utilisateurDTO.id}">
             </c:if>
-            
+
             <div class="form-group">
                 <label for="nom">Nom *</label>
                 <input type="text" id="nom" name="nom" value="${utilisateurDTO.nom}" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="prenom">Prénom</label>
                 <input type="text" id="prenom" name="prenom" value="${utilisateurDTO.prenom}">
             </div>
-            
+
             <div class="form-group">
                 <label for="email">Email *</label>
                 <input type="email" id="email" name="email" value="${utilisateurDTO.email}" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="motDePasse">Mot de passe ${utilisateurDTO.id == null ? '*' : '(laisser vide pour conserver)'}</label>
                 <input type="password" id="motDePasse" name="motDePasse" ${utilisateurDTO.id == null ? 'required' : ''}>
             </div>
-            
+
             <div class="form-group">
                 <label for="roleId">Rôle *</label>
                 <select id="roleId" name="roleId" required>
@@ -108,7 +108,7 @@
                     </c:forEach>
                 </select>
             </div>
-            
+
             <c:if test="${utilisateurDTO.id != null}">
                 <div class="form-group">
                     <label for="actif">Actif</label>
@@ -118,7 +118,7 @@
                     </select>
                 </div>
             </c:if>
-            
+
             <div class="form-group">
                 <a href="${pageContext.request.contextPath}/utilisateurs" class="btn btn-secondary">Annuler</a>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>

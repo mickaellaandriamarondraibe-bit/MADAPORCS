@@ -31,7 +31,7 @@ public class UtilisateurController {
     @GetMapping("/utilisateurs/form")
     public String showForm(@RequestParam(required = false) Long id, Model model) {
         UtilisateurDTO dto = new UtilisateurDTO();
-        
+
         if (id != null) {
             Utilisateur utilisateur = utilisateurService.findById(id);
             if (utilisateur != null) {
@@ -43,7 +43,7 @@ public class UtilisateurController {
                 dto.setActif(utilisateur.getActif());
             }
         }
-        
+
         List<Role> roles = roleRepository.findAll();
         model.addAttribute("utilisateurDTO", dto);
         model.addAttribute("roles", roles);
@@ -53,13 +53,13 @@ public class UtilisateurController {
     @PostMapping("/utilisateurs/save")
     public String save(@ModelAttribute UtilisateurDTO dto, Model model) {
         String result;
-        
+
         if (dto.getId() != null) {
             result = utilisateurService.modifier(dto.getId(), dto);
         } else {
             result = utilisateurService.creer(dto);
         }
-        
+
         if ("error".equals(result)) {
             List<Role> roles = roleRepository.findAll();
             model.addAttribute("utilisateurDTO", dto);
@@ -67,7 +67,7 @@ public class UtilisateurController {
             model.addAttribute("error", "Cet email est déjà utilisé ou une erreur est survenue");
             return "utilisateurs/form";
         }
-        
+
         return result;
     }
 

@@ -35,20 +35,20 @@ public class UtilisateurService {
         if (emailExiste(dto.getEmail())) {
             return "error";
         }
-        
+
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
         utilisateur.setEmail(dto.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse()));
         utilisateur.setActif(true);
-        
+
         Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
         if (role == null) {
             return "error";
         }
         utilisateur.setRole(role);
-        
+
         utilisateurRepository.save(utilisateur);
         return "redirect:/utilisateurs";
     }
@@ -58,29 +58,29 @@ public class UtilisateurService {
         if (utilisateur == null) {
             return "error";
         }
-        
+
         if (!utilisateur.getEmail().equals(dto.getEmail()) && emailExiste(dto.getEmail())) {
             return "error";
         }
-        
+
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
         utilisateur.setEmail(dto.getEmail());
-        
+
         if (dto.getMotDePasse() != null && !dto.getMotDePasse().isEmpty()) {
             utilisateur.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse()));
         }
-        
+
         if (dto.getActif() != null) {
             utilisateur.setActif(dto.getActif());
         }
-        
+
         Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
         if (role == null) {
             return "error";
         }
         utilisateur.setRole(role);
-        
+
         utilisateurRepository.save(utilisateur);
         return "redirect:/utilisateurs";
     }
