@@ -681,6 +681,118 @@ CREATE TABLE imports_exports (
 );
 
 -- =====================================================
+-- DONNEES INITIALES
+-- =====================================================
+
+INSERT INTO roles(nom)
+VALUES
+('ADMIN'),
+('GESTIONNAIRE');
+
+-- Compte initial :
+-- email : admin@madaporc.local
+-- mot de passe : admin123
+--
+-- Pour démarrer vite, le mot de passe est stocké en clair.
+-- Si vous utilisez BCryptPasswordEncoder, remplacez admin123 par un hash BCrypt.
+INSERT INTO utilisateurs(nom, prenom, email, mot_de_passe, role_id)
+VALUES (
+    'Administrateur',
+    'MADAPORC',
+    'admin@madaporc.local',
+    'admin123',
+    (SELECT id FROM roles WHERE nom = 'ADMIN')
+);
+
+INSERT INTO races(nom, description)
+VALUES
+('Large White', 'Race porcine utilisée pour la reproduction.'),
+('Landrace', 'Race porcine connue pour ses qualités maternelles.'),
+('Duroc', 'Race porcine utilisée pour la croissance et la qualité de viande.'),
+('Pietrain', 'Race porcine utilisée pour la conformation musculaire.');
+
+INSERT INTO parametres_reproduction_race(
+    race_id,
+    age_min_reproduction_mois,
+    age_max_reproduction_mois,
+    nombre_max_portees,
+    seuil_fertilite_min,
+    seuil_survie_min,
+    duree_gestation_jours,
+    jours_alerte_mise_bas
+)
+SELECT
+    id,
+    8,
+    60,
+    7,
+    60,
+    70,
+    114,
+    5
+FROM races;
+
+INSERT INTO statuts_reproductifs(code, libelle, description)
+VALUES
+(
+    'PRETE_JAMAIS_SAILLIE',
+    'Prêtes mais jamais saillies',
+    'Femelles aptes théoriquement, mais jamais encore testées en reproduction.'
+),
+(
+    'DEJA_REPRODUCTRICE_APTE',
+    'Déjà reproductrices et encore aptes',
+    'Femelles ayant déjà réussi une reproduction et pouvant continuer.'
+),
+(
+    'EN_CYCLE',
+    'En cycle de reproduction',
+    'Femelles actuellement engagées dans un cycle de reproduction.'
+),
+(
+    'A_SURVEILLER',
+    'À surveiller',
+    'Femelles encore utilisables mais présentant un risque.'
+),
+(
+    'A_RETIRER_REPRODUCTION',
+    'À retirer de la reproduction',
+    'Femelles non recommandées pour une nouvelle reproduction.'
+);
+
+INSERT INTO categories_depenses(nom)
+VALUES
+('Alimentation'),
+('Santé'),
+('Personnel'),
+('Transport'),
+('Maintenance');
+
+INSERT INTO vaccins(nom, description)
+VALUES
+('Peste porcine', 'Vaccin de prévention contre la peste porcine.'),
+('Parvovirose', 'Vaccin utilisé pour la prévention des troubles reproductifs.'),
+('Rouget', 'Vaccin contre le rouget du porc.');
+
+INSERT INTO maladies(nom, description)
+VALUES
+('Diarrhee', 'Trouble digestif observe sur les lots.'),
+('Toux', 'Symptome respiratoire.'),
+('Fievre', 'Etat sanitaire necessitant une surveillance.');
+
+INSERT INTO traitements(maladie_id, nom, description)
+VALUES
+((SELECT id FROM maladies WHERE nom = 'Diarrhée'), 'Réhydratation et traitement vétérinaire', 'Traitement selon prescription.'),
+((SELECT id FROM maladies WHERE nom = 'Toux'), 'Traitement respiratoire', 'Traitement selon prescription.'),
+((SELECT id FROM maladies WHERE nom = 'Fièvre'), 'Surveillance et traitement vétérinaire', 'Traitement selon prescription.');
+
+INSERT INTO ingredients(nom, unite, stock_actuel, seuil_alerte)
+VALUES
+('Maïs', 'kg', 0, 30),
+('Son de riz', 'kg', 0, 30),
+('Tourteau', 'kg', 0, 20);
+
+-- =====================================================
 -- INDEX
 -- =====================================================
 
