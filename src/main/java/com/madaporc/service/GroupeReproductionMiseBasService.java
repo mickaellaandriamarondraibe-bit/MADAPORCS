@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.madaporc.dto.ConfirmationMiseBasDTO;
 import com.madaporc.dto.GroupeReproductionDetailDTO;
 import com.madaporc.model.GroupeReproduction;
+import com.madaporc.model.RepartitionReproductiveLot;
 import com.madaporc.repository.GroupeReproductionRepository;
+import com.madaporc.repository.RepartitionReproductiveLotRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,9 +20,13 @@ import jakarta.transaction.Transactional;
 public class GroupeReproductionMiseBasService {
 
     private final GroupeReproductionRepository groupeRepository;
+    private final RepartitionReproductiveLotRepository repartitionRepository;
 
-    public GroupeReproductionMiseBasService(GroupeReproductionRepository groupeRepository) {
+    public GroupeReproductionMiseBasService(
+            GroupeReproductionRepository groupeRepository,
+            RepartitionReproductiveLotRepository repartitionRepository) {
         this.groupeRepository = groupeRepository;
+        this.repartitionRepository = repartitionRepository;
     }
 
     // Fonction pour afficher tout les details d'un groupe
@@ -82,33 +88,36 @@ public class GroupeReproductionMiseBasService {
             return 0;
         }
 
-        if( pourcentage >100){
+        if (pourcentage > 100) {
             return 100;
         }
         return pourcentage;
     }
 
-    //fontcion pour la confirmation de mise bas , 
+    // fontcion pour la confirmation de mise bas ,
     @Transactional
     public GroupeReproductionDetailDTO confirmerMiseBas(Long groupeId, ConfirmationMiseBasDTO dto) {
         GroupeReproduction groupe = groupeRepository.findById(groupeId)
                 .orElseThrow(() -> new IllegalArgumentException("Groupe de reproduction introuvable."));
 
         validerDonneesMiseBas(groupe, dto);
+
         mettreAJourGroupeApresMiseBas(groupe, dto);
 
-        groupeRepository.save(groupe); 
-        //id null      → INSERT
-        //id existe    → UPDATE
+        groupeRepository.save(groupe);
+
+        if ("MISE_BAS_CONFIRMEE".equals(groupe.getStatut())) {
+            mettreAJourRepartitionApresMiseBas(groupe);
+        }
+
         return getDetailGroupe(groupeId);
     }
 
     private void mettreAJourGroupeApresMiseBas(
             GroupeReproduction groupe,
-            ConfirmationMiseBasDTO dto
-    ) {
+            ConfirmationMiseBasDTO dto) {
         groupe.setDateMiseBasReelle(dto.getDateMiseBasReelle());
-        
+
         groupe.setNbFemellesGestantes(dto.getNbFemellesGestantes());
         groupe.setNbFemellesNonGestantes(dto.getNbFemellesNonGestantes());
         groupe.setNbFemellesMiseBas(dto.getNbFemellesMiseBas());
@@ -127,7 +136,7 @@ public class GroupeReproductionMiseBasService {
         }
     }
 
-    //validation des donner envoyer par l'user 
+    // validation des donner envoyer par l'user
     private void validerDonneesMiseBas(GroupeReproduction groupe, ConfirmationMiseBasDTO dto) {
         if ("MISE_BAS_CONFIRMEE".equals(groupe.getStatut()) || "CLOTURE".equals(groupe.getStatut())) {
             throw new IllegalArgumentException("Ce groupe est déjà confirmé ou clôturé.");
@@ -135,15 +144,13 @@ public class GroupeReproductionMiseBasService {
         if (dto.getDateMiseBasReelle().isBefore(groupe.getDateSaillie())) {
             throw new IllegalArgumentException("La date de mise bas ne peut pas être avant la date de saillie.");
         }
-        if (dto.getNbFemellesGestantes() + dto.getNbFemellesNonGestantes()
-                > groupe.getNombreFemellesConcernees()) {
+        if (dto.getNbFemellesGestantes() + dto.getNbFemellesNonGestantes() > groupe.getNombreFemellesConcernees()) {
             throw new IllegalArgumentException("Le total gestantes + non gestantes dépasse les femelles concernées.");
         }
         if (dto.getNbFemellesMiseBas() > dto.getNbFemellesGestantes()) {
             throw new IllegalArgumentException("Les femelles ayant mis bas dépassent les femelles gestantes.");
         }
-        if (dto.getNbPorceletsVivants() + dto.getNbPorceletsMorts()
-                > dto.getNbPorceletsNes()) {
+        if (dto.getNbPorceletsVivants() + dto.getNbPorceletsMorts() > dto.getNbPorceletsNes()) {
             throw new IllegalArgumentException("Vivants + morts dépasse le nombre de porcelets nés.");
         }
         if (dto.getNbFemellesMiseBas() == 0 && dto.getNbPorceletsNes() > 0) {
@@ -151,5 +158,30 @@ public class GroupeReproductionMiseBasService {
         }
     }
 
+    private void mettreAJourRepartitionApresMiseBas(GroupeReproduction groupe) {
+        Long lotFemelleId = groupe.getLotFemelle().getId();
+        int nbFemelles = groupe.getNbFemellesMiseBas();
+
+        RepartitionReproductiveLot enCycle = repartitionRepository
+                .findByLot_IdAndStatutReproductif(lotFemelleId, "EN_CYCLE")
+                .orElseThrow(() -> new IllegalArgumentException("Répartition EN_CYCLE introuvable."));
+
+        RepartitionReproductiveLot dejaApte = repartitionRepository
+                .findByLot_IdAndStatutReproductif(lotFemelleId, "DEJA_REPRODUCTRICE_APTE")
+                .orElseThrow(() -> new IllegalArgumentException("Répartition DEJA_REPRODUCTRICE_APTE introuvable."));
+
+        if (enCycle.getQuantite() < nbFemelles) {
+            throw new IllegalArgumentException("Quantité EN_CYCLE insuffisante.");
+        }
+
+        enCycle.setQuantite(enCycle.getQuantite() - nbFemelles);
+        dejaApte.setQuantite(dejaApte.getQuantite() + nbFemelles);
+
+        enCycle.setDateMiseAJour(LocalDateTime.now());
+        dejaApte.setDateMiseAJour(LocalDateTime.now());
+
+        repartitionRepository.save(enCycle);
+        repartitionRepository.save(dejaApte);
+    }
 
 }
