@@ -46,6 +46,10 @@ public class MouvementLotPorc {
         this.lot = lot;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTypeMouvement() {
         return typeMouvement;
     }
