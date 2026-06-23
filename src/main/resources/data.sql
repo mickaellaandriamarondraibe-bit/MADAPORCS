@@ -288,10 +288,13 @@ WHERE NOT EXISTS (
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> d54bc1f (GroupeReproductionMiseBasService)
+=======
+>>>>>>> 9662b8e (deatail groupe)
 -- =====================================================
 -- 11. LOTS DE TEST POUR REPRODUCTION
 -- =====================================================
