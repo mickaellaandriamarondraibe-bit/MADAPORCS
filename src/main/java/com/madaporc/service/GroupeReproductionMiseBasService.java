@@ -55,6 +55,7 @@ public class GroupeReproductionMiseBasService {
 
     // fonction pour calculer les jours restants jusqu'a mis bas : si aujourd'hui
     // avant date d'accuplement alors forcement il reste 114 jours
+    // fonction pour calculer les jours restants jusqu'a mis bas : si aujourd'hui avant date d'accuplement alors forcement il reste 114 jours 
     public Long calculerJoursRestants(Long id) {
         GroupeReproduction groupe = groupeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Groupe de reproduction introuvable."));
