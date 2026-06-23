@@ -35,7 +35,7 @@ Puis ouvrir directement une route du PDF, par exemple :
 ```text
 http://localhost:8082/login
 http://localhost:8082/dashboard
-http://localhost:8082/lots
+http://localhost:8082/reproduction/groupes/{id}
 ```
 
 ## Vérification
