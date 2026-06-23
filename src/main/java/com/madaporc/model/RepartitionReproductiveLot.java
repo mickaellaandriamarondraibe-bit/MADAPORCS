@@ -4,6 +4,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "repartitions_reproductives_lots")
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "repartitions_reproductives_lots")
+@Getter
+@Setter
+@NoArgsConstructor
 public class RepartitionReproductiveLot {
 
     @Id
@@ -11,41 +22,30 @@ public class RepartitionReproductiveLot {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "lot_id")
+    @JoinColumn(name = "lot_id", nullable = false)
     private LotPorc lot;
+    @Column(name = "statut_reproductif", nullable = false, length = 50)
+    private String statutReproductif;
 
-    @ManyToOne
-    @JoinColumn(name = "statut_reproductif_id")
-    private StatutReproductif statutReproductif;
-
-    @Column(name = "quantite")
+    @Column(name = "quantite", nullable = false)
     private Integer quantite;
 
-    public Long getId() {
-        return id;
+    @Column(name = "date_mise_a_jour", nullable = false)
+    private LocalDateTime dateMiseAJour;
+
+    @PrePersist
+    public void beforeCreate() {
+        if (dateMiseAJour == null) {
+            dateMiseAJour = LocalDateTime.now();
+        }
+
+        if (quantite == null) {
+            quantite = 0;
+        }
     }
 
-    public LotPorc getLot() {
-        return lot;
-    }
-
-    public void setLot(LotPorc lot) {
-        this.lot = lot;
-    }
-
-    public StatutReproductif getStatutReproductif() {
-        return statutReproductif;
-    }
-
-    public void setStatutReproductif(StatutReproductif statutReproductif) {
-        this.statutReproductif = statutReproductif;
-    }
-
-    public Integer getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(Integer quantite) {
-        this.quantite = quantite;
+    @PreUpdate
+    public void beforeUpdate() {
+        dateMiseAJour = LocalDateTime.now();
     }
 }

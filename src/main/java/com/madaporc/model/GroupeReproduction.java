@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Setter
 @Entity
@@ -77,8 +78,6 @@ public class GroupeReproduction {
     
     @Column(name = "observation")
     private String observation;
-
-   
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

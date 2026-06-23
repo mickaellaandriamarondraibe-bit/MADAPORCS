@@ -178,4 +178,8 @@ public class GroupeReproductionCreationService {
             repartitionRepository.save(enCycleRepar);
         }
     }
+
+@Service
+public class GroupeReproductionCreationService{
+
 }

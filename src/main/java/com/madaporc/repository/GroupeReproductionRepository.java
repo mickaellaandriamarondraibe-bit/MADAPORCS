@@ -1,5 +1,6 @@
 package com.madaporc.repository;
 
+import com.madaporc.dto.GroupeReproductionDTO;
 import com.madaporc.model.GroupeReproduction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
