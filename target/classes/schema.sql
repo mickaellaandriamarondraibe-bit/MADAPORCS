@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS mouvements_lots_porcs CASCADE;
 DROP TABLE IF EXISTS lots_porcs CASCADE;
 
 DROP TABLE IF EXISTS parametres_reproduction_race CASCADE;
-DROP TABLE IF EXISTS races CASCADE;
+DROP TABLE IF EXISTS race CASCADE;
 
 DROP TABLE IF EXISTS utilisateurs CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
@@ -75,7 +75,7 @@ CREATE TABLE utilisateurs (
 -- REFERENCES METIER
 -- =====================================================
 
-CREATE TABLE races (
+CREATE TABLE race (
     id BIGSERIAL PRIMARY KEY,
     nom VARCHAR(100) UNIQUE NOT NULL,
     description TEXT
@@ -84,7 +84,7 @@ CREATE TABLE races (
 CREATE TABLE parametres_reproduction_race (
     id BIGSERIAL PRIMARY KEY,
 
-    race_id BIGINT NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+    race_id BIGINT NOT NULL REFERENCES race(id) ON DELETE CASCADE,
 
     age_min_reproduction_mois INTEGER NOT NULL DEFAULT 8,
     age_max_reproduction_mois INTEGER NOT NULL DEFAULT 60,
@@ -119,7 +119,7 @@ CREATE TABLE lots_porcs (
 
     date_creation DATE NOT NULL DEFAULT CURRENT_DATE,
 
-    race_id BIGINT REFERENCES races(id),
+    race_id BIGINT REFERENCES race(id),
 
     sexe VARCHAR(10) NOT NULL,
     objectif VARCHAR(30) NOT NULL,
