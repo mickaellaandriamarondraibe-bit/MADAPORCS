@@ -287,181 +287,239 @@ WHERE NOT EXISTS (
 );
 
 
-
-
 -- =====================================================
 -- 11. LOTS DE TEST POUR REPRODUCTION
 -- =====================================================
 
 INSERT INTO lots_porcs (
-    code_lot,
-    date_creation,
-    race_id,
-    sexe,
-    objectif,
-    origine,
-    effectif_initial,
-    effectif_actuel,
-    statut,
-    description
+code_lot,
+date_creation,
+race_id,
+sexe,
+objectif,
+origine,
+effectif_initial,
+effectif_actuel,
+statut,
+description
 )
 VALUES (
-    'LOT-F-001',
-    CURRENT_DATE,
-    (SELECT id FROM race WHERE nom = 'Large White'),
-    'FEMELLE',
-    'REPRODUCTION',
-    'ACHAT',
-    4,
-    4,
-    'ACTIF',
-    'Lot femelle de test pour reproduction.'
+'LOT-F-001',
+DATE '2026-01-10',
+(SELECT id FROM race WHERE nom = 'Large White'),
+'FEMELLE',
+'REPRODUCTION',
+'ACHAT',
+4,
+4,
+'ACTIF',
+'Lot femelle de test pour reproduction.'
 )
 ON CONFLICT (code_lot)
 DO UPDATE SET
-    race_id = EXCLUDED.race_id,
-    sexe = EXCLUDED.sexe,
-    objectif = EXCLUDED.objectif,
-    origine = EXCLUDED.origine,
-    effectif_initial = EXCLUDED.effectif_initial,
-    effectif_actuel = EXCLUDED.effectif_actuel,
-    statut = EXCLUDED.statut,
-    description = EXCLUDED.description;
-
+date_creation = EXCLUDED.date_creation,
+race_id = EXCLUDED.race_id,
+sexe = EXCLUDED.sexe,
+objectif = EXCLUDED.objectif,
+origine = EXCLUDED.origine,
+effectif_initial = EXCLUDED.effectif_initial,
+effectif_actuel = EXCLUDED.effectif_actuel,
+statut = EXCLUDED.statut,
+description = EXCLUDED.description;
 
 INSERT INTO lots_porcs (
-    code_lot,
-    date_creation,
-    race_id,
-    sexe,
-    objectif,
-    origine,
-    effectif_initial,
-    effectif_actuel,
-    statut,
-    description
+code_lot,
+date_creation,
+race_id,
+sexe,
+objectif,
+origine,
+effectif_initial,
+effectif_actuel,
+statut,
+description
 )
 VALUES (
-    'LOT-M-001',
-    CURRENT_DATE,
-    (SELECT id FROM race WHERE nom = 'Large White'),
-    'MALE',
-    'REPRODUCTION',
-    'ACHAT',
-    2,
-    2,
-    'ACTIF',
-    'Lot mâle de test pour reproduction.'
+'LOT-M-001',
+DATE '2026-01-10',
+(SELECT id FROM race WHERE nom = 'Large White'),
+'MALE',
+'REPRODUCTION',
+'ACHAT',
+2,
+2,
+'ACTIF',
+'Lot mâle de test pour reproduction.'
 )
 ON CONFLICT (code_lot)
 DO UPDATE SET
-    race_id = EXCLUDED.race_id,
-    sexe = EXCLUDED.sexe,
-    objectif = EXCLUDED.objectif,
-    origine = EXCLUDED.origine,
-    effectif_initial = EXCLUDED.effectif_initial,
-    effectif_actuel = EXCLUDED.effectif_actuel,
-    statut = EXCLUDED.statut,
-    description = EXCLUDED.description;
-
+date_creation = EXCLUDED.date_creation,
+race_id = EXCLUDED.race_id,
+sexe = EXCLUDED.sexe,
+objectif = EXCLUDED.objectif,
+origine = EXCLUDED.origine,
+effectif_initial = EXCLUDED.effectif_initial,
+effectif_actuel = EXCLUDED.effectif_actuel,
+statut = EXCLUDED.statut,
+description = EXCLUDED.description;
 
 -- =====================================================
--- 12. REPARTITION REPRODUCTIVE INITIALE DU LOT FEMELLE
--- Après création du groupe, 2 femelles sont en cycle et 2 restent prêtes.
+-- 12. REPARTITION REPRODUCTIVE DU LOT FEMELLE
+-- LOT-F-001 contient 4 femelles.
+-- 2 femelles sont dans GR-001.
+-- 1 femelle est dans GR-002.
+-- 1 femelle reste prête.
 -- =====================================================
 
 INSERT INTO repartitions_reproductives_lots (
-    lot_id,
-    statut_reproductif,
-    quantite
+lot_id,
+statut_reproductif,
+quantite
 )
 VALUES
 (
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    'PRETE_JAMAIS_SAILLIE',
-    2
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+'PRETE_JAMAIS_SAILLIE',
+1
 ),
 (
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    'DEJA_REPRODUCTRICE_APTE',
-    0
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+'DEJA_REPRODUCTRICE_APTE',
+0
 ),
 (
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    'EN_CYCLE',
-    2
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+'EN_CYCLE',
+3
 ),
 (
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    'A_SURVEILLER',
-    0
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+'A_SURVEILLER',
+0
 ),
 (
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    'A_RETIRER_REPRODUCTION',
-    0
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+'A_RETIRER_REPRODUCTION',
+0
 )
 ON CONFLICT (lot_id, statut_reproductif)
 DO UPDATE SET
-    quantite = EXCLUDED.quantite,
-    date_mise_a_jour = CURRENT_TIMESTAMP;
-
+quantite = EXCLUDED.quantite,
+date_mise_a_jour = CURRENT_TIMESTAMP;
 
 -- =====================================================
--- 13. GROUPE DE REPRODUCTION DE TEST
+-- 13. GROUPES DE REPRODUCTION DE TEST
+-- Aujourd'hui : 23 juin 2026
+-- GR-001 : prêt à confirmer, date prévue déjà passée
+-- GR-002 : encore en gestation, pour tester la barre d'évolution
 -- =====================================================
 
 INSERT INTO groupes_reproduction (
-    code_groupe,
-    lot_femelle_id,
-    lot_male_id,
-    nombre_femelles_concernees,
-    nombre_males_utilises,
-    date_saillie,
-    duree_gestation_jours,
-    nb_femelles_gestantes,
-    nb_femelles_non_gestantes,
-    nb_femelles_mise_bas,
-    nb_porcelets_nes,
-    nb_porcelets_vivants,
-    nb_porcelets_morts,
-    statut,
-    observation,
-    created_by
+code_groupe,
+lot_femelle_id,
+lot_male_id,
+nombre_femelles_concernees,
+nombre_males_utilises,
+date_saillie,
+duree_gestation_jours,
+nb_femelles_gestantes,
+nb_femelles_non_gestantes,
+nb_femelles_mise_bas,
+nb_porcelets_nes,
+nb_porcelets_vivants,
+nb_porcelets_morts,
+statut,
+observation,
+created_by
 )
 VALUES (
-    'GR-001',
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
-    (SELECT id FROM lots_porcs WHERE code_lot = 'LOT-M-001'),
-    2,
-    1,
-    DATE '2026-07-01',
-    114,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    'SAILLIE',
-    'Groupe de reproduction de test.',
-    (SELECT id FROM utilisateurs WHERE email = 'admin@madaporc.local')
+'GR-001',
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-M-001'),
+2,
+1,
+DATE '2026-02-20',
+114,
+0,
+0,
+0,
+0,
+0,
+0,
+'MISE_BAS_PROCHE',
+'Groupe prêt à confirmer. Date prévue de mise bas : 14/06/2026.',
+(SELECT id FROM utilisateurs WHERE email = '[admin@madaporc.local](mailto:admin@madaporc.local)')
 )
 ON CONFLICT (code_groupe)
 DO UPDATE SET
-    lot_femelle_id = EXCLUDED.lot_femelle_id,
-    lot_male_id = EXCLUDED.lot_male_id,
-    nombre_femelles_concernees = EXCLUDED.nombre_femelles_concernees,
-    nombre_males_utilises = EXCLUDED.nombre_males_utilises,
-    date_saillie = EXCLUDED.date_saillie,
-    duree_gestation_jours = EXCLUDED.duree_gestation_jours,
-    nb_femelles_gestantes = EXCLUDED.nb_femelles_gestantes,
-    nb_femelles_non_gestantes = EXCLUDED.nb_femelles_non_gestantes,
-    nb_femelles_mise_bas = EXCLUDED.nb_femelles_mise_bas,
-    nb_porcelets_nes = EXCLUDED.nb_porcelets_nes,
-    nb_porcelets_vivants = EXCLUDED.nb_porcelets_vivants,
-    nb_porcelets_morts = EXCLUDED.nb_porcelets_morts,
-    statut = EXCLUDED.statut,
-    observation = EXCLUDED.observation,
-    created_by = EXCLUDED.created_by,
-    updated_at = CURRENT_TIMESTAMP;
+lot_femelle_id = EXCLUDED.lot_femelle_id,
+lot_male_id = EXCLUDED.lot_male_id,
+nombre_femelles_concernees = EXCLUDED.nombre_femelles_concernees,
+nombre_males_utilises = EXCLUDED.nombre_males_utilises,
+date_saillie = EXCLUDED.date_saillie,
+duree_gestation_jours = EXCLUDED.duree_gestation_jours,
+nb_femelles_gestantes = EXCLUDED.nb_femelles_gestantes,
+nb_femelles_non_gestantes = EXCLUDED.nb_femelles_non_gestantes,
+nb_femelles_mise_bas = EXCLUDED.nb_femelles_mise_bas,
+nb_porcelets_nes = EXCLUDED.nb_porcelets_nes,
+nb_porcelets_vivants = EXCLUDED.nb_porcelets_vivants,
+nb_porcelets_morts = EXCLUDED.nb_porcelets_morts,
+statut = EXCLUDED.statut,
+observation = EXCLUDED.observation,
+created_by = EXCLUDED.created_by,
+updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO groupes_reproduction (
+code_groupe,
+lot_femelle_id,
+lot_male_id,
+nombre_femelles_concernees,
+nombre_males_utilises,
+date_saillie,
+duree_gestation_jours,
+nb_femelles_gestantes,
+nb_femelles_non_gestantes,
+nb_femelles_mise_bas,
+nb_porcelets_nes,
+nb_porcelets_vivants,
+nb_porcelets_morts,
+statut,
+observation,
+created_by
+)
+VALUES (
+'GR-002',
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-F-001'),
+(SELECT id FROM lots_porcs WHERE code_lot = 'LOT-M-001'),
+1,
+1,
+DATE '2026-05-01',
+114,
+0,
+0,
+0,
+0,
+0,
+0,
+'EN_GESTATION',
+'Groupe encore en gestation pour tester la barre d’évolution.',
+(SELECT id FROM utilisateurs WHERE email = '[admin@madaporc.local](mailto:admin@madaporc.local)')
+)
+ON CONFLICT (code_groupe)
+DO UPDATE SET
+lot_femelle_id = EXCLUDED.lot_femelle_id,
+lot_male_id = EXCLUDED.lot_male_id,
+nombre_femelles_concernees = EXCLUDED.nombre_femelles_concernees,
+nombre_males_utilises = EXCLUDED.nombre_males_utilises,
+date_saillie = EXCLUDED.date_saillie,
+duree_gestation_jours = EXCLUDED.duree_gestation_jours,
+nb_femelles_gestantes = EXCLUDED.nb_femelles_gestantes,
+nb_femelles_non_gestantes = EXCLUDED.nb_femelles_non_gestantes,
+nb_femelles_mise_bas = EXCLUDED.nb_femelles_mise_bas,
+nb_porcelets_nes = EXCLUDED.nb_porcelets_nes,
+nb_porcelets_vivants = EXCLUDED.nb_porcelets_vivants,
+nb_porcelets_morts = EXCLUDED.nb_porcelets_morts,
+statut = EXCLUDED.statut,
+observation = EXCLUDED.observation,
+created_by = EXCLUDED.created_by,
+updated_at = CURRENT_TIMESTAMP;

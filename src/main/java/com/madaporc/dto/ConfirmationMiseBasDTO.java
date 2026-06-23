@@ -7,11 +7,14 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Getter
 @Setter
 public class ConfirmationMiseBasDTO {
 
     @NotNull(message = "La date réelle de mise bas est obligatoire.")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateMiseBasReelle;
 
     @NotNull(message = "Le nombre de femelles gestantes est obligatoire.")
