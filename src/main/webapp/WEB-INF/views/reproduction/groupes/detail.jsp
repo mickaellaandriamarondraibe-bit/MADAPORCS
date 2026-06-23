@@ -222,18 +222,9 @@
                         </dd>
 
                         <dt>Lot naissance</dt>
-                        <dd>
-                            <c:choose>
-                                <c:when test="${not empty g.codeLotNaissance}">
-                                    <a href="${ctx}/lots/${g.lotNaissanceId}">
-                                        ${g.codeLotNaissance}
-                                    </a>
-                                </c:when>
-                                <c:otherwise>
-                                    <span class="muted">Non créé</span>
-                                </c:otherwise>
-                            </c:choose>
-                        </dd>
+<dd>
+    <span class="muted">Non créé</span>
+</dd>
                     </dl>
                 </c:when>
 
