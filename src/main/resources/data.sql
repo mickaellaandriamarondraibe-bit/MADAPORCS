@@ -16,7 +16,10 @@ VALUES (
     '$2a$10$Rd4XjgqiGoS5e3sYu7T8OeLGXy6RMe2/6dgQZphKGoMVxVCZ5XMvC',
     (SELECT id FROM roles WHERE nom = 'ADMIN')
 )
-ON CONFLICT (email) DO NOTHING;
+ON CONFLICT (email)
+DO UPDATE SET
+    mot_de_passe = EXCLUDED.mot_de_passe,
+    role_id = EXCLUDED.role_id;
 
 -- 3. RACES (Le nom est UNIQUE)
 INSERT INTO races(nom, description)

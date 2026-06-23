@@ -22,7 +22,7 @@ public class AuthController {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/connexion")
     public String login(@ModelAttribute LoginDTO dto, Model model, HttpSession session) {
         String result = authService.connecter(dto, session);
         if ("login".equals(result)) {

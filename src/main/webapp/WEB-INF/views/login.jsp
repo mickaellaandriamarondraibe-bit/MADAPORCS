@@ -69,7 +69,7 @@
         <c:if test="${not empty error}">
             <div class="error">${error}</div>
         </c:if>
-        <form action="${pageContext.request.contextPath}/login" method="post">
+        <form action="${pageContext.request.contextPath}/connexion" method="post">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
