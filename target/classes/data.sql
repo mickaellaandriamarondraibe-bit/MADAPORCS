@@ -18,22 +18,18 @@ ON CONFLICT (nom) DO NOTHING;
 -- 2. UTILISATEUR ADMIN
 -- =====================================================
 
-INSERT INTO utilisateurs(
-nom,
-prenom,
-email,
-mot_de_passe,
-role_id
-)
+INSERT INTO utilisateurs(nom, prenom, email, mot_de_passe, role_id)
 VALUES (
-'Administrateur',
-'MADAPORC',
-'[admin@madaporc.local](mailto:admin@madaporc.local)',
-'admin123',
-(SELECT id FROM roles WHERE nom = 'ADMIN')
+    'Administrateur',
+    'MADAPORC',
+    'admin@madaporc.local',
+    '$2a$10$Rd4XjgqiGoS5e3sYu7T8OeLGXy6RMe2/6dgQZphKGoMVxVCZ5XMvC',
+    (SELECT id FROM roles WHERE nom = 'ADMIN')
 )
-ON CONFLICT (email) DO NOTHING;
-
+ON CONFLICT (email)
+DO UPDATE SET
+    mot_de_passe = EXCLUDED.mot_de_passe,
+    role_id = EXCLUDED.role_id;
 -- =====================================================
 -- 3. RACES
 -- =====================================================
