@@ -17,4 +17,6 @@ public interface GroupeReproductionRepository extends JpaRepository<GroupeReprod
     List<GroupeReproduction> findByLotFemelleIdOrderByDateSaillieDesc(Long lotFemelleId);
 
     List<GroupeReproduction> findByLotMaleIdOrderByDateSaillieDesc(Long lotMaleId);
+    
+    List<GroupeReproduction> findAllByOrderByDateSaillieDesc();
 }
