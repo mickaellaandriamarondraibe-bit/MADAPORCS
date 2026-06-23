@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface MouvementLotPorcRepository extends JpaRepository<MouvementLotPorc, Long> {
 
-    List<MouvementLotPorc> findByLotIdOrderByDateMouvementDesc(Long lotId);
 }
