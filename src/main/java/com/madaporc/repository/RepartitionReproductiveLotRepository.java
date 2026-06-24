@@ -13,5 +13,3 @@ public interface RepartitionReproductiveLotRepository
     List<RepartitionReproductiveLot> findByLotId(Long lotId);
 
 }
-
-
