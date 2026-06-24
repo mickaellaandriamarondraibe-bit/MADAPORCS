@@ -26,7 +26,7 @@
       <c:if test="${not empty info}"><div class="alert alert--info"><i class="fa-solid fa-circle-info"></i> <span>${info}</span></div></c:if>
 
       <%-- POST vers AuthController @PostMapping("/login"), bind LoginDTO --%>
-      <form method="post" action="${ctx}/login">
+      <form method="post" action="${ctx}/connexion">
         <div class="field">
           <label for="email">Adresse e-mail <span class="req">*</span></label>
           <input class="input" type="email" id="email" name="email"
