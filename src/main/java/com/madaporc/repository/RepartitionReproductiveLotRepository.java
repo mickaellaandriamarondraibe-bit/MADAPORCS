@@ -12,4 +12,6 @@ public interface RepartitionReproductiveLotRepository
 
     List<RepartitionReproductiveLot> findByLotId(Long lotId);
 
+    Optional<RepartitionReproductiveLot> findByLotIdAndStatutReproductif(Long lotId, String statutReproductif);
+
 }

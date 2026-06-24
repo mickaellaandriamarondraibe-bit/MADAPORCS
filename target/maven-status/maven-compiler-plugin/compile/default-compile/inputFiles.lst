@@ -28,11 +28,14 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/GroupeReproductionDetailDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/ImportExcelDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LoginDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotDetailDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotFiltreDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotNaissanceDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotPorcDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/MouvementLotDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/PeseeLotDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RapportFiltreDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RepartitionReproductiveDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/UtilisateurDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/VenteDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/AlerteReproduction.java
