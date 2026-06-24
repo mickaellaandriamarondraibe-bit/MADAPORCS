@@ -12,10 +12,10 @@ import com.madaporc.repository.LotPorcRepository;
 @Service
 public class LotNaissanceService {
 
-    private final LotPorcRepository repository;
+    // private final LotPorcRepository repository;
 
     public String creerLotNaissanceApresMiseBas(LotNaissanceDTO dto){
-
+        
         return("direct");
     }
     
