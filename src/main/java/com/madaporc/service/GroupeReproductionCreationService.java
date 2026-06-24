@@ -137,7 +137,7 @@ public class GroupeReproductionCreationService {
         if (nombreFemelles > totalDisponibles) {
             return "Nombre de femelles insuffisant. Disponibles : " + totalDisponibles;
         }
-        return null; /
+        return null;
     }
 
     public void mettreAJourRepartitionApresSaillie(Long lotId, Integer nombreFemelles) {
