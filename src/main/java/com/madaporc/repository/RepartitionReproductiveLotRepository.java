@@ -1,5 +1,6 @@
 package com.madaporc.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,9 +11,5 @@ public interface RepartitionReproductiveLotRepository
         extends JpaRepository<RepartitionReproductiveLot, Long> {
 
     List<RepartitionReproductiveLot> findByLotId(Long lotId);
-
-}
-
-public interface  RepartitionReproductiveLotRepository extends JpaRepository<RepartitionReproductiveLot, Integer> {
 
 }

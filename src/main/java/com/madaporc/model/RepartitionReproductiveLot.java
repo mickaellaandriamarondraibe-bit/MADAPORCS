@@ -1,9 +1,6 @@
 package com.madaporc.model;
 
 import jakarta.persistence.*;
-
-@Entity
-@Table(name = "repartitions_reproductives_lots")
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

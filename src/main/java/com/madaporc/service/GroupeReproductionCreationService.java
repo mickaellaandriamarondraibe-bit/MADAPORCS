@@ -129,7 +129,7 @@ public class GroupeReproductionCreationService {
         List<RepartitionReproductiveLot> repartitions = repartitionRepository.findByLotId(lotFemelleId);
         int totalDisponibles = 0;
         for (RepartitionReproductiveLot r : repartitions) {
-            String code = r.getStatutReproductif().getCode();
+            String code = r.getStatutReproductif();
             if ("PRETE_JAMAIS_SAILLIE".equals(code) || "DEJA_REPRODUCTRICE_APTE".equals(code)) {
                 totalDisponibles += r.getQuantite();
             }
@@ -147,7 +147,7 @@ public class GroupeReproductionCreationService {
 
         //On pioche d'abord dans DEJA_REPRODUCTRICE_APTE
         for (RepartitionReproductiveLot r : repartitions) {
-            String code = r.getStatutReproductif().getCode();
+            String code = r.getStatutReproductif();
             if ("DEJA_REPRODUCTRICE_APTE".equals(code) && restantAEngager > 0) {
                 int aPrelever = Math.min(restantAEngager, r.getQuantite());
                 r.setQuantite(r.getQuantite() - aPrelever);
@@ -162,7 +162,7 @@ public class GroupeReproductionCreationService {
         //Si pas assez, on pioche dans PRETE_JAMAIS_SAILLIE
         if (restantAEngager > 0) {
             for (RepartitionReproductiveLot r : repartitions) {
-                String code = r.getStatutReproductif().getCode();
+                String code = r.getStatutReproductif();
                 if ("PRETE_JAMAIS_SAILLIE".equals(code)) {
                     int aPrelever = Math.min(restantAEngager, r.getQuantite());
                     r.setQuantite(r.getQuantite() - aPrelever);
@@ -178,8 +178,4 @@ public class GroupeReproductionCreationService {
             repartitionRepository.save(enCycleRepar);
         }
     }
-
-@Service
-public class GroupeReproductionCreationService{
-
 }
