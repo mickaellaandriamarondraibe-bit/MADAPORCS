@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import com.madaporc.model.LotPorc;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;   
+import jakarta.persistence.OrderBy;
 
 @Entity
 @Table(name="repartitions_reproductives_lots")
