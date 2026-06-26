@@ -1,19 +1,14 @@
 package com.madaporc.model;
 
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Column;
-
 import java.time.LocalDateTime;
+import com.madaporc.model.LotPorc;
 
-@Setter
-@Getter
 @Entity
 @Table(name="analyses_reproduction_lots")
 public class AnalyseReproductionLot {
@@ -21,8 +16,8 @@ public class AnalyseReproductionLot {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lot_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "lot_id", nullable = false)
     private LotPorc lotPorc;
 
     @Column(name="date_analyse")
@@ -68,5 +63,131 @@ public class AnalyseReproductionLot {
     public AnalyseReproductionLot() {
     }
 
-    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LotPorc getLotPorc() {
+        return lotPorc;
+    }
+
+    public void setLotPorc(LotPorc lotPorc) {
+        this.lotPorc = lotPorc;
+    }
+
+    public LocalDateTime getDateAnalyse() {
+        return dateAnalyse;
+    }
+
+    public void setDateAnalyse(LocalDateTime dateAnalyse) {
+        this.dateAnalyse = dateAnalyse;
+    }
+
+    public Integer getNbPretesJamaisSaillies() {
+        return nbPretesJamaisSaillies;
+    }
+
+    public void setNbPretesJamaisSaillies(Integer nbPretesJamaisSaillies) {
+        this.nbPretesJamaisSaillies = nbPretesJamaisSaillies;
+    }
+
+    public Integer getNbDejaReproductricesAptes() {
+        return nbDejaReproductricesAptes;
+    }
+
+    public void setNbDejaReproductricesAptes(Integer nbDejaReproductricesAptes) {
+        this.nbDejaReproductricesAptes = nbDejaReproductricesAptes;
+    }
+
+    public Integer getNbEnCycle() {
+        return nbEnCycle;
+    }
+
+    public void setNbEnCycle(Integer nbEnCycle) {
+        this.nbEnCycle = nbEnCycle;
+    }
+
+    public Integer getNbASurveiller() {
+        return nbASurveiller;
+    }
+
+    public void setNbASurveiller(Integer nbASurveiller) {
+        this.nbASurveiller = nbASurveiller;
+    }
+
+    public Integer getNbARetirerReproduction() {
+        return nbARetirerReproduction;
+    }
+
+    public void setNbARetirerReproduction(Integer nbARetirerReproduction) {
+        this.nbARetirerReproduction = nbARetirerReproduction;
+    }
+
+    public Integer getNbFemellesTotal() {
+        return nbFemellesTotal;
+    }
+
+    public void setNbFemellesTotal(Integer nbFemellesTotal) {
+        this.nbFemellesTotal = nbFemellesTotal;
+    }
+
+    public Integer getNbFemellesSailliesTotal() {
+        return nbFemellesSailliesTotal;
+    }
+
+    public void setNbFemellesSailliesTotal(Integer nbFemellesSailliesTotal) {
+        this.nbFemellesSailliesTotal = nbFemellesSailliesTotal;
+    }
+
+    public Integer getNbFemellesGestantesTotal() {
+        return nbFemellesGestantesTotal;
+    }
+
+    public void setNbFemellesGestantesTotal(Integer nbFemellesGestantesTotal) {
+        this.nbFemellesGestantesTotal = nbFemellesGestantesTotal;
+    }
+
+    public Double getTauxAptitudeGlobal() {
+        return tauxAptitudeGlobal;
+    }
+
+    public void setTauxAptitudeGlobal(Double tauxAptitudeGlobal) {
+        this.tauxAptitudeGlobal = tauxAptitudeGlobal;
+    }
+
+    public Double getTauxRecommande() {
+        return tauxRecommande;
+    }
+
+    public void setTauxRecommande(Double tauxRecommande) {
+        this.tauxRecommande = tauxRecommande;
+    }
+
+    public Double getTauxFertiliteObserve() {
+        return tauxFertiliteObserve;
+    }
+
+    public void setTauxFertiliteObserve(Double tauxFertiliteObserve) {
+        this.tauxFertiliteObserve = tauxFertiliteObserve;
+    }
+
+    public String getDecision() {
+        return decision;
+    }
+
+    public void setDecision(String decision) {
+        this.decision = decision;
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
 }

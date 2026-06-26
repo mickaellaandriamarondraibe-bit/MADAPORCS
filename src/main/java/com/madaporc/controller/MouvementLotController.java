@@ -22,7 +22,7 @@ public class MouvementLotController {
     public String listMouvements(@PathVariable Long id, Model model) {
         model.addAttribute("mouvements", mouvementLotService.getMouvementsByLot(id));
         model.addAttribute("effectifTotal", mouvementLotService.getEffectifTotal(id));
-        return "mouvements-lot";
+        return "lots/mouvements";
     }
 
     @PostMapping("/lots/mouvements/save")

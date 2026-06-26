@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<c:set var="l" value="${detail}" />
+<c:set var="l" value="${lot}" />
 
 <c:set var="pageTitle" value="Lot ${l.codeLot}" />
 <c:set var="crumbs" value="Cheptel / Lots / ${l.codeLot}" />
@@ -218,13 +218,13 @@
                         </div>
                     </a>
 
-                    <a href="${ctx}/lots/${l.id}/mouvements" class="action-item">
-                        <i class="fa-solid fa-right-left"></i>
-                        <div>
-                            <strong>Voir les mouvements</strong>
-                            <span>Entrées, sorties et ajustements.</span>
-                        </div>
-                    </a>
+                    <a href="${ctx}/lots/${lot.id}/mouvements" class="action-item">
+    <i class="fa-solid fa-right-left"></i>
+    <div>
+        <strong>Voir les mouvements</strong>
+        <span>Entrées, sorties et ajustements.</span>
+    </div>
+</a>
 
                     <a href="${ctx}/lots/form?id=${l.id}" class="action-item">
                         <i class="fa-solid fa-pen-to-square"></i>

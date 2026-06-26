@@ -22,7 +22,7 @@
     <a class="nav__link" data-match="/reproduction/groupes" href="${ctx}/reproduction/groupes">
       <i class="ico fa-solid fa-venus-mars"></i> Groupes
     </a>
-    <a class="nav__link" data-match="/reproduction/analyse" href="${ctx}/reproduction/analyse/lots/1">
+    <a class="nav__link" data-match="/reproduction/analyse" href="${ctx}/reproduction/analyse">
       <i class="ico fa-solid fa-chart-line"></i> Analyse reproductive
     </a>
     <a class="nav__link" data-match="/reproduction/alertes" href="${ctx}/reproduction/alertes">

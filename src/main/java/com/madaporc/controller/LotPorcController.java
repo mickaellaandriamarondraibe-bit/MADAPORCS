@@ -1,64 +1,77 @@
 package com.madaporc.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.madaporc.dto.LotDetailDTO;
 import com.madaporc.dto.LotFiltreDTO;
 import com.madaporc.dto.LotPorcDTO;
-import com.madaporc.repository.LotPorcRepository;
-import com.madaporc.repository.RaceRepository;
 import com.madaporc.service.LotPorcService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 public class LotPorcController {
-    private final LotPorcService lotPorcService;
-    private final RaceRepository raceRepository;
-    private final LotPorcRepository lotPorcRepository;
 
-    public LotPorcController(LotPorcService lotPorcService ,RaceRepository raceRepository,LotPorcRepository lotPorcRepository ) {
-        this.lotPorcService = lotPorcService;
-        this.lotPorcRepository = lotPorcRepository;
-        this.raceRepository = raceRepository;   
-    }
+    private final LotPorcService lotPorcService;
 
     @GetMapping("/lots")
     public String listLots(@ModelAttribute LotFiltreDTO filtre, Model model) {
         model.addAttribute("lots", lotPorcService.rechercherLots(filtre));
+        model.addAttribute("filtre", filtre);
         return "lots/listeLots";
     }
 
     @GetMapping("/lots/form")
     public String showForm(@RequestParam(required = false) Long id, Model model) {
-        if (id != null) {
-            lotPorcService.prepareFormModel(model, id);
-        } else {
-            model.addAttribute("lot", new LotPorcDTO());
-        }
-        model.addAttribute("races", raceRepository.findAll());
-        model.addAttribute("lotsParents", lotPorcRepository.findAll());
-
+        lotPorcService.prepareFormModel(model, id);
         return "lots/formLot";
     }
 
     @PostMapping("/lots/save")
     public String save(@ModelAttribute LotPorcDTO dto, Model model) {
-        return lotPorcService.creerLot(dto);
+        String error;
+
+        if (dto.getId() == null) {
+            error = lotPorcService.creerLot(dto);
+        } else {
+            error = lotPorcService.modifierLot(dto.getId(), dto);
+        }
+
+        if (error != null) {
+            model.addAttribute("error", error);
+            model.addAttribute("lot", dto);
+            model.addAttribute("races", lotPorcService.getAllRaces());
+            return "lots/formLot";
+        }
+
+        return "redirect:/lots";
     }
 
     @GetMapping("/lots/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        LotDetailDTO lotDetail = lotPorcService.getDetailLot(id);
-        model.addAttribute("detail", lotDetail);
+        model.addAttribute("lot", lotPorcService.getDetailLot(id));
         return "lots/detailLot";
     }
+
     @PostMapping("/lots/archive/{id}")
     public String archiver(@PathVariable Long id) {
-        return lotPorcService.archiverLot(id);
+        String error = lotPorcService.archiverLot(id);
+
+        if (error != null) {
+            return "redirect:/lots?error=" + error;
+        }
+
+        return "redirect:/lots";
+    }
+    
+    @GetMapping("/lots/archive/{id}")
+    public String archiverGet(@PathVariable Long id) {
+        String error = lotPorcService.archiverLot(id);
+
+        if (error != null) {
+            return "redirect:/lots?error=" + error;
+        }
+
+        return "redirect:/lots";
     }
 }

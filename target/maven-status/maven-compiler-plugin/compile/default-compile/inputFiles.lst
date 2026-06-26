@@ -37,7 +37,10 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/PeseeLotDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RapportFiltreDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RepartitionReproductiveDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/SuiviSanitaireDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/UtilisateurDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/VaccinDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/VaccinationDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/VenteDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/AlerteReproduction.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/AnalyseReproductionLot.java
@@ -71,6 +74,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/ImportExportRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/IngredientRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/LotPorcRepository.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/MaladieRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/MouvementLotPorcRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/ParametreReproductionRaceRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/PeseeLotRepository.java
@@ -79,6 +83,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/RoleRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/StatutReproductifRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/SuiviSanitaireRepository.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/TraitementRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/UtilisateurRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/VaccinRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/VaccinationRepository.java
@@ -93,12 +98,14 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/ImportExportService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/LotNaissanceService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/LotPorcService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MaladieService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MouvementLotService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PeseeLotService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/RapportService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/RepartitionReproductiveService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/StockService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/SuiviSanitaireService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/TraitementService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/UtilisateurService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/VaccinService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/VaccinationService.java

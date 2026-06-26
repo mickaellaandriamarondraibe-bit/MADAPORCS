@@ -1,83 +1,151 @@
 package com.madaporc.service;
 
-import org.springframework.stereotype.Service;
-
 import com.madaporc.dto.MouvementLotDTO;
+import com.madaporc.model.LotPorc;
 import com.madaporc.model.MouvementLotPorc;
+import com.madaporc.repository.LotPorcRepository;
 import com.madaporc.repository.MouvementLotPorcRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.ArrayList;
 
 @Service
+@Transactional
 public class MouvementLotService {
-    private final MouvementLotPorcRepository mouvementLotRepository;
 
-    public MouvementLotService(MouvementLotPorcRepository mouvementLotRepository) {
+    private final MouvementLotPorcRepository mouvementLotRepository;
+    private final LotPorcRepository lotPorcRepository;
+
+    public MouvementLotService(
+            MouvementLotPorcRepository mouvementLotRepository,
+            LotPorcRepository lotPorcRepository
+    ) {
         this.mouvementLotRepository = mouvementLotRepository;
+        this.lotPorcRepository = lotPorcRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<MouvementLotPorc> getMouvementsByLot(Long lotId) {
-        List<MouvementLotPorc> mouvements = new ArrayList<>();
-        mouvements = mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);
-        return mouvements;
+        return mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);
     }
 
     public String enregistrerMouvement(MouvementLotDTO dto) {
-        MouvementLotPorc mouvement = new MouvementLotPorc();
-        mouvement.setId(dto.getLotId());
-        mouvement.setTypeMouvement(dto.getTypeMouvement());
-        mouvement.setQuantite(dto.getQuantite());
-        mouvement.setDateMouvement(dto.getDateMouvement());
-        mouvement.setObservation(dto.getObservation());
-        mouvement.setCreatedAt(dto.getCreatedAt());
+        if (dto.getLotId() == null) {
+            return "Le lot est obligatoire.";
+        }
 
+        if (dto.getTypeMouvement() == null || dto.getTypeMouvement().trim().isEmpty()) {
+            return "Le type de mouvement est obligatoire.";
+        }
+
+        if (dto.getQuantite() == null || dto.getQuantite() <= 0) {
+            return "La quantité doit être supérieure à 0.";
+        }
+
+        LotPorc lot = lotPorcRepository.findById(dto.getLotId())
+                .orElseThrow(() -> new IllegalArgumentException("Lot introuvable avec l'id : " + dto.getLotId()));
+
+        if ("ARCHIVE".equalsIgnoreCase(lot.getStatut())) {
+            return "Impossible d'ajouter un mouvement sur un lot archivé.";
+        }
+
+        String type = dto.getTypeMouvement().trim().toUpperCase();
+
+        if (estSortie(type) && dto.getQuantite() > lot.getEffectifActuel()) {
+            return "La quantité est supérieure à l'effectif actuel.";
+        }
+
+        if (estEntree(type)) {
+            lot.setEffectifActuel(lot.getEffectifActuel() + dto.getQuantite());
+        } else if (estSortie(type)) {
+            lot.setEffectifActuel(lot.getEffectifActuel() - dto.getQuantite());
+        } else {
+            return "Type de mouvement invalide.";
+        }
+
+        MouvementLotPorc mouvement = new MouvementLotPorc();
+
+        // Très important : on lie le mouvement au lot.
+        mouvement.setLot(lot);
+
+        mouvement.setTypeMouvement(type);
+        mouvement.setQuantite(dto.getQuantite());
+
+        if (dto.getDateMouvement() == null) {
+            mouvement.setDateMouvement(LocalDate.now());
+        } else {
+            mouvement.setDateMouvement(dto.getDateMouvement());
+        }
+
+        mouvement.setObservation(dto.getObservation());
+
+        lotPorcRepository.save(lot);
         mouvementLotRepository.save(mouvement);
-        return "redirect:/lots/" + dto.getLotId();
+
+        return null;
     }
 
+    @Transactional(readOnly = true)
     public Integer getEffectifTotal(Long lotId) {
-        List<MouvementLotPorc> mouvements = mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);
-        Integer effectifTotal = 0;
+        LotPorc lot = lotPorcRepository.findById(lotId)
+                .orElseThrow(() -> new IllegalArgumentException("Lot introuvable avec l'id : " + lotId));
 
-        for (MouvementLotPorc mouvement : mouvements) {
-            if ("AUGMENTATION".equals(mouvement.getTypeMouvement())) {
-                effectifTotal += mouvement.getQuantite();
-            } else if ("DIMINUTION".equals(mouvement.getTypeMouvement())) {
-                effectifTotal -= mouvement.getQuantite();
-            }
-        }
-        return effectifTotal;
+        return lot.getEffectifActuel();
     }
 
     public void augmenterEffectif(Long lotId, Integer quantite) {
-        MouvementLotPorc mouvement = new MouvementLotPorc();
-        mouvement.setId(lotId);
-        mouvement.setTypeMouvement("AUGMENTATION");
-        mouvement.setQuantite(quantite);
-        mouvement.setDateMouvement(java.time.LocalDate.now());
-        mouvement.setObservation("Augmentation de l'effectif du lot");
-        mouvement.setCreatedAt(java.time.LocalDateTime.now());
+        MouvementLotDTO dto = new MouvementLotDTO();
+        dto.setLotId(lotId);
+        dto.setTypeMouvement("ENTREE");
+        dto.setQuantite(quantite);
+        dto.setDateMouvement(LocalDate.now());
+        dto.setObservation("Augmentation de l'effectif du lot");
 
-        mouvementLotRepository.save(mouvement);
+        String error = enregistrerMouvement(dto);
+
+        if (error != null) {
+            throw new IllegalArgumentException(error);
+        }
     }
 
     public void diminuerEffectif(Long lotId, Integer quantite) {
-        if(!verifierQuantiteDisponible(lotId, quantite)) {
-            throw new IllegalArgumentException("Quantite insuffisante pour le lot");
-        }
-        MouvementLotPorc mouvement = new MouvementLotPorc();
-        mouvement.setId(lotId);
-        mouvement.setTypeMouvement("DIMINUTION");
-        mouvement.setQuantite(quantite);
-        mouvement.setDateMouvement(java.time.LocalDate.now());
-        mouvement.setObservation("Diminution de l'effectif du lot");
-        mouvement.setCreatedAt(java.time.LocalDateTime.now());
+        MouvementLotDTO dto = new MouvementLotDTO();
+        dto.setLotId(lotId);
+        dto.setTypeMouvement("VENTE");
+        dto.setQuantite(quantite);
+        dto.setDateMouvement(LocalDate.now());
+        dto.setObservation("Diminution de l'effectif du lot");
 
-        mouvementLotRepository.save(mouvement);
+        String error = enregistrerMouvement(dto);
+
+        if (error != null) {
+            throw new IllegalArgumentException(error);
+        }
     }
 
+    @Transactional(readOnly = true)
     public boolean verifierQuantiteDisponible(Long lotId, Integer quantite) {
-        Integer effectifTotal = getEffectifTotal(lotId);
-        return effectifTotal >= quantite;
+        if (quantite == null || quantite <= 0) {
+            return false;
+        }
+
+        LotPorc lot = lotPorcRepository.findById(lotId)
+                .orElseThrow(() -> new IllegalArgumentException("Lot introuvable avec l'id : " + lotId));
+
+        return lot.getEffectifActuel() >= quantite;
+    }
+
+    private boolean estEntree(String type) {
+        return "ENTREE".equals(type)
+                || "NAISSANCE".equals(type)
+                || "TRANSFERT_ENTREE".equals(type);
+    }
+
+    private boolean estSortie(String type) {
+        return "DECES".equals(type)
+                || "VENTE".equals(type)
+                || "TRANSFERT_SORTIE".equals(type);
     }
 }
