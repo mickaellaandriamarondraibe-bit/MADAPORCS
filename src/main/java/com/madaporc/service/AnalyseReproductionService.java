@@ -80,8 +80,11 @@ public class AnalyseReproductionService {
     }
 
     public BigDecimal calculerTauxFertiliteObserve(AnalyseReproductionLotDTO analyse) {
+        LotPorc lot = lotPorcRepository.findByCodeLot(analyse.getLotPorc())
+                .orElseThrow(() -> new RuntimeException("Lot non trouvé: " + analyse.getLotPorc()));
+
         List<GroupeReproduction> groupes =
-                groupeReproductionRepository.findByCodeLot(analyse.getLotPorc());
+                groupeReproductionRepository.findByLotFemelleId(lot.getId());
 
         BigDecimal nbFemellesSaillies = BigDecimal.ZERO;
         BigDecimal nbFemellesGestantes = BigDecimal.ZERO;
