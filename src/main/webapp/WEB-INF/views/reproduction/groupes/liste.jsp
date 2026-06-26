@@ -26,11 +26,11 @@
             <c:forEach var="g" items="${groupes}">
               <tr>
                 <td><a href="${ctx}/reproduction/groupes/${g.id}"><b>${g.codeGroupe}</b></a></td>
-                <td>${g.codeLotFemelle}</td>
-                <td>${g.codeLotMale}</td>
-                <td class="num">${g.nombreFemelles}</td>
-                <td><fmt:formatDate value="${g.dateSaillie}" pattern="dd/MM/yyyy"/></td>
-                <td><fmt:formatDate value="${g.datePrevueMiseBas}" pattern="dd/MM/yyyy"/></td>
+                <td>${g.lotFemelle.codeLot}</td>
+                <td>${g.lotMale.codeLot}</td>
+                <td class="num">${g.nombreFemellesConcernees}</td>
+                <td>${g.dateSaillie}</td>
+                <td>${g.datePrevueMiseBas}</td>
                 <td>
                   <c:choose>
                     <c:when test="${g.statut == 'EN_CYCLE'}"><span class="badge badge--amber"><span class="dot"></span>En cycle</span></c:when>

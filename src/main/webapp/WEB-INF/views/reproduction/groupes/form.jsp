@@ -38,7 +38,7 @@
         </div>
         <div class="field">
           <label>Nombre de femelles concernées <span class="req">*</span></label>
-          <input class="input" type="number" min="1" name="nombreFemelles" value="${groupe.nombreFemelles}" required>
+          <input class="input" type="number" min="1" name="nombreFemelles" value="${groupe.nombreFemellesConcernees}" required>
           <span class="hint">Supérieur à 0 et ≤ femelles disponibles.</span>
         </div>
         <div class="field">

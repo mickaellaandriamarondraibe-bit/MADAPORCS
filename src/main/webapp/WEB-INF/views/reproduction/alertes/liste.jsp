@@ -22,7 +22,7 @@
               <tr>
                 <td><span class="badge badge--amber">${al.typeAlerte}</span></td>
                 <td><a href="${ctx}/reproduction/groupes/${al.groupeId}"><b>${al.codeGroupe}</b></a></td>
-                <td>${al.codeLotFemelle}</td>
+                <td>${al.lotFemelle.codeLot}</td>
                 <td><fmt:formatDate value="${al.datePrevue}" pattern="dd/MM/yyyy"/></td>
                 <td>
                   <c:choose>

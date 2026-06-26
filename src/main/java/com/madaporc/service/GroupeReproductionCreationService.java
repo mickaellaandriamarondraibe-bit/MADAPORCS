@@ -39,19 +39,21 @@ public class GroupeReproductionCreationService {
         this.parametreRepository = parametreRepository;
     }
 
-
     public String creer(GroupeReproductionDTO dto, Long utilisateurId) {
         try {
             // érifications individuelles des lots)
             String erreurFemelle = verifierLotFemelle(dto.getLotFemelleId());
-            if (erreurFemelle != null) return erreurFemelle;
+            if (erreurFemelle != null)
+                return erreurFemelle;
 
             String erreurMale = verifierLotMale(dto.getLotMaleId());
-            if (erreurMale != null) return erreurMale;
+            if (erreurMale != null)
+                return erreurMale;
 
             // efectif dispo
             String erreurDispo = verifierFemellesDisponibles(dto.getLotFemelleId(), dto.getNombreFemellesConcernees());
-            if (erreurDispo != null) return erreurDispo;
+            if (erreurDispo != null)
+                return erreurDispo;
 
             // entite
             LotPorc lotFemelle = lotPorcRepository.findById(dto.getLotFemelleId()).get();
@@ -61,9 +63,10 @@ public class GroupeReproductionCreationService {
             mettreAJourRepartitionApresSaillie(dto.getLotFemelleId(), dto.getNombreFemellesConcernees());
 
             // Calcul de la durée de gestation de la race
-            int dureeGestation = 114; 
+            int dureeGestation = 114;
             if (lotFemelle.getRace() != null) {
-                Optional<ParametreReproductionRace> params = parametreRepository.findByRaceId(lotFemelle.getRace().getId());
+                Optional<ParametreReproductionRace> params = parametreRepository
+                        .findByRaceId(lotFemelle.getRace().getId());
                 if (params.isPresent()) {
                     dureeGestation = params.get().getDureeGestationJours();
                 }
@@ -72,7 +75,7 @@ public class GroupeReproductionCreationService {
             // Calcul de la date prévue de mise bas
             LocalDate datePrevue = calculerDatePrevueMiseBas(dto.getDateSaillie(), dureeGestation);
 
-            //  Sauvegarde du groupe
+            // Sauvegarde du groupe
             GroupeReproduction groupe = new GroupeReproduction();
             groupe.setCodeGroupe("GRP-" + System.currentTimeMillis());
             groupe.setLotFemelle(lotFemelle);
@@ -82,7 +85,8 @@ public class GroupeReproductionCreationService {
             groupe.setDateSaillie(dto.getDateSaillie());
             groupe.setDureeGestationJours(dureeGestation);
             groupe.setStatut("SAILLIE");
-            groupe.setObservation(dto.getObservation() != null ? dto.getObservation() : "Création automatique - Saillie partielle");
+            groupe.setObservation(
+                    dto.getObservation() != null ? dto.getObservation() : "Création automatique - Saillie partielle");
             groupe.setCreatedAt(LocalDateTime.now());
 
             groupeRepository.save(groupe);
@@ -97,28 +101,51 @@ public class GroupeReproductionCreationService {
         return "SUCCESS";
     }
 
-
     public LocalDate calculerDatePrevueMiseBas(LocalDate dateSaillie, Integer dureeGestation) {
-        if (dateSaillie == null) return null;
+        if (dateSaillie == null)
+            return null;
         int jours = (dureeGestation != null) ? dureeGestation : 114;
         return dateSaillie.plusDays(jours);
     }
 
     public String verifierLotFemelle(Long lotFemelleId) {
-        if (lotFemelleId == null) return "Veuillez sélectionner un lot femelle.";
-        Optional<LotPorc> lot = lotPorcRepository.findById(lotFemelleId);
-        if (lot.isEmpty()) return "Lot femelle introuvable.";
-        if (!"FEMELLE".equals(lot.get().getSexe())) return "Le lot sélectionné doit être de sexe FEMELLE.";
-        if (!"ACTIF".equals(lot.get().getStatut())) return "Le lot femelle doit être ACTIF.";
+        if (lotFemelleId == null) {
+            return "Veuillez sélectionner un lot femelle.";
+        }
+
+        Optional<LotPorc> lotOpt = lotPorcRepository.findById(lotFemelleId);
+
+        if (lotOpt.isEmpty()) {
+            return "Lot femelle introuvable.";
+        }
+
+        LotPorc lot = lotOpt.get();
+
+        if (!"FEMELLE".equals(lot.getSexe())) {
+            return "Le lot sélectionné doit être de sexe FEMELLE.";
+        }
+
+        if (!"ACTIF".equals(lot.getStatut())) {
+            return "Le lot femelle doit être ACTIF.";
+        }
+
+        if (!"REPRODUCTION".equals(lot.getObjectif())) {
+            return "Seuls les lots femelles de type REPRODUCTION peuvent être utilisés pour créer un groupe de reproduction.";
+        }
+
         return null;
     }
 
     public String verifierLotMale(Long lotMaleId) {
-        if (lotMaleId == null) return "Veuillez sélectionner un lot mâle.";
+        if (lotMaleId == null)
+            return "Veuillez sélectionner un lot mâle.";
         Optional<LotPorc> lot = lotPorcRepository.findById(lotMaleId);
-        if (lot.isEmpty()) return "Lot mâle introuvable.";
-        if (!"MALE".equals(lot.get().getSexe())) return "Le lot sélectionné doit être de sexe MALE.";
-        if (!"ACTIF".equals(lot.get().getStatut())) return "Le lot mâle doit être ACTIF.";
+        if (lot.isEmpty())
+            return "Lot mâle introuvable.";
+        if (!"MALE".equals(lot.get().getSexe()))
+            return "Le lot sélectionné doit être de sexe MALE.";
+        if (!"ACTIF".equals(lot.get().getStatut()))
+            return "Le lot mâle doit être ACTIF.";
         return null;
     }
 
@@ -145,7 +172,7 @@ public class GroupeReproductionCreationService {
         RepartitionReproductiveLot enCycleRepar = null;
         int restantAEngager = nombreFemelles;
 
-        //On pioche d'abord dans DEJA_REPRODUCTRICE_APTE
+        // On pioche d'abord dans DEJA_REPRODUCTRICE_APTE
         for (RepartitionReproductiveLot r : repartitions) {
             String code = r.getStatutReproductif();
             if ("DEJA_REPRODUCTRICE_APTE".equals(code) && restantAEngager > 0) {
@@ -159,7 +186,7 @@ public class GroupeReproductionCreationService {
             }
         }
 
-        //Si pas assez, on pioche dans PRETE_JAMAIS_SAILLIE
+        // Si pas assez, on pioche dans PRETE_JAMAIS_SAILLIE
         if (restantAEngager > 0) {
             for (RepartitionReproductiveLot r : repartitions) {
                 String code = r.getStatutReproductif();

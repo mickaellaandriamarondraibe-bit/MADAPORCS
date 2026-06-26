@@ -22,55 +22,44 @@ public class LotPorcService {
         this.lotPorcRepository = lotPorcRepository;
         this.raceRepository = raceRepository;
     }
-public List<LotPorc> rechercherLots(LotFiltreDTO filtre) {
-    List<LotPorc> lots = new ArrayList<>(lotPorcRepository.findAll());
 
-    if (filtre.getCodeLot() != null && !filtre.getCodeLot().trim().isEmpty()) {
-        String codeLot = filtre.getCodeLot().trim().toLowerCase();
+    public List<LotPorc> rechercherLots(LotFiltreDTO filtre) {
+        List<LotPorc> lots = new ArrayList<>(lotPorcRepository.findAll());
 
-        lots.removeIf(lot ->
-                lot.getCodeLot() == null ||
-                !lot.getCodeLot().toLowerCase().contains(codeLot)
-        );
+        if (filtre.getCodeLot() != null && !filtre.getCodeLot().trim().isEmpty()) {
+            String codeLot = filtre.getCodeLot().trim().toLowerCase();
+
+            lots.removeIf(lot -> lot.getCodeLot() == null ||
+                    !lot.getCodeLot().toLowerCase().contains(codeLot));
+        }
+
+        if (filtre.getSexe() != null && !filtre.getSexe().trim().isEmpty()) {
+            lots.removeIf(lot -> lot.getSexe() == null ||
+                    !lot.getSexe().equals(filtre.getSexe()));
+        }
+
+        if (filtre.getObjectif() != null && !filtre.getObjectif().trim().isEmpty()) {
+            lots.removeIf(lot -> lot.getObjectif() == null ||
+                    !lot.getObjectif().equals(filtre.getObjectif()));
+        }
+
+        if (filtre.getStatut() != null && !filtre.getStatut().trim().isEmpty()) {
+            lots.removeIf(lot -> lot.getStatut() == null ||
+                    !lot.getStatut().equals(filtre.getStatut()));
+        }
+
+        if (filtre.getDateCreationDebut() != null) {
+            lots.removeIf(lot -> lot.getDateCreation() == null ||
+                    lot.getDateCreation().isBefore(filtre.getDateCreationDebut()));
+        }
+
+        if (filtre.getDateCreationFin() != null) {
+            lots.removeIf(lot -> lot.getDateCreation() == null ||
+                    lot.getDateCreation().isAfter(filtre.getDateCreationFin()));
+        }
+
+        return lots;
     }
-
-    if (filtre.getSexe() != null && !filtre.getSexe().trim().isEmpty()) {
-        lots.removeIf(lot ->
-                lot.getSexe() == null ||
-                !lot.getSexe().equals(filtre.getSexe())
-        );
-    }
-
-    if (filtre.getObjectif() != null && !filtre.getObjectif().trim().isEmpty()) {
-        lots.removeIf(lot ->
-                lot.getObjectif() == null ||
-                !lot.getObjectif().equals(filtre.getObjectif())
-        );
-    }
-
-    if (filtre.getStatut() != null && !filtre.getStatut().trim().isEmpty()) {
-        lots.removeIf(lot ->
-                lot.getStatut() == null ||
-                !lot.getStatut().equals(filtre.getStatut())
-        );
-    }
-
-    if (filtre.getDateCreationDebut() != null) {
-        lots.removeIf(lot ->
-                lot.getDateCreation() == null ||
-                lot.getDateCreation().isBefore(filtre.getDateCreationDebut())
-        );
-    }
-
-    if (filtre.getDateCreationFin() != null) {
-        lots.removeIf(lot ->
-                lot.getDateCreation() == null ||
-                lot.getDateCreation().isAfter(filtre.getDateCreationFin())
-        );
-    }
-
-    return lots;
-}
 
     public void prepareFormModel(Model model, Long id) {
         LotPorc lot = lotPorcRepository.findById(id)
@@ -119,7 +108,7 @@ public List<LotPorc> rechercherLots(LotFiltreDTO filtre) {
         lot.setDateCreation(dto.getDateCreation());
         lot.setSexe(dto.getSexe());
         lot.setObjectif(dto.getObjectif());
-        if(dto.getOrigine() == null){
+        if (dto.getOrigine() == null) {
             lot.setOrigine(null);
         }
         lot.setOrigine(dto.getOrigine());
@@ -175,15 +164,40 @@ public List<LotPorc> rechercherLots(LotFiltreDTO filtre) {
 
     public LotDetailDTO getDetailLot(Long lotId) {
         LotPorc lot = lotPorcRepository.findById(lotId)
-                .orElseThrow(() -> new IllegalArgumentException("Lot non trouve"));
+                .orElseThrow(() -> new IllegalArgumentException("Lot non trouvé"));
+
         LotDetailDTO detailDTO = new LotDetailDTO();
+
         detailDTO.setId(lot.getId());
         detailDTO.setCodeLot(lot.getCodeLot());
         detailDTO.setDateCreation(lot.getDateCreation());
+
+        if (lot.getRace() != null) {
+            detailDTO.setRaceId(lot.getRace().getId());
+            detailDTO.setRaceNom(lot.getRace().getNom());
+        }
+
         detailDTO.setSexe(lot.getSexe());
         detailDTO.setObjectif(lot.getObjectif());
         detailDTO.setOrigine(lot.getOrigine());
         detailDTO.setEffectifInitial(lot.getEffectifInitial());
+        detailDTO.setEffectifActuel(lot.getEffectifActuel());
+        detailDTO.setStatut(lot.getStatut());
+
+        if (lot.getLotParent() != null) {
+            detailDTO.setLotParentId(lot.getLotParent().getId());
+            detailDTO.setCodeLotParent(lot.getLotParent().getCodeLot());
+        }
+
+        if (lot.getGroupeReproductionOrigine() != null) {
+            detailDTO.setGroupeReproductionOrigineId(
+                    lot.getGroupeReproductionOrigine().getId());
+        }
+
+        detailDTO.setDescription(lot.getDescription());
+        detailDTO.setCreatedAt(lot.getCreatedAt());
+        detailDTO.setUpdatedAt(lot.getUpdatedAt());
+
         return detailDTO;
     }
 

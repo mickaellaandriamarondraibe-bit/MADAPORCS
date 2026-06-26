@@ -64,8 +64,7 @@ public class GroupeReproductionController {
             queryService.prepareFormModel(model, null);
             return "reproduction/groupes/form";
         }
-
-        return "redirect:/reproduction/groupes";
+        return "reproduction/groupes";
     }
 
 

@@ -19,6 +19,6 @@ public interface LotPorcRepository extends JpaRepository<LotPorc, Long> {
     List<LotPorc> findByStatut(String statut);
 
     List<LotPorc> findByDateCreationBetween(LocalDate startDate, LocalDate endDate);
-
+    List<LotPorc> findBySexeAndStatut(String Sexe,String status);
     long countByStatut(String statut);
 }

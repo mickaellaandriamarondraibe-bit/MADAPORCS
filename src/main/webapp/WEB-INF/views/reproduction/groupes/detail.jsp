@@ -64,7 +64,7 @@
             ×
             <c:choose>
                 <c:when test="${not empty g.codeLotMale}">
-                    ${g.codeLotMale}
+                ${g.codeLotMale}
                 </c:when>
                 <c:otherwise>
                     <span class="muted">Aucun lot mâle</span>
@@ -134,21 +134,19 @@
             <dl class="dl">
                 <dt>Code groupe</dt>
                 <dd>${g.codeGroupe}</dd>
-
-                <dt>Lot femelle</dt>
-                <dd>${g.lotFemelleId}</dd>
-
-                <dt>Lot mâle</dt>
-                <dd>
-                    <c:choose>
-                        <c:when test="${not empty g.lotFemelleId}">
-                            ${g.lotFemelleId}
-                        </c:when>
-                        <c:otherwise>
-                            <span class="muted">Aucun lot mâle</span>
-                        </c:otherwise>
-                    </c:choose>
-                </dd>
+<p>
+    Lot mère ${g.codeLotFemelle}
+    ×
+    <c:choose>
+        <c:when test="${not empty g.codeLotMale}">
+            ${g.codeLotMale} 
+        </c:when>
+        <c:otherwise>
+            <span class="muted">Aucun lot mâle</span>
+        </c:otherwise>
+    </c:choose>
+    · ${g.nombreFemellesConcernees} femelle(s)
+</p>
 
                 <dt>Femelles concernées</dt>
                 <dd>${g.nombreFemellesConcernees}</dd>

@@ -54,10 +54,9 @@ public class LotPorcController {
     @GetMapping("/lots/{id}")
     public String detail(@PathVariable Long id, Model model) {
         LotDetailDTO lotDetail = lotPorcService.getDetailLot(id);
-        model.addAttribute("lot", lotDetail);
+        model.addAttribute("detail", lotDetail);
         return "lots/detailLot";
     }
-
     @PostMapping("/lots/archive/{id}")
     public String archiver(@PathVariable Long id) {
         return lotPorcService.archiverLot(id);
