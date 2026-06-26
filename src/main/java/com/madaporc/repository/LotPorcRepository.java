@@ -14,6 +14,8 @@ public interface LotPorcRepository extends JpaRepository<LotPorc, Long> {
 
     List<LotPorc> findBySexe(String sexe);
 
+    List<LotPorc> findBySexeAndStatut(String sexe, String statut);
+
     List<LotPorc> findByObjectif(String objectif);
 
     List<LotPorc> findByStatut(String statut);

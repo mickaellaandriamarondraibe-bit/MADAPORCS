@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 public interface GroupeReproductionRepository extends JpaRepository<GroupeReproduction, Long> {
 
@@ -20,4 +21,10 @@ public interface GroupeReproductionRepository extends JpaRepository<GroupeReprod
     List<GroupeReproduction> findByLotMaleIdOrderByDateSaillieDesc(Long lotMaleId);
     
     List<GroupeReproduction> findAllByOrderByDateSaillieDesc();
+
+    long countByStatutIn(List<String> statuts);
+
+    List<GroupeReproduction> findByDatePrevueMiseBasBetweenAndDateMiseBasReelleIsNullOrderByDatePrevueMiseBasAsc(
+            LocalDate debut,
+            LocalDate fin);
 }

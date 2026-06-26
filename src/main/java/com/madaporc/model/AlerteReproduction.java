@@ -1,65 +1,77 @@
 package com.madaporc.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import com.madaporc.model.GroupeReproduction;
-import com.madaporc.model.LotPorc;
 
 @Entity
 @Table(name = "alertes_reproduction")
 public class AlerteReproduction {
 
+    public enum StatutAlerte {
+        NON_LUE,
+        LUE,
+        TRAITEE
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
-    @ManyToOne
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupe_reproduction_id")
     private GroupeReproduction groupeReproduction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lot_id")
     private LotPorc lot;
-    
-    @Column(name = "type_alerte")
+
+    @Column(name = "type_alerte", nullable = false, length = 50)
     private String typeAlerte;
 
-    @Column(name = "message")
+    @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    @Column(name = "date_alerte")
-    private LocalDateTime date_alerte;
+    @Column(name = "date_alerte", nullable = false)
+    private LocalDate dateAlerte;
 
-    @Column(name = "statut")
-    private String statut;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut", nullable = false, length = 30)
+    private StatutAlerte statut;
 
-    public AlerteReproduction() {
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (dateAlerte == null) {
+            dateAlerte = LocalDate.now();
+        }
+        if (statut == null) {
+            statut = StatutAlerte.NON_LUE;
+        }
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 
-    public AlerteReproduction(GroupeReproduction groupeReproduction, LotPorc     lot, String typeAlerte, String message,
-        LocalDateTime date_alerte, String statut) {
-        this.groupeReproduction = groupeReproduction;
-        this.lot = lot;
-        this.typeAlerte = typeAlerte;
-        this.message = message;
-        this.date_alerte = date_alerte;
-        this.statut = statut;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -95,19 +107,27 @@ public class AlerteReproduction {
         this.message = message;
     }
 
-    public LocalDateTime getDate_alerte() {
-        return date_alerte;
+    public LocalDate getDateAlerte() {
+        return dateAlerte;
     }
 
-    public void setDate_alerte(LocalDateTime date_alerte) {
-        this.date_alerte = date_alerte;
+    public void setDateAlerte(LocalDate dateAlerte) {
+        this.dateAlerte = dateAlerte;
     }
 
-    public String getStatut() {
+    public StatutAlerte getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(StatutAlerte statut) {
         this.statut = statut;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
