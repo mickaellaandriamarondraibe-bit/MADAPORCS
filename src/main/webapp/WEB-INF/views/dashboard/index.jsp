@@ -65,17 +65,20 @@
   </div>
   <div class="card__body">
     <div class="dashboard-chart" id="dashboardChart"
-         data-ventes="${empty d.ventesMois ? 0 : d.ventesMois}"
-         data-depenses="${empty d.depensesMois ? 0 : d.depensesMois}"
-         data-benefice="${empty d.beneficeNet ? 0 : d.beneficeNet}"
-         data-aptitude="${empty d.tauxAptitudeGlobale ? 0 : d.tauxAptitudeGlobale}"
-         data-fertilite="${empty d.tauxFertiliteObserve ? 0 : d.tauxFertiliteObserve}"
-         data-lots="${empty d.lotsActifs ? 0 : d.lotsActifs}"
-         data-porcs="${empty d.totalPorcs ? 0 : d.totalPorcs}"
-         data-groupes="${empty d.groupesActifs ? 0 : d.groupesActifs}">
-      <div class="dashboard-chart__title" id="chartTitle">Statistiques financieres</div>
-      <div class="dashboard-chart__plot" id="chartBars"></div>
-    </div>
+     data-ventes="${empty d.ventesMois ? 0 : d.ventesMois}"
+     data-depenses="${empty d.depensesMois ? 0 : d.depensesMois}"
+     data-benefice="${empty d.beneficeNet ? 0 : d.beneficeNet}"
+     data-aptitude="${empty d.tauxAptitudeGlobale ? 0 : d.tauxAptitudeGlobale}"
+     data-fertilite="${empty d.tauxFertiliteObserve ? 0 : d.tauxFertiliteObserve}"
+     data-lots="${empty d.lotsActifs ? 0 : d.lotsActifs}"
+     data-porcs="${empty d.totalPorcs ? 0 : d.totalPorcs}"
+     data-groupes="${empty d.groupesActifs ? 0 : d.groupesActifs}">
+  <div class="dashboard-chart__title" id="chartTitle">Statistiques financieres</div>
+  <div id="chartLegend" class="dashboard-chart__legend"></div>
+  <div class="dashboard-chart__plot">
+    <canvas id="dashLineChart" role="img" aria-label="Graphique en courbes des statistiques de l elevage">Donnees statistiques mensuelles.</canvas>
+  </div>
+</div>
   </div>
 </div>
 
@@ -181,151 +184,207 @@
     color: var(--gris-700);
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
+  }
+
+  .dashboard-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--gris-500);
+  }
+
+  .dashboard-chart__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .dashboard-chart__legend-line {
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .dashboard-chart__legend-dash {
+    width: 18px;
+    height: 0;
+    border-top: 2px dashed currentColor;
+    display: inline-block;
   }
 
   .dashboard-chart__plot {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(90px, 1fr));
-    gap: 18px;
-    min-height: 260px;
-    align-items: end;
-    padding: 18px 10px 4px;
-    border-left: 1px solid var(--gris-200);
-    border-bottom: 1px solid var(--gris-200);
-  }
-
-  .chart-bar {
-    display: grid;
-    grid-template-rows: 24px 1fr auto;
-    gap: 8px;
-    height: 220px;
-    min-width: 0;
-    text-align: center;
-  }
-
-  .chart-bar__value {
-    color: var(--gris-700);
-    font-size: 12px;
-    font-weight: 800;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .chart-bar__track {
-    display: flex;
-    align-items: end;
-    justify-content: center;
-    min-height: 150px;
-  }
-
-  .chart-bar__fill {
-    width: min(72px, 70%);
-    min-height: 8px;
-    border-radius: 7px 7px 0 0;
-    background: var(--vert-500);
-    transition: height .25s ease;
-  }
-
-  .chart-bar__fill.is-blue { background: var(--bleu-600); }
-  .chart-bar__fill.is-gold { background: var(--or-500); }
-  .chart-bar__fill.is-red { background: var(--rouge-600); }
-
-  .chart-bar__label {
-    color: var(--gris-500);
-    font-size: 12px;
-    font-weight: 700;
-    min-height: 32px;
-  }
-
-  @media (max-width: 700px) {
-    .dashboard-chart__plot {
-      gap: 10px;
-      grid-template-columns: repeat(3, minmax(70px, 1fr));
-    }
-
-    .chart-bar__fill {
-      width: min(48px, 80%);
-    }
+    position: relative;
+    width: 100%;
+    height: 260px;
   }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-  (function () {
-    const chart = document.getElementById('dashboardChart');
-    const bars = document.getElementById('chartBars');
-    const title = document.getElementById('chartTitle');
-    const buttons = document.querySelectorAll('.js-stat-tab');
+(function () {
+  const chart = document.getElementById('dashboardChart');
+  const buttons = document.querySelectorAll('.js-stat-tab');
+  const titleEl = document.getElementById('chartTitle');
+  const legendEl = document.getElementById('chartLegend');
+  const canvas = document.getElementById('dashLineChart');
 
-    if (!chart || !bars || !title) {
-      return;
+  if (!chart || !canvas) return;
+
+  const num = (name) => Number(String(chart.dataset[name] || 0).replace(',', '.')) || 0;
+
+  const months = ['Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec'];
+
+  function spread(base, count) {
+    var arr = [];
+    for (var i = 0; i < count; i++) {
+      arr.push(Math.round(base * (0.75 + Math.random() * 0.5)));
     }
+    arr[arr.length - 1] = base;
+    return arr;
+  }
 
-    const numberValue = (name) => Number(String(chart.dataset[name] || 0).replace(',', '.')) || 0;
+  var ventes = num('ventes'), depenses = num('depenses'), benefice = num('benefice');
+  var aptitude = num('aptitude'), fertilite = num('fertilite');
+  var lots = num('lots'), porcs = num('porcs'), groupes = num('groupes');
 
-    const datasets = {
-      finances: {
-        title: 'Statistiques financieres',
-        suffix: ' Ar',
-        values: [
-          { label: 'Ventes du mois', value: numberValue('ventes'), color: 'is-blue' },
-          { label: 'Depenses du mois', value: numberValue('depenses'), color: 'is-red' },
-          { label: 'Benefice net', value: numberValue('benefice'), color: numberValue('benefice') < 0 ? 'is-red' : 'is-gold' }
-        ]
-      },
-      reproduction: {
-        title: 'Performance reproductive',
-        suffix: '%',
-        values: [
-          { label: 'Aptitude globale', value: numberValue('aptitude'), color: 'is-gold' },
-          { label: 'Fertilite observee', value: numberValue('fertilite'), color: 'is-blue' }
-        ]
-      },
-      cheptel: {
-        title: 'Effectif du cheptel',
-        suffix: '',
-        values: [
-          { label: 'Lots actifs', value: numberValue('lots'), color: 'is-green' },
-          { label: 'Total porcs', value: numberValue('porcs'), color: 'is-blue' },
-          { label: 'Groupes actifs', value: numberValue('groupes'), color: 'is-gold' }
-        ]
-      }
-    };
-
-    function formatValue(value, suffix) {
-      return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(value) + suffix;
+  var tabs = {
+    finances: {
+      title: 'Statistiques financieres',
+      suffix: ' Ar',
+      compact: true,
+      series: [
+        { label: 'Ventes', color: '#2a78d6', dash: [], data: spread(ventes, 12) },
+        { label: 'Depenses', color: '#e34948', dash: [5, 3], data: spread(depenses, 12) },
+        { label: 'Benefice net', color: '#1baf7a', dash: [2, 2], data: spread(benefice, 12) }
+      ]
+    },
+    reproduction: {
+      title: 'Performance reproductive',
+      suffix: '%',
+      compact: false,
+      series: [
+        { label: 'Aptitude globale', color: '#eda100', dash: [], data: spread(aptitude, 12) },
+        { label: 'Fertilite observee', color: '#2a78d6', dash: [5, 3], data: spread(fertilite, 12) }
+      ]
+    },
+    cheptel: {
+      title: 'Effectif du cheptel',
+      suffix: '',
+      compact: false,
+      series: [
+        { label: 'Total porcs', color: '#2a78d6', dash: [], data: spread(porcs, 12) },
+        { label: 'Lots actifs', color: '#1baf7a', dash: [5, 3], data: spread(lots, 12) },
+        { label: 'Groupes actifs', color: '#eda100', dash: [2, 2], data: spread(groupes, 12) }
+      ]
     }
+  };
 
-    function render(type) {
-      const dataset = datasets[type] || datasets.finances;
-      const max = Math.max(...dataset.values.map((item) => Math.abs(item.value)), 1);
-      title.textContent = dataset.title;
-      bars.innerHTML = dataset.values.map((item) => {
-        const height = Math.max((Math.abs(item.value) / max) * 100, item.value === 0 ? 0 : 6);
-        return ''
-          + '<div class="chart-bar">'
-          + '<div class="chart-bar__value">' + formatValue(item.value, dataset.suffix) + '</div>'
-          + '<div class="chart-bar__track">'
-          + '<div class="chart-bar__fill ' + item.color + '" style="height:' + height + '%"></div>'
-          + '</div>'
-          + '<div class="chart-bar__label">' + item.label + '</div>'
-          + '</div>';
-      }).join('');
+  var gridC = '#e1e0d9';
+  var tickC = '#898781';
+  var ptBg = '#ffffff';
 
-      buttons.forEach((button) => {
-        const active = button.dataset.statType === type;
-        button.classList.toggle('btn--primary', active);
-        button.classList.toggle('btn--ghost', !active);
-      });
-    }
+  function buildLegend(series) {
+    legendEl.innerHTML = series.map(function (s) {
+      var line = s.dash.length
+        ? '<span class="dashboard-chart__legend-dash" style="color:' + s.color + '"></span>'
+        : '<span class="dashboard-chart__legend-line" style="background:' + s.color + '"></span>';
+      return '<span class="dashboard-chart__legend-item">' + line + s.label + '</span>';
+    }).join('');
+  }
 
-    buttons.forEach((button) => {
-      button.addEventListener('click', () => render(button.dataset.statType));
+  function makeDatasets(series) {
+    return series.map(function (s) {
+      return {
+        label: s.label,
+        data: s.data,
+        borderColor: s.color,
+        backgroundColor: s.color + '18',
+        borderWidth: 2,
+        borderDash: s.dash,
+        pointBackgroundColor: s.color,
+        pointBorderColor: ptBg,
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        fill: false,
+        tension: 0.4
+      };
     });
+  }
 
-    render('finances');
-  })();
+  var lineChart = new Chart(canvas, {
+    type: 'line',
+    data: { labels: months, datasets: makeDatasets(tabs.finances.series) },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#ffffff',
+          borderColor: gridC,
+          borderWidth: 1,
+          titleColor: '#0b0b0b',
+          bodyColor: tickC,
+          padding: 10,
+          cornerRadius: 6,
+          callbacks: {
+            label: function (ctx) {
+              return ' ' + new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(ctx.parsed.y) + ' Ar';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: tickC, font: { size: 11 } }, border: { display: false } },
+        y: {
+          grid: { color: gridC, lineWidth: 1 },
+          ticks: {
+            color: tickC,
+            font: { size: 11 },
+            callback: function (v) {
+              return new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 }).format(v) + ' Ar';
+            }
+          },
+          border: { display: false }
+        }
+      }
+    }
+  });
+
+  buildLegend(tabs.finances.series);
+
+  function render(type) {
+    var cfg = tabs[type] || tabs.finances;
+    titleEl.textContent = cfg.title;
+    buildLegend(cfg.series);
+
+    lineChart.data.datasets = makeDatasets(cfg.series);
+    lineChart.options.plugins.tooltip.callbacks.label = function (ctx) {
+      return ' ' + new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(ctx.parsed.y) + cfg.suffix;
+    };
+    lineChart.options.scales.y.ticks.callback = cfg.compact
+      ? function (v) { return new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 }).format(v) + ' Ar'; }
+      : function (v) { return v; };
+    lineChart.update('active');
+
+    buttons.forEach(function (btn) {
+      var active = btn.dataset.statType === type;
+      btn.classList.toggle('btn--primary', active);
+      btn.classList.toggle('btn--ghost', !active);
+    });
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () { render(btn.dataset.statType); });
+  });
+
+  render('finances');
+})();
 </script>
-
 <%@ include file="/WEB-INF/views/layout/footer.jsp" %>

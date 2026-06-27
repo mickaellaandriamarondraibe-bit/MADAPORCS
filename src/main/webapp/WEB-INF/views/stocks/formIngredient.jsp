@@ -1,8 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="edition" value="${not empty ingredient.id}" />
-<c:set var="pageTitle" value="${edition ? 'Modifier l\'ingrédient' : 'Nouvel ingrédient'}" />
-<c:set var="crumbs"    value="Stocks / Ingrédients / <b>${edition ? 'Édition' : 'Création'}</b>" />
+
+<c:choose>
+  <c:when test="${not empty ingredient.id}">
+    <c:set var="edition"   value="true" />
+    <c:set var="pageTitle" value="Modifier l'ingrédient" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="edition"   value="false" />
+    <c:set var="pageTitle" value="Nouvel ingrédient" />
+  </c:otherwise>
+</c:choose>
+<c:set var="crumbs" value="Stocks / Ingrédients / <b>${edition ? 'Édition' : 'Création'}</b>" />
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
 <div class="page-head">
@@ -12,7 +21,7 @@
 
 <div class="card" style="max-width:760px">
   <div class="card__body">
-    <%-- POST /ingredients/save, bind IngredientDTO --%>
+    <h4 class="text-red-600"><c:if test="${not empty message}">${message}</c:if></h4>
     <form method="post" action="${ctx}/ingredients/save">
       <input type="hidden" name="id" value="${ingredient.id}">
       <div class="form-grid">
@@ -25,10 +34,8 @@
             <option value="UNITE" ${ingredient.unite == 'UNITE' ? 'selected' : ''}>unité</option>
           </select>
         </div>
-        <div class="field"><label>Stock actuel</label><input class="input" type="number" step="0.01" min="0" name="quantiteStock" value="${ingredient.quantiteStock}"></div>
+        <div class="field"><label>Stock actuel</label><input class="input" type="number" step="0.01" min="0" name="stockActuel" value="${ingredient.stockActuel}"></div>
         <div class="field"><label>Seuil d'alerte</label><input class="input" type="number" step="0.01" min="0" name="seuilAlerte" value="${ingredient.seuilAlerte}"></div>
-        <div class="field"><label>Prix unitaire (Ar)</label><input class="input" type="number" min="0" name="prixUnitaire" value="${ingredient.prixUnitaire}"></div>
-        <div class="field span-2"><label>Description</label><textarea class="textarea" name="description">${ingredient.description}</textarea></div>
       </div>
       <div class="form-actions">
         <a class="btn btn--ghost" href="${ctx}/ingredients">Annuler</a>

@@ -13,7 +13,7 @@
 </div>
 
 <div class="toolbar"><div class="search"><input class="input" placeholder="Rechercher…" data-filter-input="#tbl-ing"></div></div>
-
+    <h4 class="text-red-600"><c:if test="${not empty message}">${message}</c:if></h4>
 <div class="card">
   <div class="table-wrap">
     <table class="tbl" id="tbl-ing">
@@ -24,10 +24,10 @@
             <c:forEach var="i" items="${ingredients}">
               <tr>
                 <td><b>${i.nom}</b></td><td>${i.unite}</td>
-                <td class="num">${i.quantiteStock}</td><td class="num">${i.seuilAlerte}</td>
+                <td class="num">${i.stockActuel}</td><td class="num">${i.seuilAlerte}</td>
                 <td>
                   <c:choose>
-                    <c:when test="${i.quantiteStock <= i.seuilAlerte}"><span class="badge badge--red"><span class="dot"></span>Stock bas</span></c:when>
+                    <c:when test="${i.stockActuel.compareTo(i.seuilAlerte) <= 0}"><span class="badge badge--red"><span class="dot"></span>Stock bas</span></c:when>
                     <c:otherwise><span class="badge badge--green">OK</span></c:otherwise>
                   </c:choose>
                 </td>

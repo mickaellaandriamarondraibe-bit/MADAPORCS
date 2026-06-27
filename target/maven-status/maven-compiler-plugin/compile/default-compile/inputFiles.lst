@@ -28,6 +28,7 @@ C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\DetailVe
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\GroupeReproductionDetailDTO.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\GroupeReproductionDTO.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\ImportExcelDTO.java
+C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\IngredientDTO.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\LoginDTO.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\LotDetailDTO.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\dto\LotFiltreDTO.java
@@ -93,6 +94,7 @@ C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\Grou
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\GroupeReproductionMiseBasService.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\GroupeReproductionQueryService.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\ImportExportService.java
+C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\IngredientService.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\LotNaissanceService.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\LotPorcService.java
 C:\Users\Noah\Documents\GitHub\MADAPORCS\src\main\java\com\madaporc\service\MouvementLotService.java
