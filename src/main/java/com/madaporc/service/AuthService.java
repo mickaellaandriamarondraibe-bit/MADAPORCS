@@ -28,7 +28,7 @@ public class AuthService {
                 session.setAttribute("userId", utilisateur.getId());
                 session.setAttribute("roleId", utilisateur.getRole().getId());
                 session.setAttribute("nom", utilisateur.getNom());
-                return "redirect:/";
+                return "placeholder";
             }
         }
 

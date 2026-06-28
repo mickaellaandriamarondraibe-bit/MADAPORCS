@@ -1,0 +1,14 @@
+com/madaporc/repository/RoleRepository.class
+com/madaporc/dto/UtilisateurDTO.class
+com/madaporc/MadaporcApplication.class
+com/madaporc/util/PasswordHashGenerator.class
+com/madaporc/common/AppConstants.class
+com/madaporc/model/Utilisateur.class
+com/madaporc/model/Role.class
+com/madaporc/controller/AuthController.class
+com/madaporc/service/AuthService.class
+com/madaporc/dto/LoginDTO.class
+com/madaporc/service/UtilisateurService.class
+com/madaporc/config/SecurityConfig.class
+com/madaporc/repository/UtilisateurRepository.class
+com/madaporc/controller/UtilisateurController.class
