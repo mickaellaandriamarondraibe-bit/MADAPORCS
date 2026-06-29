@@ -100,6 +100,22 @@
           </select>
         </div>
 
+        <%-- Champ âge : visible seulement si l'origine est "Achat".
+             Utile pour l'analyse reproductive (classer les femelles). --%>
+        <div class="field" id="champAge" style="display:none">
+          <label for="ageMois">Âge à l'achat (en mois) <span class="req">*</span></label>
+          <input
+            class="input"
+            type="number"
+            min="0"
+            id="ageMois"
+            name="ageMois"
+            value="${lot.ageMois}"
+            placeholder="Ex: 8"
+          />
+          <span class="hint">Âge moyen des animaux achetés, en mois.</span>
+        </div>
+
         <div class="field">
           <label for="effectifInitial">Effectif initial <span class="req">*</span></label>
           <input
@@ -174,5 +190,22 @@
 
   </div>
 </div>
+
+<%-- Affiche le champ "âge" uniquement quand l'origine choisie est "Achat". --%>
+<script>
+  const selectOrigine = document.getElementById("origine");
+  const champAge = document.getElementById("champAge");
+
+  function majAffichageAge() {
+    if (selectOrigine.value === "ACHAT") {
+      champAge.style.display = "";
+    } else {
+      champAge.style.display = "none";
+    }
+  }
+
+  selectOrigine.addEventListener("change", majAffichageAge);
+  majAffichageAge(); // au chargement de la page
+</script>
 
 <%@ include file="/WEB-INF/views/layout/footer.jsp" %>

@@ -36,6 +36,11 @@ public class LotPorc {
     @Column(name = "origine", nullable = false)
     private String origine;
 
+    // Âge du lot en mois, saisi à l'achat (origine ACHAT).
+    // Sert à classer les femelles pour l'analyse reproductive.
+    @Column(name = "age_mois")
+    private Integer ageMois;
+
     @Column(name = "effectif_initial", nullable = false)
     private Integer effectifInitial;
 

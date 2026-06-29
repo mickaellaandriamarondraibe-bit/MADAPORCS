@@ -125,6 +125,8 @@ CREATE TABLE lots_porcs (
     objectif VARCHAR(30) NOT NULL,
     origine VARCHAR(30) NOT NULL DEFAULT 'ACHAT',
 
+    age_mois INTEGER,
+
     effectif_initial INTEGER NOT NULL,
     effectif_actuel INTEGER NOT NULL,
 
@@ -619,6 +621,8 @@ CREATE TABLE mouvements_stock_aliment (
     quantite NUMERIC(12,2) NOT NULL,
 
     date_mouvement DATE NOT NULL DEFAULT CURRENT_DATE,
+
+    stock_apres NUMERIC(12,2),
 
     observation TEXT,
 

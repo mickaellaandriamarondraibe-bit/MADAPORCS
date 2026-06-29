@@ -18,9 +18,13 @@ import jakarta.transaction.Transactional;
 public class GroupeReproductionMiseBasService {
 
     private final GroupeReproductionRepository groupeRepository;
+    private final RepartitionReproductiveService repartitionReproductiveService;
 
-    public GroupeReproductionMiseBasService(GroupeReproductionRepository groupeRepository) {
+    public GroupeReproductionMiseBasService(
+            GroupeReproductionRepository groupeRepository,
+            RepartitionReproductiveService repartitionReproductiveService) {
         this.groupeRepository = groupeRepository;
+        this.repartitionReproductiveService = repartitionReproductiveService;
     }
 
     // Fonction pour afficher tout les details d'un groupe
@@ -97,7 +101,13 @@ public class GroupeReproductionMiseBasService {
         validerDonneesMiseBas(groupe, dto);
         mettreAJourGroupeApresMiseBas(groupe, dto);
 
-        groupeRepository.save(groupe); 
+        groupeRepository.save(groupe);
+
+        // Les femelles quittent "En cycle" : mise à jour de la répartition du lot.
+        repartitionReproductiveService.mettreAJourApresMiseBas(
+                groupe.getLotFemelle().getId(),
+                groupe.getNbFemellesMiseBas(),
+                groupe.getNombreFemellesConcernees());
         //id null      → INSERT
         //id existe    → UPDATE
         return getDetailGroupe(groupeId);
@@ -151,5 +161,22 @@ public class GroupeReproductionMiseBasService {
         }
     }
 
+    // Cloture le groupe : seulement apres une mise bas confirmee (ou un echec).
+    @Transactional
+    public void cloturer(Long groupeId) {
+        GroupeReproduction groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new IllegalArgumentException("Groupe de reproduction introuvable."));
+
+        if ("CLOTURE".equals(groupe.getStatut())) {
+            throw new IllegalArgumentException("Ce groupe est déjà clôturé.");
+        }
+        if (!"MISE_BAS_CONFIRMEE".equals(groupe.getStatut()) && !"ECHEC".equals(groupe.getStatut())) {
+            throw new IllegalArgumentException("Le groupe doit être confirmé (mise bas) avant la clôture.");
+        }
+
+        groupe.setStatut("CLOTURE");
+        groupe.setUpdatedAt(LocalDateTime.now());
+        groupeRepository.save(groupe);
+    }
 
 }

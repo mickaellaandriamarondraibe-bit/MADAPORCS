@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.madaporc.dto.AnalyseReproductionLotDTO;
 import com.madaporc.service.AnalyseReproductionService;
+import com.madaporc.service.RepartitionReproductiveService;
 
 @Controller
 public class AnalyseReproductionController {
 
     @Autowired
     private AnalyseReproductionService analyseReproductionService;
+
+    @Autowired
+    private RepartitionReproductiveService repartitionReproductiveService;
 
     @GetMapping("/reproduction/analyse")
     public String index(Model model) {
@@ -33,6 +37,9 @@ public class AnalyseReproductionController {
 
     @PostMapping("/reproduction/analyse/generer/{lotId}")
     public String genererAnalyse(@PathVariable Long lotId) {
+        // Si le lot n'a pas encore de répartition (ex: ancien lot), on l'initialise.
+        repartitionReproductiveService.initialiserRepartitionLotFemelle(lotId);
+
         AnalyseReproductionLotDTO analyse = analyseReproductionService.analyserDTO(lotId);
         analyseReproductionService.enregistrerAnalyse(analyse);
 

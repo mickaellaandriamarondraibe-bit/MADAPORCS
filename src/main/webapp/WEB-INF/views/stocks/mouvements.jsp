@@ -19,8 +19,8 @@
           <c:when test="${not empty mouvements}">
             <c:forEach var="m" items="${mouvements}">
               <tr>
-                <td><fmt:formatDate value="${m.dateMouvement}" pattern="dd/MM/yyyy"/></td>
-                <td><b>${m.nomIngredient}</b></td>
+                <td>${m.dateMouvement}</td>
+                <td><b>${m.ingredient.nom}</b></td>
                 <td><span class="badge ${m.typeMouvement == 'SORTIE' ? 'badge--red' : 'badge--green'}">${m.typeMouvement}</span></td>
                 <td class="num">${m.quantite}</td>
                 <td class="num">${m.stockApres}</td>

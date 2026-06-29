@@ -1,6 +1,8 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/MadaporcApplication.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/common/AppConstants.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/config/AuthInterceptor.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/config/SecurityConfig.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/config/WebConfig.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/AlerteReproductionController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/AnalyseReproductionController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/AuthController.java
@@ -28,14 +30,17 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/GroupeReproductionDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/GroupeReproductionDetailDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/ImportExcelDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/IngredientDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LoginDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotDetailDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotFiltreDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotNaissanceDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/LotPorcDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/MouvementLotDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/MouvementStockDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/PeseeLotDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RapportFiltreDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RapportFinancierDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/RepartitionReproductiveDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/SuiviSanitaireDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/UtilisateurDTO.java
@@ -53,6 +58,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/LotPorc.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Maladie.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/MouvementLotPorc.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/MouvementStock.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/ParametreReproductionRace.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/PeseeLot.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Race.java
@@ -76,6 +82,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/LotPorcRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/MaladieRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/MouvementLotPorcRepository.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/MouvementStockRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/ParametreReproductionRaceRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/PeseeLotRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/RaceRepository.java
@@ -96,10 +103,12 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/GroupeReproductionMiseBasService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/GroupeReproductionQueryService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/ImportExportService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/IngredientService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/LotNaissanceService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/LotPorcService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MaladieService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MouvementLotService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/MouvementStockService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/PeseeLotService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/RapportService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/RepartitionReproductiveService.java

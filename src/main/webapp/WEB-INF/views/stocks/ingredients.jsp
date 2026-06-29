@@ -24,10 +24,10 @@
             <c:forEach var="i" items="${ingredients}">
               <tr>
                 <td><b>${i.nom}</b></td><td>${i.unite}</td>
-                <td class="num">${i.quantiteStock}</td><td class="num">${i.seuilAlerte}</td>
+                <td class="num">${i.stockActuel}</td><td class="num">${i.seuilAlerte}</td>
                 <td>
                   <c:choose>
-                    <c:when test="${i.quantiteStock <= i.seuilAlerte}"><span class="badge badge--red"><span class="dot"></span>Stock bas</span></c:when>
+                    <c:when test="${i.stockActuel <= i.seuilAlerte}"><span class="badge badge--red"><span class="dot"></span>Stock bas</span></c:when>
                     <c:otherwise><span class="badge badge--green">OK</span></c:otherwise>
                   </c:choose>
                 </td>

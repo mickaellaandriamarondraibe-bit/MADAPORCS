@@ -18,7 +18,7 @@
         <select class="select" name="ingredientId" required>
           <option value="">— Choisir —</option>
           <c:forEach var="i" items="${ingredients}">
-            <option value="${i.id}">${i.nom} (stock : ${i.quantiteStock} ${i.unite})</option>
+            <option value="${i.id}">${i.nom} (stock : ${i.stockActuel} ${i.unite})</option>
           </c:forEach>
         </select>
       </div>

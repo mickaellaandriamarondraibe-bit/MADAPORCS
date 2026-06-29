@@ -25,14 +25,17 @@ public class LotPorcService {
     private final LotPorcRepository lotPorcRepository;
     private final RaceRepository raceRepository;
     private final MouvementLotPorcRepository mouvementLotPorcRepository;
+    private final RepartitionReproductiveService repartitionReproductiveService;
 
     public LotPorcService(
             LotPorcRepository lotPorcRepository,
             RaceRepository raceRepository,
-            MouvementLotPorcRepository mouvementLotPorcRepository) {
+            MouvementLotPorcRepository mouvementLotPorcRepository,
+            RepartitionReproductiveService repartitionReproductiveService) {
         this.lotPorcRepository = lotPorcRepository;
         this.raceRepository = raceRepository;
         this.mouvementLotPorcRepository = mouvementLotPorcRepository;
+        this.repartitionReproductiveService = repartitionReproductiveService;
     }
 
     @Transactional(readOnly = true)
@@ -85,6 +88,7 @@ public class LotPorcService {
             dto.setSexe(lot.getSexe());
             dto.setObjectif(lot.getObjectif());
             dto.setOrigine(lot.getOrigine());
+            dto.setAgeMois(lot.getAgeMois());
             dto.setEffectifInitial(lot.getEffectifInitial());
             dto.setEffectifActuel(lot.getEffectifActuel());
             dto.setStatut(lot.getStatut());
@@ -125,6 +129,11 @@ public class LotPorcService {
                 : "ACHAT");
         lot.setDescription(dto.getDescription());
 
+        // L'âge n'a de sens que pour un lot acheté (origine ACHAT).
+        if ("ACHAT".equalsIgnoreCase(lot.getOrigine())) {
+            lot.setAgeMois(dto.getAgeMois());
+        }
+
         lot.setEffectifInitial(dto.getEffectifInitial());
 
         lot.setEffectifActuel(dto.getEffectifInitial());
@@ -149,6 +158,13 @@ public class LotPorcService {
          * Mouvement automatique de création du lot.
          */
         creerMouvementInitial(lotSauvegarde);
+
+        /*
+         * Pour un lot femelle, on remplit tout de suite la répartition
+         * reproductive (Prête / À surveiller / À retirer) selon l'âge.
+         * C'est ce qui alimente la page "Analyse reproductive".
+         */
+        repartitionReproductiveService.initialiserRepartitionLotFemelle(lotSauvegarde.getId());
 
         return null;
     }
@@ -210,6 +226,11 @@ public class LotPorcService {
         lot.setOrigine(dto.getOrigine() != null ? dto.getOrigine().toUpperCase() : lot.getOrigine());
         lot.setDescription(dto.getDescription());
 
+        // On met à jour l'âge seulement pour un lot acheté.
+        if ("ACHAT".equalsIgnoreCase(lot.getOrigine())) {
+            lot.setAgeMois(dto.getAgeMois());
+        }
+
         if (dto.getRaceId() != null) {
             Race race = raceRepository.findById(dto.getRaceId())
                     .orElseThrow(() -> new IllegalArgumentException("Race non trouvée"));
@@ -217,6 +238,10 @@ public class LotPorcService {
         }
 
         lotPorcRepository.save(lot);
+
+        // Après modification (âge, date, race...), on recalcule la répartition
+        // pour que la page "Analyse reproductive" reflète tout de suite le changement.
+        repartitionReproductiveService.initialiserRepartitionLotFemelle(lot.getId());
 
         return null;
     }

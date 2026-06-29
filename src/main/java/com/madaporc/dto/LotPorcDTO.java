@@ -15,6 +15,7 @@ public class LotPorcDTO {
     private String sexe;
     private String objectif;
     private String origine;
+    private Integer ageMois;
     private Integer effectifInitial;
     private Integer effectifActuel;
     private String statut;

@@ -55,23 +55,24 @@ public class GroupeReproduction {
     @Column(name = "date_mise_bas_reelle")
     private LocalDate dateMiseBasReelle;
 
+    // Ces compteurs commencent à 0 (colonnes NOT NULL en base).
     @Column(name = "nb_femelles_gestantes")
-    private Integer nbFemellesGestantes;
+    private Integer nbFemellesGestantes = 0;
 
     @Column(name = "nb_femelles_non_gestantes")
-    private Integer nbFemellesNonGestantes;
+    private Integer nbFemellesNonGestantes = 0;
 
     @Column(name = "nb_femelles_mise_bas")
-    private Integer nbFemellesMiseBas;
+    private Integer nbFemellesMiseBas = 0;
 
     @Column(name = "nb_porcelets_nes")
-    private Integer nbPorceletsNes;
+    private Integer nbPorceletsNes = 0;
 
     @Column(name = "nb_porcelets_vivants")
-    private Integer nbPorceletsVivants;
+    private Integer nbPorceletsVivants = 0;
 
     @Column(name = "nb_porcelets_morts")
-    private Integer nbPorceletsMorts;
+    private Integer nbPorceletsMorts = 0;
 
     @Column(name = "statut")
     private String statut;

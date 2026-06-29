@@ -22,4 +22,7 @@ public interface LotPorcRepository extends JpaRepository<LotPorc, Long> {
     List<LotPorc> findByDateCreationBetween(LocalDate startDate, LocalDate endDate);
     List<LotPorc> findBySexeAndStatut(String Sexe,String status);
     long countByStatut(String statut);
+
+    // Lots naissance issus d'un groupe de reproduction donne
+    List<LotPorc> findByGroupeReproductionOrigineId(Long groupeId);
 }

@@ -34,6 +34,6 @@ public class AuthController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         authService.deconnecter(session);
-        return "redirect:/login";
+        return "redirect:/";
     }
 }

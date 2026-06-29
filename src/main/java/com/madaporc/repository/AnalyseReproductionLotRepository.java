@@ -20,4 +20,10 @@ public interface AnalyseReproductionLotRepository
     List<AnalyseReproductionLot> findByLotIdOrderByDateAnalyseDesc(
             @Param("lotId") Long lotId
     );
+
+      @Query("select coalesce(avg(a.tauxAptitudeGlobal), 0) from AnalyseReproductionLot a")
+    Double moyenneTauxAptitudeGlobale();
+
+    @Query("select coalesce(avg(a.tauxFertiliteObserve), 0) from AnalyseReproductionLot a")
+    Double moyenneTauxFertiliteObserve();
 }

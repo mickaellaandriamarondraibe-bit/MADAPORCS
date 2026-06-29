@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="edition" value="${not empty groupe.id}" />
+<c:set var="edition" value="${not empty groupeReproductionDTO.id}" />
 <c:set var="pageTitle" value="${edition ? 'Modifier le groupe' : 'Nouveau groupe de reproduction'}" />
 <c:set var="crumbs"    value="Reproduction / Groupes / <b>${edition ? 'Édition' : 'Création'}</b>" />
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
@@ -12,16 +12,23 @@
 
 <div class="card" style="max-width:820px">
   <div class="card__body">
+    <%-- Message d'erreur renvoyé par le serveur (ex: nombre de femelles invalide) --%>
+    <c:if test="${not empty erreur}">
+      <div class="alert alert--error" style="margin-bottom:16px;color:#b91c1c;background:#fee2e2;padding:10px 14px;border-radius:8px">
+        ${erreur}
+      </div>
+    </c:if>
+
     <%-- POST /reproduction/groupes/save, bind GroupeReproductionDTO --%>
     <form method="post" action="${ctx}/reproduction/groupes/save">
-      <input type="hidden" name="id" value="${groupe.id}">
+      <input type="hidden" name="id" value="${groupeReproductionDTO.id}">
       <div class="form-grid">
         <div class="field">
           <label>Lot femelle <span class="req">*</span></label>
           <select class="select" name="lotFemelleId" required>
             <option value="">— Choisir un lot FEMELLE —</option>
             <c:forEach var="lf" items="${lotsFemelles}">
-              <option value="${lf.id}" ${groupe.lotFemelleId == lf.id ? 'selected' : ''}>${lf.codeLot} (${lf.effectifActuel} dispo)</option>
+              <option value="${lf.id}" ${groupeReproductionDTO.lotFemelleId == lf.id ? 'selected' : ''}>${lf.codeLot} (${lf.effectifActuel} dispo)</option>
             </c:forEach>
           </select>
           <span class="hint">Doit être de sexe FEMELLE.</span>
@@ -31,32 +38,32 @@
           <select class="select" name="lotMaleId" required>
             <option value="">— Choisir un lot MÂLE —</option>
             <c:forEach var="lm" items="${lotsMales}">
-              <option value="${lm.id}" ${groupe.lotMaleId == lm.id ? 'selected' : ''}>${lm.codeLot}</option>
+              <option value="${lm.id}" ${groupeReproductionDTO.lotMaleId == lm.id ? 'selected' : ''}>${lm.codeLot}</option>
             </c:forEach>
           </select>
           <span class="hint">Doit être de sexe MÂLE.</span>
         </div>
         <div class="field">
           <label>Nombre de femelles concernées <span class="req">*</span></label>
-          <input class="input" type="number" min="1" name="nombreFemelles" value="${groupe.nombreFemellesConcernees}" required>
+          <input class="input" type="number" min="1" name="nombreFemellesConcernees" value="${groupeReproductionDTO.nombreFemellesConcernees}" required>
           <span class="hint">Supérieur à 0 et ≤ femelles disponibles.</span>
         </div>
         <div class="field">
           <label>Nombre de mâles utilisés</label>
-          <input class="input" type="number" min="1" name="nombreMales" value="${empty groupe.nombreMales ? 1 : groupe.nombreMales}">
+          <input class="input" type="number" min="1" name="nombreMalesUtilises" value="${empty groupeReproductionDTO.nombreMalesUtilises ? 1 : groupeReproductionDTO.nombreMalesUtilises}">
         </div>
         <div class="field">
           <label>Date de saillie <span class="req">*</span></label>
-          <input class="input" type="date" name="dateSaillie" value="${groupe.dateSaillie}" required>
+          <input class="input" type="date" name="dateSaillie" value="${groupeReproductionDTO.dateSaillie}" required>
         </div>
         <div class="field">
           <label>Durée de gestation (jours)</label>
-          <input class="input" type="number" name="dureeGestation" value="${empty groupe.dureeGestation ? 114 : groupe.dureeGestation}">
+          <input class="input" type="number" name="dureeGestation" value="114">
           <span class="hint">La date prévue de mise bas est calculée automatiquement.</span>
         </div>
         <div class="field span-2">
           <label>Observation</label>
-          <textarea class="textarea" name="observation">${groupe.observation}</textarea>
+          <textarea class="textarea" name="observation">${groupeReproductionDTO.observation}</textarea>
         </div>
       </div>
       <div class="form-actions">
