@@ -14,6 +14,7 @@ import com.madaporc.model.MouvementStockAliment;
 import java.util.List;
 import com.madaporc.model.Ingredient;
 import com.madaporc.dto.MouvementStockDTO;
+import com.madaporc.model.enums.TypeMouvement;
 
 @Controller
 @RequestMapping("/stocks/mouvements")
@@ -24,17 +25,16 @@ public class MouvementStockController {
     @GetMapping("")
     public String listMouvements(Model model) {
         model.addAttribute("mouvements", mouvementStockService.getAllMouvementsStock());
-        return "mouvements-list";
+        return "stocks/Mouvements";
     }
 
     @GetMapping("/form")
     public String showForm(Model model) {
-        List<String> typeMouvements = List.of("ENTREE", "SORTIE");
         List<Ingredient> ingredients = mouvementStockService.getIngredientRepository().findAll();
-        model.addAttribute("typeMouvements", typeMouvements);
+        model.addAttribute("typeMouvements", TypeMouvement.values());
         model.addAttribute("ingredients", ingredients);
         model.addAttribute("mouvement", new MouvementStockAliment());
-        return "mouvements-form";
+        return "stocks/form";
     }
 
     @PostMapping("/save")
@@ -45,7 +45,7 @@ public class MouvementStockController {
             return "redirect:/stocks/mouvements";
         } else {
             model.addAttribute("errorMessage", result);
-            return "mouvements-form";
+            return "stocks/form";
         }
     }
 }

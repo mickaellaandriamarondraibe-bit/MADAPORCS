@@ -8,6 +8,7 @@ import com.madaporc.repository.MouvementStockRepository;
 import jakarta.transaction.Transactional;
 
 import com.madaporc.model.MouvementStockAliment;
+import com.madaporc.model.enums.TypeMouvement;
 
 import java.util.List;
 import java.math.BigDecimal;
@@ -48,8 +49,18 @@ public class MouvementStockService {
             return "Ingrédient non trouvé.";
         }
 
+        if( mouvementStockDTO.getTypeMouvement().equals(TypeMouvement.ENTREE.toString()) ) {
+            appliquerEntree(ingredient, mouvementStockDTO.getQuantite());
+        } 
+        else if( mouvementStockDTO.getTypeMouvement().equals(TypeMouvement.SORTIE.toString()) ) {
+            String sortieResult = appliquerSortie(ingredient, mouvementStockDTO.getQuantite());
+            if (!sortieResult.equals("success")) {
+                return sortieResult;
+            }
+        }
+
         mouvementStock.setIngredient(ingredient);
-        mouvementStock.setTypeMouvement(mouvementStockDTO.getTypeMouvement());
+        mouvementStock.setTypeMouvement(TypeMouvement.valueOf(mouvementStockDTO.getTypeMouvement()));
         mouvementStock.setQuantite(mouvementStockDTO.getQuantite());
         mouvementStock.setDateMouvement(mouvementStockDTO.getDateMouvement());
         mouvementStock.setObservation(mouvementStockDTO.getObservation());
@@ -61,11 +72,11 @@ public class MouvementStockService {
     public String validerMouvementStock(MouvementStockDTO mouvementStockDTO) {
         String statut = mouvementStockDTO.getTypeMouvement();
         
-        if (statut.equals("ENTREE")) {
+        if (statut.equals(TypeMouvement.ENTREE.toString())) {
             if (mouvementStockDTO.getQuantite().compareTo(BigDecimal.ZERO) <= 0) {
                 return "La quantité d'entrée doit être supérieure à zéro.";
             }
-        } else if (statut.equals("SORTIE")) {
+        } else if (statut.equals(TypeMouvement.SORTIE.toString())) {
             if (!verifierStockDisponible(mouvementStockDTO.getIngredientId(), mouvementStockDTO.getQuantite())) {
                 return "Stock insuffisant pour effectuer la sortie.";
             }
@@ -75,11 +86,10 @@ public class MouvementStockService {
     }
 
     public boolean verifierStockDisponible(Long ingredientId, BigDecimal quantite) {
-        List<MouvementStockAliment> mouvements = mouvementStockRepository.findByIngredientIdOrderByDateMouvementDesc(ingredientId);
-        MouvementStockAliment dernierMouvement = mouvements.isEmpty() ? null : mouvements.get(0);
-
-        if (dernierMouvement != null) {
-            BigDecimal stockDisponible = dernierMouvement.getQuantite();
+        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElse(null);
+        
+        if (ingredient != null) {
+            BigDecimal stockDisponible = ingredient.getStockActuel();
             return stockDisponible.compareTo(quantite) >= 0;
         }
 
@@ -90,10 +100,33 @@ public class MouvementStockService {
         MouvementStockDTO dto = new MouvementStockDTO();
         dto.setId(mouvementStock.getId());
         dto.setIngredientId(mouvementStock.getIngredient().getId());
-        dto.setTypeMouvement(mouvementStock.getTypeMouvement());
+        dto.setTypeMouvement(mouvementStock.getTypeMouvement().toString());
         dto.setQuantite(mouvementStock.getQuantite());
         dto.setDateMouvement(mouvementStock.getDateMouvement());
         dto.setObservation(mouvementStock.getObservation());
         return dto;
+    }
+
+    public String appliquerEntree(Ingredient ingredient, BigDecimal quantite) {
+        BigDecimal stockActuel = ingredient.getStockActuel();
+        BigDecimal nouveauStock = stockActuel.add(quantite);
+        ingredient.setStockActuel(nouveauStock);
+        ingredientRepository.save(ingredient);
+
+        return "success";
+    }
+
+    public String appliquerSortie(Ingredient ingredient, BigDecimal quantite) {
+        BigDecimal stockActuel = ingredient.getStockActuel();
+        
+        if (!verifierStockDisponible(ingredient.getId(), quantite)) {
+            return "Stock insuffisant pour effectuer la sortie.";
+        }
+
+        BigDecimal nouveauStock = stockActuel.subtract(quantite);
+        ingredient.setStockActuel(nouveauStock);
+        ingredientRepository.save(ingredient);
+
+        return "success";
     }
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -15,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import com.madaporc.model.enums.TypeMouvement;
+import jakarta.persistence.EnumType;
 
 @Entity
 @Table(name = "mouvement_stock_aliment")
@@ -27,8 +30,9 @@ public class MouvementStockAliment {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    @Column(name = "type_mouvement")
-    private String typeMouvement;
+    @Column(name = "type_mouvement", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TypeMouvement typeMouvement;
 
     private BigDecimal quantite;
 
@@ -56,11 +60,11 @@ public class MouvementStockAliment {
         this.ingredient = ingredient;
     }
 
-    public String getTypeMouvement() {
+    public TypeMouvement getTypeMouvement() {
         return typeMouvement;
     }
 
-    public void setTypeMouvement(String typeMouvement) {
+    public void setTypeMouvement(TypeMouvement typeMouvement) {
         this.typeMouvement = typeMouvement;
     }
 
