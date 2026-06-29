@@ -1,14 +1,24 @@
 package com.madaporc.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Model placeholder pour la table categories_depenses.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
+@Entity
+@Table(name = "categories_depenses")
 @Getter
 @Setter
 public class CategorieDepense {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String nom;
 }
