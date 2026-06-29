@@ -5,16 +5,12 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * DTO conforme au PDF - placeholder à compléter si besoin.
- */
 @Getter
 @Setter
 public class DepenseDTO {
     private Long id;
-    private Long categorieDepenseId;
-    private String libelle;
-    private BigDecimal montant;
+    private Long categorieId;
     private LocalDate dateDepense;
+    private BigDecimal montant;
     private String description;
 }
