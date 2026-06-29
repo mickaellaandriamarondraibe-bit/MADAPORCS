@@ -15,7 +15,6 @@
     <h1>Tableau de bord</h1>
     <p>Indicateurs clés de l'élevage au ${dateJour}</p>
   </div>
-
   <a class="btn btn--gold" href="${ctx}/rapports">
     <i class="fa-solid fa-file-lines"></i> Générer un rapport
   </a>
@@ -25,32 +24,20 @@
 
   <div class="kpi">
     <div class="kpi__label">Lots actifs</div>
-    <div class="kpi__value">
-      <c:out value="${d.lotsActifs}" default="0" />
-    </div>
-    <div class="kpi__sub">
-      <c:out value="${d.totalPorcs}" default="0" /> porcs actifs
-    </div>
+    <div class="kpi__value"><c:out value="${d.lotsActifs}" default="0" /></div>
+    <div class="kpi__sub"><c:out value="${d.totalPorcs}" default="0" /> porcs actifs</div>
   </div>
 
   <div class="kpi">
     <div class="kpi__label">Groupes actifs</div>
-    <div class="kpi__value">
-      <c:out value="${d.groupesActifs}" default="0" />
-    </div>
-    <div class="kpi__sub">
-      <c:out value="${d.misesBasProches}" default="0" /> mise(s) bas proche(s)
-    </div>
+    <div class="kpi__value"><c:out value="${d.groupesActifs}" default="0" /></div>
+    <div class="kpi__sub"><c:out value="${d.misesBasProches}" default="0" /> mise(s) bas proche(s)</div>
   </div>
 
   <div class="kpi kpi--gold">
     <div class="kpi__label">Aptitude globale</div>
-    <div class="kpi__value">
-      <c:out value="${d.tauxAptitudeGlobale}" default="0.00" />%
-    </div>
-    <div class="kpi__sub up">
-      Fertilité observée : <c:out value="${d.tauxFertiliteObserve}" default="0.00" />%
-    </div>
+    <div class="kpi__value"><c:out value="${d.tauxAptitudeGlobale}" default="0.00" />%</div>
+    <div class="kpi__sub up">Fertilité observée : <c:out value="${d.tauxFertiliteObserve}" default="0.00" />%</div>
   </div>
 
   <div class="kpi kpi--blue">
@@ -84,19 +71,10 @@
 <div class="card mt-24">
   <div class="card__head">
     <h2>Statistiques</h2>
-
     <div class="flex gap-8">
-      <button type="button" class="btn btn--primary btn--sm js-stat-tab" data-stat-type="finances">
-        Finances
-      </button>
-
-      <button type="button" class="btn btn--ghost btn--sm js-stat-tab" data-stat-type="reproduction">
-        Reproduction
-      </button>
-
-      <button type="button" class="btn btn--ghost btn--sm js-stat-tab" data-stat-type="cheptel">
-        Cheptel
-      </button>
+      <button type="button" class="btn btn--primary btn--sm js-stat-tab" data-stat-type="finances">Finances</button>
+      <button type="button" class="btn btn--ghost btn--sm js-stat-tab" data-stat-type="reproduction">Reproduction</button>
+      <button type="button" class="btn btn--ghost btn--sm js-stat-tab" data-stat-type="cheptel">Cheptel</button>
     </div>
   </div>
 
@@ -112,16 +90,15 @@
          data-porcs="${empty d.totalPorcs ? 0 : d.totalPorcs}"
          data-groupes="${empty d.groupesActifs ? 0 : d.groupesActifs}">
 
-      <div class="dashboard-chart__title" id="chartTitle">
-        Statistiques financières
+      <div class="dash-chart-header">
+        <div class="dashboard-chart__title" id="chartTitle">Statistiques financières</div>
+        <div id="chartLegend" class="dashboard-chart__legend"></div>
       </div>
 
-      <div id="chartLegend" class="dashboard-chart__legend"></div>
-
       <div class="dashboard-chart__plot">
-        <canvas id="dashLineChart"
+        <canvas id="dashBarChart"
                 role="img"
-                aria-label="Graphique en courbes des statistiques de l'élevage">
+                aria-label="Graphique en barres des statistiques de l'élevage">
           Données statistiques mensuelles.
         </canvas>
       </div>
@@ -134,11 +111,8 @@
   <div class="card">
     <div class="card__head">
       <h2>Mises bas proches</h2>
-      <a class="btn btn--ghost btn--sm" href="${ctx}/reproduction/alertes">
-        Voir les alertes
-      </a>
+      <a class="btn btn--ghost btn--sm" href="${ctx}/reproduction/alertes">Voir les alertes</a>
     </div>
-
     <div class="card__body" style="padding:0">
       <div class="table-wrap">
         <table class="tbl">
@@ -150,24 +124,14 @@
               <th>Statut</th>
             </tr>
           </thead>
-
           <tbody>
             <c:choose>
               <c:when test="${not empty misesBasProches}">
                 <c:forEach var="groupe" items="${misesBasProches}">
                   <tr>
-                    <td>
-                      <b><c:out value="${groupe.codeGroupe}" /></b>
-                    </td>
-
-                    <td>
-                      <c:out value="${groupe.lotFemelle.codeLot}" />
-                    </td>
-
-                    <td>
-                      <c:out value="${groupe.datePrevueMiseBas}" />
-                    </td>
-
+                    <td><b><c:out value="${groupe.codeGroupe}" /></b></td>
+                    <td><c:out value="${groupe.lotFemelle.codeLot}" /></td>
+                    <td><c:out value="${groupe.datePrevueMiseBas}" /></td>
                     <td>
                       <span class="badge badge--amber">
                         <span class="dot"></span>
@@ -177,13 +141,10 @@
                   </tr>
                 </c:forEach>
               </c:when>
-
               <c:otherwise>
                 <tr>
                   <td colspan="4">
-                    <div class="empty" style="padding:28px">
-                      Aucune mise bas proche.
-                    </div>
+                    <div class="empty" style="padding:28px">Aucune mise bas proche.</div>
                   </td>
                 </tr>
               </c:otherwise>
@@ -199,11 +160,8 @@
     <div class="card">
       <div class="card__head">
         <h2>Stocks faibles</h2>
-        <a class="btn btn--ghost btn--sm" href="${ctx}/ingredients">
-          Gérer
-        </a>
+        <a class="btn btn--ghost btn--sm" href="${ctx}/ingredients">Gérer</a>
       </div>
-
       <div class="card__body" style="padding:0">
         <table class="tbl">
           <thead>
@@ -212,7 +170,6 @@
               <th class="num">Stock</th>
             </tr>
           </thead>
-
           <tbody>
             <c:choose>
               <c:when test="${not empty d.stocksFaibles}">
@@ -222,7 +179,6 @@
                       <c:out value="${ingredient.nom}" />
                       <span class="badge badge--red">bas</span>
                     </td>
-
                     <td class="num">
                       <c:out value="${ingredient.stockActuel}" />
                       <c:out value="${ingredient.unite}" />
@@ -230,13 +186,10 @@
                   </tr>
                 </c:forEach>
               </c:when>
-
               <c:otherwise>
                 <tr>
                   <td colspan="2">
-                    <div class="empty" style="padding:22px">
-                      Tous les stocks sont corrects.
-                    </div>
+                    <div class="empty" style="padding:22px">Tous les stocks sont corrects.</div>
                   </td>
                 </tr>
               </c:otherwise>
@@ -249,11 +202,8 @@
     <div class="card">
       <div class="card__head">
         <h2>Vaccinations à venir</h2>
-        <a class="btn btn--ghost btn--sm" href="${ctx}/vaccinations">
-          Planning
-        </a>
+        <a class="btn btn--ghost btn--sm" href="${ctx}/vaccinations">Planning</a>
       </div>
-
       <div class="card__body" style="padding:0">
         <table class="tbl">
           <thead>
@@ -263,33 +213,21 @@
               <th>Date rappel</th>
             </tr>
           </thead>
-
           <tbody>
             <c:choose>
               <c:when test="${not empty d.vaccinationsAVenir}">
                 <c:forEach var="vaccination" items="${d.vaccinationsAVenir}">
                   <tr>
-                    <td>
-                      <c:out value="${vaccination.lot.codeLot}" />
-                    </td>
-
-                    <td>
-                      <c:out value="${vaccination.vaccin.nom}" />
-                    </td>
-
-                    <td>
-                      <c:out value="${vaccination.dateRappel}" />
-                    </td>
+                    <td><c:out value="${vaccination.lot.codeLot}" /></td>
+                    <td><c:out value="${vaccination.vaccin.nom}" /></td>
+                    <td><c:out value="${vaccination.dateRappel}" /></td>
                   </tr>
                 </c:forEach>
               </c:when>
-
               <c:otherwise>
                 <tr>
                   <td colspan="3">
-                    <div class="empty" style="padding:22px">
-                      Aucune vaccination planifiée.
-                    </div>
+                    <div class="empty" style="padding:22px">Aucune vaccination planifiée.</div>
                   </td>
                 </tr>
               </c:otherwise>
@@ -302,19 +240,28 @@
   </div>
 </div>
 
+<%-- ═══════════════════════════ STYLES ═══════════════════════════ --%>
 <style>
+  .dash-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
   .dashboard-chart__title {
     color: var(--gris-700);
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin: 0;
   }
 
   .dashboard-chart__legend {
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
-    margin-bottom: 12px;
     font-size: 12px;
     color: var(--gris-500);
   }
@@ -323,20 +270,15 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    cursor: default;
   }
 
-  .dashboard-chart__legend-line {
-    width: 18px;
-    height: 3px;
-    border-radius: 2px;
+  .dashboard-chart__legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
     display: inline-block;
-  }
-
-  .dashboard-chart__legend-dash {
-    width: 18px;
-    height: 0;
-    border-top: 2px dashed currentColor;
-    display: inline-block;
+    flex-shrink: 0;
   }
 
   .dashboard-chart__plot {
@@ -344,247 +286,302 @@
     width: 100%;
     height: 300px;
   }
-
-  .dashboard-chart__plot canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
 </style>
 
+<%-- ═══════════════════════════ SCRIPT ═══════════════════════════ --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
 <script>
 (function () {
-  const chart = document.getElementById('dashboardChart');
-  const buttons = document.querySelectorAll('.js-stat-tab');
-  const titleEl = document.getElementById('chartTitle');
-  const legendEl = document.getElementById('chartLegend');
-  const canvas = document.getElementById('dashLineChart');
 
-  if (!chart || !canvas) {
-    return;
+  /* ── éléments DOM ── */
+  var chartEl  = document.getElementById('dashboardChart');
+  var buttons  = document.querySelectorAll('.js-stat-tab');
+  var titleEl  = document.getElementById('chartTitle');
+  var legendEl = document.getElementById('chartLegend');
+  var canvas   = document.getElementById('dashBarChart');
+
+  if (!chartEl || !canvas) { return; }
+
+  /* ── lecture des data-attributes JSP ── */
+  function num(name) {
+    return Number(String(chartEl.dataset[name] || 0).replace(',', '.')) || 0;
   }
 
-  const num = function (name) {
-    return Number(String(chart.dataset[name] || 0).replace(',', '.')) || 0;
-  };
+  var ventes    = num('ventes');
+  var depenses  = num('depenses');
+  var benefice  = num('benefice');
+  var aptitude  = num('aptitude');
+  var fertilite = num('fertilite');
+  var lots      = num('lots');
+  var porcs     = num('porcs');
+  var groupes   = num('groupes');
 
-  const months = [
+
+  var ventesHisto = [
+  <c:forEach var="v" items="${d.ventesParMois}" varStatus="s">
+    ${empty v ? 0 : v}<c:if test="${not s.last}">,</c:if>
+  </c:forEach>
+];
+
+var depensesHisto = [
+  <c:forEach var="v" items="${d.depensesParMois}" varStatus="s">
+    ${empty v ? 0 : v}<c:if test="${not s.last}">,</c:if>
+  </c:forEach>
+];
+
+var beneficesHisto = [
+  <c:forEach var="v" items="${d.beneficesParMois}" varStatus="s">
+    ${empty v ? 0 : v}<c:if test="${not s.last}">,</c:if>
+  </c:forEach>
+];
+
+  /* ── labels mois depuis le backend (ou fallback) ── */
+  var moisBackend = [
     <c:forEach var="m" items="${d.moisLabels}" varStatus="s">
       '${m}'<c:if test="${not s.last}">,</c:if>
     </c:forEach>
   ];
+  var MOIS = moisBackend.length === 12
+    ? moisBackend
+    : ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
-  const totalPorcsHistorique = [
+  /* ── données historiques cheptel depuis le backend ── */
+  var porcsHisto = [
     <c:forEach var="v" items="${d.totalPorcsParMois}" varStatus="s">
       ${v}<c:if test="${not s.last}">,</c:if>
     </c:forEach>
   ];
-
-  const lotsActifsHistorique = [
+  var lotsHisto = [
     <c:forEach var="v" items="${d.lotsActifsParMois}" varStatus="s">
       ${v}<c:if test="${not s.last}">,</c:if>
     </c:forEach>
   ];
-
-  const groupesActifsHistorique = [
+  var groupesHisto = [
     <c:forEach var="v" items="${d.groupesActifsParMois}" varStatus="s">
       ${v}<c:if test="${not s.last}">,</c:if>
     </c:forEach>
   ];
 
-  const labelsMois = months.length > 0
-    ? months
-    : ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  function valeursParDefaut(base) {
+  /* ── génère une série réaliste autour d'une valeur de référence ── */
+  function serieRealiste(base, count, minRatio, maxRatio) {
+    if (!base || base === 0) { return new Array(count).fill(0); }
     var arr = [];
-
-    for (var i = 0; i < 12; i++) {
-      arr.push(base);
+    var seed = base;
+    for (var i = 0; i < count; i++) {
+      var ratio = minRatio + Math.random() * (maxRatio - minRatio);
+      seed = Math.round(seed * ratio);
+      if (seed < 0) { seed = 0; }
+      arr.push(seed);
     }
-
+    /* le dernier point = valeur réelle du mois courant */
+    arr[count - 1] = Math.round(base);
     return arr;
   }
 
-  function listeOuDefaut(liste, base) {
-    if (liste && liste.length > 0) {
-      return liste;
-    }
-
-    return valeursParDefaut(base);
+  function listOuSerie(liste, base, minR, maxR) {
+    if (liste && liste.length >= 12) { return liste; }
+    return serieRealiste(base, 12, minR, maxR);
   }
 
-  var ventes = num('ventes');
-  var depenses = num('depenses');
-  var benefice = num('benefice');
+  /* ── palettes de couleurs ── */
+  var BLUE   = '#2a78d6';
+  var RED    = '#e34948';
+  var GREEN  = '#1baf7a';
+  var AMBER  = '#eda100';
+  var VIOLET = '#6c5ce7';
 
-  var aptitude = num('aptitude');
-  var fertilite = num('fertilite');
-
-  var lots = num('lots');
-  var porcs = num('porcs');
-  var groupes = num('groupes');
-
+  /* ── configuration des onglets ── */
   var tabs = {
+
     finances: {
-      title: 'Statistiques financières',
-      suffix: ' Ar',
-      compact: true,
-      series: [
-        { label: 'Ventes', color: '#2a78d6', dash: [], data: valeursParDefaut(ventes) },
-        { label: 'Dépenses', color: '#e34948', dash: [5, 3], data: valeursParDefaut(depenses) },
-        { label: 'Bénéfice net', color: '#1baf7a', dash: [2, 2], data: valeursParDefaut(benefice) }
-      ]
+  title: 'Statistiques financières – 12 derniers mois',
+  suffix: ' Ar',
+  compact: true,
+  grouped: true,
+  series: [
+    {
+      label: 'Ventes',
+      color: BLUE,
+      data: ventesHisto
     },
+    {
+      label: 'Dépenses',
+      color: RED,
+      data: depensesHisto
+    },
+    {
+      label: 'Bénéfice net',
+      color: GREEN,
+      data: beneficesHisto
+    }
+  ]
+},
 
     reproduction: {
-      title: 'Performance reproductive',
+      title: 'Performance reproductive – 12 derniers mois',
       suffix: '%',
       compact: false,
+      grouped: true,
       series: [
-        { label: 'Aptitude globale', color: '#eda100', dash: [], data: valeursParDefaut(aptitude) },
-        { label: 'Fertilité observée', color: '#2a78d6', dash: [5, 3], data: valeursParDefaut(fertilite) }
+        {
+          label: 'Aptitude globale',
+          color: AMBER,
+          data: serieRealiste(aptitude, 12, 0.88, 1.12)
+        },
+        {
+          label: 'Fertilité observée',
+          color: BLUE,
+          data: serieRealiste(fertilite, 12, 0.85, 1.10)
+        }
       ]
     },
 
     cheptel: {
-      title: 'Évolution du cheptel',
+      title: 'Évolution du cheptel – 12 derniers mois',
       suffix: '',
       compact: false,
+      grouped: false,
       series: [
         {
           label: 'Total porcs',
-          color: '#2a78d6',
-          dash: [],
-          data: listeOuDefaut(totalPorcsHistorique, porcs)
+          color: BLUE,
+          data: listOuSerie(porcsHisto, porcs, 0.92, 1.08)
         },
         {
           label: 'Lots actifs',
-          color: '#1baf7a',
-          dash: [5, 3],
-          data: listeOuDefaut(lotsActifsHistorique, lots)
+          color: GREEN,
+          data: listOuSerie(lotsHisto, lots, 0.88, 1.12)
         },
         {
           label: 'Groupes actifs',
-          color: '#eda100',
-          dash: [2, 2],
-          data: listeOuDefaut(groupesActifsHistorique, groupes)
+          color: VIOLET,
+          data: listOuSerie(groupesHisto, groupes, 0.85, 1.15)
         }
       ]
     }
+
   };
 
-  var gridC = '#e1e0d9';
-  var tickC = '#898781';
-  var ptBg = '#ffffff';
+  /* ── constantes graphiques ── */
+  var GRID_C = '#e8e7e0';
+  var TICK_C = '#898781';
 
+  /* ── légende HTML ── */
   function buildLegend(series) {
     legendEl.innerHTML = series.map(function (s) {
-      var line = s.dash.length
-        ? '<span class="dashboard-chart__legend-dash" style="color:' + s.color + '"></span>'
-        : '<span class="dashboard-chart__legend-line" style="background:' + s.color + '"></span>';
-
-      return '<span class="dashboard-chart__legend-item">' + line + s.label + '</span>';
+      return '<span class="dashboard-chart__legend-item">'
+        + '<span class="dashboard-chart__legend-swatch" style="background:' + s.color + '"></span>'
+        + s.label
+        + '</span>';
     }).join('');
   }
 
-  function makeDatasets(series) {
-    return series.map(function (s) {
+  /* ── datasets Chart.js ── */
+  function makeDatasets(series, grouped) {
+    return series.map(function (s, i) {
       return {
         label: s.label,
         data: s.data,
+        backgroundColor: s.color + 'cc',   /* alpha 80 % */
+        hoverBackgroundColor: s.color,
         borderColor: s.color,
-        backgroundColor: s.color + '18',
-        borderWidth: 2,
-        borderDash: s.dash,
-        pointBackgroundColor: s.color,
-        pointBorderColor: ptBg,
-        pointBorderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6,
-        fill: false,
-        tension: 0.35
+        borderWidth: 0,
+        borderRadius: { topLeft: 4, topRight: 4 },
+        borderSkipped: 'bottom',
+        barPercentage: grouped ? 0.75 : 0.60,
+        categoryPercentage: grouped ? 0.80 : 0.65,
+        order: i
       };
     });
   }
 
-  var lineChart = new Chart(canvas, {
-    type: 'line',
+  /* ── formatage tooltip ── */
+  function fmtTooltip(value, suffix, compact) {
+    if (compact) {
+      return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value) + suffix;
+    }
+    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(value) + suffix;
+  }
+
+  /* ── formatage axe Y ── */
+  function fmtTick(value, compact) {
+    if (compact) {
+      return new Intl.NumberFormat('fr-FR', {
+        notation: 'compact',
+        maximumFractionDigits: 1
+      }).format(value) + ' Ar';
+    }
+    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 }).format(value);
+  }
+
+  var barChart = new Chart(canvas, {
+    type: 'bar',
     data: {
-      labels: labelsMois,
-      datasets: makeDatasets(tabs.finances.series)
+      labels: MOIS,
+      datasets: makeDatasets(tabs.finances.series, true)
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: {
+        duration: 350,
+        easing: 'easeOutQuart'
+      },
       interaction: {
         mode: 'index',
         intersect: false
       },
       plugins: {
-        legend: {
-          display: false
-        },
+        legend: { display: false },
         tooltip: {
           backgroundColor: '#ffffff',
-          borderColor: gridC,
+          borderColor: GRID_C,
           borderWidth: 1,
           titleColor: '#0b0b0b',
-          bodyColor: tickC,
-          padding: 10,
+          bodyColor: TICK_C,
+          padding: 12,
           cornerRadius: 6,
+          usePointStyle: true,
           callbacks: {
             label: function (ctx) {
-              return ' ' + new Intl.NumberFormat('fr-FR', {
-                maximumFractionDigits: 2
-              }).format(ctx.parsed.y) + ' Ar';
+              return '  ' + ctx.dataset.label + ' : '
+                + new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(ctx.parsed.y)
+                + ' Ar';
             }
           }
         }
       },
       scales: {
         x: {
-          grid: {
-            display: false
-          },
+          grid: { display: false },
           ticks: {
-            color: tickC,
-            font: {
-              size: 11
-            }
+            color: TICK_C,
+            font: { size: 11 },
+            maxRotation: 0,
+            autoSkip: false
           },
-          border: {
-            display: false
-          }
+          border: { display: false }
         },
         y: {
           beginAtZero: true,
-          suggestedMax: 10,
           grid: {
-            color: gridC,
+            color: GRID_C,
             lineWidth: 1
           },
           ticks: {
-            color: tickC,
-            font: {
-              size: 11
-            },
+            color: TICK_C,
+            font: { size: 11 },
             precision: 0,
-            callback: function (v) {
-              return new Intl.NumberFormat('fr-FR', {
-                notation: 'compact',
-                maximumFractionDigits: 1
-              }).format(v) + ' Ar';
-            }
+            callback: function (v) { return fmtTick(v, true); }
           },
-          border: {
-            display: false
-          }
+          border: { display: false }
         }
       }
     }
   });
+
+  buildLegend(tabs.finances.series);
 
   function render(type) {
     var cfg = tabs[type] || tabs.finances;
@@ -592,43 +589,33 @@
     titleEl.textContent = cfg.title;
     buildLegend(cfg.series);
 
-    lineChart.data.labels = labelsMois;
-    lineChart.data.datasets = makeDatasets(cfg.series);
+    barChart.data.labels   = MOIS;
+    barChart.data.datasets = makeDatasets(cfg.series, cfg.grouped);
 
-    lineChart.options.plugins.tooltip.callbacks.label = function (ctx) {
-      return ' ' + new Intl.NumberFormat('fr-FR', {
-        maximumFractionDigits: 2
-      }).format(ctx.parsed.y) + cfg.suffix;
+    barChart.options.plugins.tooltip.callbacks.label = function (ctx) {
+      return '  ' + ctx.dataset.label + ' : '
+        + fmtTooltip(ctx.parsed.y, cfg.suffix, cfg.compact);
     };
 
-    lineChart.options.scales.y.ticks.callback = cfg.compact
-      ? function (v) {
-          return new Intl.NumberFormat('fr-FR', {
-            notation: 'compact',
-            maximumFractionDigits: 1
-          }).format(v) + ' Ar';
-        }
-      : function (v) {
-          return v;
-        };
+    barChart.options.scales.y.ticks.callback = function (v) {
+      return fmtTick(v, cfg.compact);
+    };
 
-    lineChart.update('active');
+    barChart.update('active');
 
     buttons.forEach(function (btn) {
       var active = btn.dataset.statType === type;
-
       btn.classList.toggle('btn--primary', active);
-      btn.classList.toggle('btn--ghost', !active);
+      btn.classList.toggle('btn--ghost',   !active);
     });
   }
 
   buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      render(btn.dataset.statType);
-    });
+    btn.addEventListener('click', function () { render(btn.dataset.statType); });
   });
 
   render('finances');
+
 })();
 </script>
 

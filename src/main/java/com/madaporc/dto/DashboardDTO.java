@@ -34,6 +34,9 @@ public class DashboardDTO {
     private List<Integer> totalPorcsParMois = new ArrayList<>();
     private List<Long> lotsActifsParMois = new ArrayList<>();
     private List<Long> groupesActifsParMois = new ArrayList<>();
+    private List<Double> ventesParMois = new ArrayList<>();
+    private List<Double> depensesParMois = new ArrayList<>();
+    private List<Double> beneficesParMois = new ArrayList<>();
 
  
     

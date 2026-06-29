@@ -172,17 +172,22 @@ public class DashboardService {
         return BigDecimal.valueOf(valeur).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private void remplirEvolutionCheptel(DashboardDTO dashboard, int annee) {
+private void remplirEvolutionCheptel(DashboardDTO dashboard, int annee) {
     List<String> moisLabels = new ArrayList<>();
     List<Integer> totalPorcsParMois = new ArrayList<>();
     List<Long> lotsActifsParMois = new ArrayList<>();
     List<Long> groupesActifsParMois = new ArrayList<>();
 
+    List<Double> ventesParMois = new ArrayList<>();
+    List<Double> depensesParMois = new ArrayList<>();
+    List<Double> beneficesParMois = new ArrayList<>();
+
     List<LotPorc> lotsActifs = lotPorcRepository.findByStatut("ACTIF");
     List<GroupeReproduction> groupes = groupeReproductionRepository.findAll();
 
     for (int mois = 1; mois <= 12; mois++) {
-        LocalDate finMois = YearMonth.of(annee, mois).atEndOfMonth();
+        YearMonth periode = YearMonth.of(annee, mois);
+        LocalDate finMois = periode.atEndOfMonth();
 
         moisLabels.add(nomMoisCourt(mois));
 
@@ -190,6 +195,7 @@ public class DashboardService {
         long nombreLotsActifs = 0;
         long nombreGroupesActifs = 0;
 
+        /* ===== Cheptel ===== */
         for (LotPorc lot : lotsActifs) {
             if (lot.getDateCreation() != null
                     && !lot.getDateCreation().isAfter(finMois)) {
@@ -211,6 +217,15 @@ public class DashboardService {
             }
         }
 
+        /* ===== Finances ===== */
+        BigDecimal ventes = calculerVentesMois(periode.atDay(1));
+        BigDecimal depenses = calculerDepensesMois(periode.atDay(1));
+        BigDecimal benefice = ventes.subtract(depenses);
+
+        ventesParMois.add(ventes.doubleValue());
+        depensesParMois.add(depenses.doubleValue());
+        beneficesParMois.add(benefice.doubleValue());
+
         totalPorcsParMois.add(totalPorcs);
         lotsActifsParMois.add(nombreLotsActifs);
         groupesActifsParMois.add(nombreGroupesActifs);
@@ -220,6 +235,10 @@ public class DashboardService {
     dashboard.setTotalPorcsParMois(totalPorcsParMois);
     dashboard.setLotsActifsParMois(lotsActifsParMois);
     dashboard.setGroupesActifsParMois(groupesActifsParMois);
+
+    dashboard.setVentesParMois(ventesParMois);
+    dashboard.setDepensesParMois(depensesParMois);
+    dashboard.setBeneficesParMois(beneficesParMois);
 }
 
     private String nomMoisCourt(int mois) {
