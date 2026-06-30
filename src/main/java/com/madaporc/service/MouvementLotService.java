@@ -3,6 +3,7 @@ package com.madaporc.service;
 import org.springframework.stereotype.Service;
 
 import com.madaporc.dto.MouvementLotDTO;
+import com.madaporc.model.LotPorc;
 import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.repository.MouvementLotPorcRepository;
 import java.util.List;
@@ -20,6 +21,10 @@ public class MouvementLotService {
         List<MouvementLotPorc> mouvements = new ArrayList<>();
         mouvements = mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);
         return mouvements;
+    }
+
+    public void saveMouvement(MouvementLotPorc mouvement) {
+        mouvementLotRepository.save(mouvement);
     }
 
     public String enregistrerMouvement(MouvementLotDTO dto) {

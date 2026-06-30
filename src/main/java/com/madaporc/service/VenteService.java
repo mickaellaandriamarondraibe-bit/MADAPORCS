@@ -1,25 +1,35 @@
 package com.madaporc.service;
 
 import com.madaporc.model.DetailVente;
+import com.madaporc.model.LotPorc;
+import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.model.Vente;
 import com.madaporc.repository.DetailVenteRepository;
 import com.madaporc.repository.VenteRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import com.madaporc.dto.*;
 
 @Service
 public class VenteService {
-    protected final VenteRepository venteRepository;
-    protected final DetailVenteRepository detailVenteRepository;
-    protected final LotPorcService lotPorcService;
+    private final VenteRepository venteRepository;
+    private final DetailVenteRepository detailVenteRepository;
+    private final LotPorcService lotPorcService;
+    private final MouvementLotService mouvementLotService;
 
-    public VenteService(VenteRepository venteRepository, DetailVenteRepository detailVenteRepository, LotPorcService lotPorcService) {
-        this.venteRepository = venteRepository;
-        this.detailVenteRepository = detailVenteRepository;
-        this.lotPorcService = lotPorcService;
+    public VenteService(
+            VenteRepository venteRepository,
+            DetailVenteRepository detailVenteRepository,
+            LotPorcService lotPorcService,
+            MouvementLotService mouvementLotService) {
+
+    this.venteRepository = venteRepository;
+    this.detailVenteRepository = detailVenteRepository;
+    this.lotPorcService = lotPorcService;
+    this.mouvementLotService = mouvementLotService;
     }
 
     public List<Vente> findAll() {
@@ -75,7 +85,7 @@ public class VenteService {
             return "redirect:/ventes?error=lotNotFound";
         }
 
-        if(venteDTO.getQuantite() > detailLotDTO.getEffectifActuel()) {
+        if(!mouvementLotService.verifierQuantiteDisponible(venteDTO.getLotId(), venteDTO.getQuantite())) {
             return "redirect:/ventes?error=quantiteInsuffisante";
         }
 
@@ -100,7 +110,7 @@ public class VenteService {
         return venteDTO.getPrixUnitaire().multiply(new BigDecimal(venteDTO.getQuantite()));
     }
 
-    String validerDonneesVente(VenteDTO venteDTO) {
+    public String validerDonneesVente(VenteDTO venteDTO) {
         if(venteDTO.getClientId() == null) {
             return "redirect:/ventes/form?error=clientIdManquant";
         }
@@ -118,5 +128,19 @@ public class VenteService {
         }
 
         return "redirect:/ventes/form";
+    }
+
+    public String creerMouvementVente(Long lotId, Integer quantite, Long venteId) {
+        MouvementLotPorc mouvement = new MouvementLotPorc();
+        LotPorc lot = lotPorcService.getLotById(lotId);
+
+        mouvement.setLot(lot);
+        mouvement.setTypeMouvement("VENTE");
+        mouvement.setQuantite(quantite);
+        mouvement.setDateMouvement(LocalDate.now());
+        mouvement.setObservation("Vente num" + venteId);
+
+        mouvementLotService.saveMouvement(mouvement);
+        return "redirect:/ventes";
     }
 }

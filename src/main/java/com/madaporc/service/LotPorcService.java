@@ -133,4 +133,8 @@ public class LotPorcService {
     public List<LotPorc> getAllActifs() {
         return lotPorcRepository.findByStatut("actif");
     }
+
+    public LotPorc getLotById(Long lotId) {
+        return lotPorcRepository.findById(lotId).orElse(null);
+    }
 }
