@@ -129,4 +129,8 @@ public class LotPorcService {
         LotPorc lot = lotPorcRepository.findById(lotId).orElseThrow(() -> new IllegalArgumentException("Lot non trouve"));
         return "actif".equals(lot.getStatut());
     }
+
+    public List<LotPorc> getAllActifs() {
+        return lotPorcRepository.findByStatut("actif");
+    }
 }
