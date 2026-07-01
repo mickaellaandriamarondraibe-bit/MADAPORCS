@@ -219,20 +219,17 @@
                             </span>
                         </dd>
 
-                        <dt>Lot naissance</dt>
+                        <dt>Lot(s) naissance</dt>
 <dd>
     <c:choose>
-        <c:when test="${not empty lotNaissance}">
-            <a href="${ctx}/lots/${lotNaissance.id}">
-                <span class="badge badge--green">${lotNaissance.codeLot}</span>
-            </a>
-            (${lotNaissance.effectifActuel} porcs)
-        </c:when>
-        <c:when test="${g.statut == 'MISE_BAS_CONFIRMEE' and g.nbPorceletsVivants > 0}">
-            <form method="post" action="${ctx}/reproduction/groupes/${g.id}/lot-naissance"
-                  style="display:inline">
-                <button class="btn btn--gold" type="submit">Créer le lot naissance</button>
-            </form>
+        <c:when test="${not empty lotsNaissance}">
+            <c:forEach var="ln" items="${lotsNaissance}">
+                <a href="${ctx}/lots/${ln.id}">
+                    <span class="badge badge--green">${ln.codeLot}</span>
+                </a>
+                <span class="muted">(${ln.sexe}, ${ln.effectifActuel} porcs)</span>
+                <br>
+            </c:forEach>
         </c:when>
         <c:otherwise>
             <span class="muted">Non créé</span>

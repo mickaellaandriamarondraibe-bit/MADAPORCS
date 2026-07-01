@@ -121,7 +121,7 @@ public class RepartitionReproductiveService {
      * Calcule l'âge réel du lot en mois.
      * On part de l'âge saisi à l'achat et on ajoute les mois passés depuis la création.
      */
-    private Integer calculerAgeReel(LotPorc lot) {
+    public Integer calculerAgeReel(LotPorc lot) {
         int moisEcoules = 0;
         if (lot.getDateCreation() != null) {
             moisEcoules = (int) ChronoUnit.MONTHS.between(lot.getDateCreation(), LocalDate.now());

@@ -25,6 +25,9 @@ public class AnalyseReproductionService {
     private RepartitionReproductiveLotRepository repartitionReproductiveLotRepository;
 
     @Autowired
+    private RepartitionReproductiveService service;
+
+    @Autowired
     private LotPorcRepository lotPorcRepository;
 
     @Autowired
@@ -72,7 +75,6 @@ public class AnalyseReproductionService {
                 + nbARetirerReproduction;
 
         Integer nbFemellesSailliesTotal = nbPretesJamaisSaillies
-                + nbDejaReproductricesAptes
                 + nbEnCycle;
 
         Integer nbFemellesGestantesTotal = nbEnCycle;
@@ -176,6 +178,9 @@ public class AnalyseReproductionService {
     public String genererDecision(AnalyseReproductionLotDTO analyse) {
         BigDecimal tauxRecommande = BigDecimal.valueOf(valeurZeroDouble(analyse.getTauxRecommande()));
         BigDecimal tauxFertilite = BigDecimal.valueOf(valeurZeroDouble(analyse.getTauxFertiliteObserve()));
+        Integer lot = service.calculerAgeReel(lotPorcRepository.findByCodeLot(analyse.getLotPorc())
+                .orElseThrow(() -> new RuntimeException("Lot non trouvé: " + analyse.getLotPorc())));
+
         if (tauxRecommande.compareTo(BigDecimal.valueOf(80)) >= 0
                 && tauxFertilite.compareTo(BigDecimal.valueOf(80)) >= 0) {
 
@@ -185,6 +190,10 @@ public class AnalyseReproductionService {
                 && tauxFertilite.compareTo(BigDecimal.valueOf(60)) >= 0) {
 
             return "A SURVEILLER";
+        }
+
+        if (lot.compareTo(Integer.valueOf(8)) < 0) {
+            return "Lot est trop jeune pour être évalué" + "(âge : " + lot + " mois)";
         }
 
         return "REFORME RECOMMANDEE";

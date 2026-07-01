@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.madaporc.dto.ConfirmationMiseBasDTO;
 import com.madaporc.dto.LotNaissanceDTO;
 import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.LotPorc;
@@ -19,9 +20,7 @@ public class LotNaissanceService {
     private final LotPorcRepository lotPorcRepository;
     private final GroupeReproductionRepository groupeRepository;
 
-    public LotNaissanceService(
-            LotPorcRepository lotPorcRepository,
-            GroupeReproductionRepository groupeRepository) {
+    public LotNaissanceService( LotPorcRepository lotPorcRepository, GroupeReproductionRepository groupeRepository) {
         this.lotPorcRepository = lotPorcRepository;
         this.groupeRepository = groupeRepository;
     }
@@ -74,5 +73,59 @@ public class LotNaissanceService {
 
         lotPorcRepository.save(lot);
         return "SUCCESS";
+    }
+
+    // Cree automatiquement le(s) lot(s) naissance a partir de la confirmation de mise bas.
+    // 1 lot FEMELLE si nbFemelles >= 1, 1 lot MALE si nbMales >= 1.
+    @Transactional
+    public String creerLotsNaissance(Long groupeId, ConfirmationMiseBasDTO dto) {
+        GroupeReproduction groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new IllegalArgumentException("Groupe de reproduction introuvable."));
+
+        int nbFemelles = dto.getNbFemelles() != null ? dto.getNbFemelles() : 0;
+        int nbMales = dto.getNbMales() != null ? dto.getNbMales() : 0;
+
+        if (nbFemelles < 1 && nbMales < 1) {
+            return "Aucun porcelet vivant réparti : aucun lot naissance créé.";
+        }
+
+        if (nbFemelles >= 1) {
+            creerLot(groupe, "FEMELLE", "F", nbFemelles, dto.getObjectifLot());
+        }
+        if (nbMales >= 1) {
+            creerLot(groupe, "MALE", "M", nbMales, dto.getObjectifLot());
+        }
+        return "SUCCESS";
+    }
+
+    // Construit et enregistre un lot naissance pour un sexe donne.
+    private void creerLot(GroupeReproduction groupe, String sexe, String suffixe, int effectif, String objectif) {
+        LotPorc lot = new LotPorc();
+        lot.setCodeLot(genererCodeUnique("LOT-N-" + suffixe + "-" + groupe.getCodeGroupe()));
+        lot.setSexe(sexe);
+        lot.setObjectif(objectif != null && !objectif.isBlank() ? objectif : "ENGRAISSEMENT");
+        lot.setEffectifInitial(effectif);
+        lot.setEffectifActuel(effectif);
+        lot.setStatut("ACTIF");
+        lot.setOrigine("NAISSANCE");
+        lot.setDateCreation(LocalDate.now());
+        lot.setRace(groupe.getLotFemelle() != null ? groupe.getLotFemelle().getRace() : null);
+        lot.setLotParent(groupe.getLotFemelle());           // lie au lot mere
+        lot.setGroupeReproductionOrigine(groupe);           // lie au groupe origine
+        lot.setDescription("Lot naissance (" + sexe + ") issu du groupe " + groupe.getCodeGroupe());
+        lot.setCreatedAt(LocalDateTime.now());
+        lot.setUpdatedAt(LocalDateTime.now());
+        lotPorcRepository.save(lot);
+    }
+
+    // Garantit un code de lot unique (ajoute un suffixe -2, -3... si deja pris).
+    private String genererCodeUnique(String base) {
+        String code = base;
+        int i = 2;
+        while (lotPorcRepository.existsByCodeLot(code)) {
+            code = base + "-" + i;
+            i++;
+        }
+        return code;
     }
 }

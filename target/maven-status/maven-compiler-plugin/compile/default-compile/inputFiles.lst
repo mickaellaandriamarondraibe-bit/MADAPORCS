@@ -24,6 +24,8 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/VaccinationController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/controller/VenteController.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/AnalyseReproductionLotDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/CategorieDepenseDTO.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/ClientDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/ConfirmationMiseBasDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/DashboardDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/DetailVenteDTO.java
@@ -49,6 +51,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/dto/VenteDTO.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/AlerteReproduction.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/AnalyseReproductionLot.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/CategorieDepense.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Client.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Depense.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/DetailVente.java
@@ -73,6 +76,7 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/model/Vente.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/AlerteReproductionRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/AnalyseReproductionLotRepository.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/CategorieDepenseRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/ClientRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/DepenseRepository.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/repository/DetailVenteRepository.java
@@ -98,7 +102,10 @@
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/AlerteReproductionService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/AnalyseReproductionService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/AuthService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/CategorieDepenseService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/ClientService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/DashboardService.java
+/home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/DepenseService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/GroupeReproductionCreationService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/GroupeReproductionMiseBasService.java
 /home/mickaella/Projet/2026/s4/nouveau/Baovola/MADAPORCS/src/main/java/com/madaporc/service/GroupeReproductionQueryService.java

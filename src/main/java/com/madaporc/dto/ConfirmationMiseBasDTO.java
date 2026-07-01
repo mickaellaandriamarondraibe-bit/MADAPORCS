@@ -41,5 +41,15 @@ public class ConfirmationMiseBasDTO {
     @Min(value = 0, message = "Le nombre de porcelets morts ne peut pas être négatif.")
     private Integer nbPorceletsMorts;
 
+    // --- Répartition en lot(s) naissance ---
+    // Champs de formulaire uniquement : NON stockés en base, servent à créer les lots.
+    @Min(value = 0, message = "Le nombre de femelles ne peut pas être négatif.")
+    private Integer nbFemelles = 0;
+
+    @Min(value = 0, message = "Le nombre de mâles ne peut pas être négatif.")
+    private Integer nbMales = 0;
+
+    private String objectifLot = "ENGRAISSEMENT";
+
     private String observation;
 }

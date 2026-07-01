@@ -145,6 +145,9 @@ public class GroupeReproductionMiseBasService {
         if (dto.getDateMiseBasReelle().isBefore(groupe.getDateSaillie())) {
             throw new IllegalArgumentException("La date de mise bas ne peut pas être avant la date de saillie.");
         }
+        if (dto.getDateMiseBasReelle().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La date de mise bas ne peut pas être dans le futur.");
+        }
         if (dto.getNbFemellesGestantes() + dto.getNbFemellesNonGestantes()
                 > groupe.getNombreFemellesConcernees()) {
             throw new IllegalArgumentException("Le total gestantes + non gestantes dépasse les femelles concernées.");

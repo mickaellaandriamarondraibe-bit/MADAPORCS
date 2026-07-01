@@ -79,6 +79,31 @@
                     <form:errors path="nbPorceletsMorts" cssClass="error" />
                 </div>
 
+                <div class="field span-2" style="border-top:1px solid #e1e0d9; padding-top:12px; margin-top:4px">
+                    <strong>Création du / des lot(s) naissance</strong>
+                    <span class="hint">Les porcelets vivants deviennent automatiquement un lot femelle et/ou un lot mâle.</span>
+                </div>
+
+                <div class="field">
+                    <label>Porcelets femelles vivants</label>
+                    <form:input class="input" type="number" min="0" path="nbFemelles" />
+                    <form:errors path="nbFemelles" cssClass="error" />
+                </div>
+
+                <div class="field">
+                    <label>Porcelets mâles vivants</label>
+                    <form:input class="input" type="number" min="0" path="nbMales" />
+                    <form:errors path="nbMales" cssClass="error" />
+                </div>
+
+                <div class="field span-2">
+                    <label>Objectif du / des lot(s) naissance</label>
+                    <form:select class="input" path="objectifLot">
+                        <form:option value="ENGRAISSEMENT">Engraissement</form:option>
+                        <form:option value="REPRODUCTION">Reproduction</form:option>
+                    </form:select>
+                </div>
+
                 <div class="field span-2">
                     <label>Observation</label>
                     <form:textarea class="input" path="observation" rows="3" />
@@ -92,7 +117,7 @@
                 </a>
 
                 <button class="btn btn--primary" type="submit">
-                    Confirmer la mise bas
+                    Confirmer et créer le(s) lot(s)
                 </button>
             </div>
 

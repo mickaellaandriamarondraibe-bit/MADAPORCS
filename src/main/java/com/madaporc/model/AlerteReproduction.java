@@ -1,7 +1,6 @@
 package com.madaporc.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import com.madaporc.model.GroupeReproduction;
-import com.madaporc.model.LotPorc;
 
 @Entity
 @Table(name = "alertes_reproduction")

@@ -116,8 +116,6 @@
         Statistiques financières
       </div>
 
-      <div id="chartLegend" class="dashboard-chart__legend"></div>
-
       <div class="dashboard-chart__plot">
         <canvas id="dashLineChart"
                 role="img"
@@ -358,267 +356,129 @@
   const chart = document.getElementById('dashboardChart');
   const buttons = document.querySelectorAll('.js-stat-tab');
   const titleEl = document.getElementById('chartTitle');
-  const legendEl = document.getElementById('chartLegend');
   const canvas = document.getElementById('dashLineChart');
 
   if (!chart || !canvas) {
     return;
   }
 
-  const num = function (name) {
+  // Lit une valeur unique stockée dans data-... (ex: data-ventes)
+  function num(name) {
     return Number(String(chart.dataset[name] || 0).replace(',', '.')) || 0;
-  };
+  }
 
-  const months = [
-    <c:forEach var="m" items="${d.moisLabels}" varStatus="s">
-      '${m}'<c:if test="${not s.last}">,</c:if>
-    </c:forEach>
+  // Étiquettes des mois (12 mois réels venant du serveur)
+  const mois = [
+    <c:forEach var="m" items="${d.moisLabels}" varStatus="s">'${m}'<c:if test="${not s.last}">,</c:if></c:forEach>
   ];
 
-  const totalPorcsHistorique = [
-    <c:forEach var="v" items="${d.totalPorcsParMois}" varStatus="s">
-      ${v}<c:if test="${not s.last}">,</c:if>
-    </c:forEach>
+  // Séries mensuelles réelles du cheptel
+  const porcsMois = [
+    <c:forEach var="v" items="${d.totalPorcsParMois}" varStatus="s">${v}<c:if test="${not s.last}">,</c:if></c:forEach>
+  ];
+  const lotsMois = [
+    <c:forEach var="v" items="${d.lotsActifsParMois}" varStatus="s">${v}<c:if test="${not s.last}">,</c:if></c:forEach>
+  ];
+  const groupesMois = [
+    <c:forEach var="v" items="${d.groupesActifsParMois}" varStatus="s">${v}<c:if test="${not s.last}">,</c:if></c:forEach>
   ];
 
-  const lotsActifsHistorique = [
-    <c:forEach var="v" items="${d.lotsActifsParMois}" varStatus="s">
-      ${v}<c:if test="${not s.last}">,</c:if>
-    </c:forEach>
-  ];
-
-  const groupesActifsHistorique = [
-    <c:forEach var="v" items="${d.groupesActifsParMois}" varStatus="s">
-      ${v}<c:if test="${not s.last}">,</c:if>
-    </c:forEach>
-  ];
-
-  const labelsMois = months.length > 0
-    ? months
+  const labelsMois = mois.length > 0
+    ? mois
     : ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  function valeursParDefaut(base) {
-    var arr = [];
+  // Couleurs
+  const BLEU = '#2a78d6', ROUGE = '#e34948', VERT = '#1baf7a', OR = '#eda100';
 
-    for (var i = 0; i < 12; i++) {
-      arr.push(base);
-    }
-
-    return arr;
-  }
-
-  function listeOuDefaut(liste, base) {
-    if (liste && liste.length > 0) {
-      return liste;
-    }
-
-    return valeursParDefaut(base);
-  }
-
-  var ventes = num('ventes');
-  var depenses = num('depenses');
-  var benefice = num('benefice');
-
-  var aptitude = num('aptitude');
-  var fertilite = num('fertilite');
-
-  var lots = num('lots');
-  var porcs = num('porcs');
-  var groupes = num('groupes');
-
-  var tabs = {
+  // Configuration de chaque onglet : le bon type de graphe par donnée
+  const tabs = {
+    // Comparaison de montants -> barres
     finances: {
-      title: 'Statistiques financières',
-      suffix: ' Ar',
-      compact: true,
-      series: [
-        { label: 'Ventes', color: '#2a78d6', dash: [], data: valeursParDefaut(ventes) },
-        { label: 'Dépenses', color: '#e34948', dash: [5, 3], data: valeursParDefaut(depenses) },
-        { label: 'Bénéfice net', color: '#1baf7a', dash: [2, 2], data: valeursParDefaut(benefice) }
-      ]
+      title: 'Finances du mois (Ar)',
+      type: 'bar',
+      unite: ' Ar',
+      data: {
+        labels: ['Ventes', 'Dépenses', 'Bénéfice net'],
+        datasets: [{
+          label: 'Montant',
+          data: [num('ventes'), num('depenses'), num('benefice')],
+          backgroundColor: [BLEU, ROUGE, VERT]
+        }]
+      }
     },
 
+    // Pourcentages -> barres sur une échelle 0 à 100
     reproduction: {
-      title: 'Performance reproductive',
-      suffix: '%',
-      compact: false,
-      series: [
-        { label: 'Aptitude globale', color: '#eda100', dash: [], data: valeursParDefaut(aptitude) },
-        { label: 'Fertilité observée', color: '#2a78d6', dash: [5, 3], data: valeursParDefaut(fertilite) }
-      ]
+      title: 'Performance reproductive (%)',
+      type: 'bar',
+      unite: ' %',
+      max: 100,
+      data: {
+        labels: ['Aptitude globale', 'Fertilité observée'],
+        datasets: [{
+          label: 'Taux',
+          data: [num('aptitude'), num('fertilite')],
+          backgroundColor: [OR, BLEU]
+        }]
+      }
     },
 
+    // Évolution dans le temps -> courbes (12 mois)
     cheptel: {
-      title: 'Évolution du cheptel',
-      suffix: '',
-      compact: false,
-      series: [
-        {
-          label: 'Total porcs',
-          color: '#2a78d6',
-          dash: [],
-          data: listeOuDefaut(totalPorcsHistorique, porcs)
-        },
-        {
-          label: 'Lots actifs',
-          color: '#1baf7a',
-          dash: [5, 3],
-          data: listeOuDefaut(lotsActifsHistorique, lots)
-        },
-        {
-          label: 'Groupes actifs',
-          color: '#eda100',
-          dash: [2, 2],
-          data: listeOuDefaut(groupesActifsHistorique, groupes)
-        }
-      ]
+      title: 'Évolution du cheptel (12 mois)',
+      type: 'line',
+      unite: '',
+      data: {
+        labels: labelsMois,
+        datasets: [
+          { label: 'Total porcs', data: porcsMois, borderColor: BLEU, backgroundColor: BLEU + '22', tension: 0.35 },
+          { label: 'Lots actifs', data: lotsMois, borderColor: VERT, backgroundColor: VERT + '22', tension: 0.35 },
+          { label: 'Groupes actifs', data: groupesMois, borderColor: OR, backgroundColor: OR + '22', tension: 0.35 }
+        ]
+      }
     }
   };
 
-  var gridC = '#e1e0d9';
-  var tickC = '#898781';
-  var ptBg = '#ffffff';
-
-  function buildLegend(series) {
-    legendEl.innerHTML = series.map(function (s) {
-      var line = s.dash.length
-        ? '<span class="dashboard-chart__legend-dash" style="color:' + s.color + '"></span>'
-        : '<span class="dashboard-chart__legend-line" style="background:' + s.color + '"></span>';
-
-      return '<span class="dashboard-chart__legend-item">' + line + s.label + '</span>';
-    }).join('');
-  }
-
-  function makeDatasets(series) {
-    return series.map(function (s) {
-      return {
-        label: s.label,
-        data: s.data,
-        borderColor: s.color,
-        backgroundColor: s.color + '18',
-        borderWidth: 2,
-        borderDash: s.dash,
-        pointBackgroundColor: s.color,
-        pointBorderColor: ptBg,
-        pointBorderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6,
-        fill: false,
-        tension: 0.35
-      };
-    });
-  }
-
-  var lineChart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels: labelsMois,
-      datasets: makeDatasets(tabs.finances.series)
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false
-      },
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          backgroundColor: '#ffffff',
-          borderColor: gridC,
-          borderWidth: 1,
-          titleColor: '#0b0b0b',
-          bodyColor: tickC,
-          padding: 10,
-          cornerRadius: 6,
-          callbacks: {
-            label: function (ctx) {
-              return ' ' + new Intl.NumberFormat('fr-FR', {
-                maximumFractionDigits: 2
-              }).format(ctx.parsed.y) + ' Ar';
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: {
-            display: false
-          },
-          ticks: {
-            color: tickC,
-            font: {
-              size: 11
-            }
-          },
-          border: {
-            display: false
-          }
-        },
-        y: {
-          beginAtZero: true,
-          suggestedMax: 10,
-          grid: {
-            color: gridC,
-            lineWidth: 1
-          },
-          ticks: {
-            color: tickC,
-            font: {
-              size: 11
-            },
-            precision: 0,
-            callback: function (v) {
-              return new Intl.NumberFormat('fr-FR', {
-                notation: 'compact',
-                maximumFractionDigits: 1
-              }).format(v) + ' Ar';
-            }
-          },
-          border: {
-            display: false
-          }
-        }
-      }
-    }
-  });
+  let graphe = null;
 
   function render(type) {
-    var cfg = tabs[type] || tabs.finances;
-
+    const cfg = tabs[type] || tabs.finances;
     titleEl.textContent = cfg.title;
-    buildLegend(cfg.series);
 
-    lineChart.data.labels = labelsMois;
-    lineChart.data.datasets = makeDatasets(cfg.series);
+    // On détruit l'ancien graphe avant d'en créer un d'un autre type
+    if (graphe) {
+      graphe.destroy();
+    }
 
-    lineChart.options.plugins.tooltip.callbacks.label = function (ctx) {
-      return ' ' + new Intl.NumberFormat('fr-FR', {
-        maximumFractionDigits: 2
-      }).format(ctx.parsed.y) + cfg.suffix;
-    };
-
-    lineChart.options.scales.y.ticks.callback = cfg.compact
-      ? function (v) {
-          return new Intl.NumberFormat('fr-FR', {
-            notation: 'compact',
-            maximumFractionDigits: 1
-          }).format(v) + ' Ar';
+    graphe = new Chart(canvas, {
+      type: cfg.type,
+      data: cfg.data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          // Légende affichée seulement pour les courbes (plusieurs séries)
+          legend: { display: cfg.type === 'line' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                const v = new Intl.NumberFormat('fr-FR').format(ctx.parsed.y);
+                return ' ' + v + cfg.unite;
+              }
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, max: cfg.max }
         }
-      : function (v) {
-          return v;
-        };
+      }
+    });
 
-    lineChart.update('active');
-
+    // Met en avant l'onglet sélectionné
     buttons.forEach(function (btn) {
-      var active = btn.dataset.statType === type;
-
-      btn.classList.toggle('btn--primary', active);
-      btn.classList.toggle('btn--ghost', !active);
+      const actif = btn.dataset.statType === type;
+      btn.classList.toggle('btn--primary', actif);
+      btn.classList.toggle('btn--ghost', !actif);
     });
   }
 

@@ -3,7 +3,6 @@ package com.madaporc.controller;
 import com.madaporc.dto.ConfirmationMiseBasDTO;
 import com.madaporc.dto.GroupeReproductionDTO;
 import com.madaporc.dto.GroupeReproductionDetailDTO;
-import com.madaporc.dto.LotNaissanceDTO;
 import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.LotPorc;
 import com.madaporc.repository.LotPorcRepository;
@@ -87,9 +86,9 @@ public class GroupeReproductionController {
         model.addAttribute("joursRestants", miseBasService.calculerJoursRestants(id));
         model.addAttribute("pourcentageEvolution", miseBasService.calculerPourcentageEvolution(id));
 
-        // Lot naissance deja cree pour ce groupe ? (pour afficher le bouton ou le lot)
+        // Lot(s) naissance cree(s) pour ce groupe (femelle et/ou male)
         List<LotPorc> lotsNaissance = lotPorcRepository.findByGroupeReproductionOrigineId(id);
-        model.addAttribute("lotNaissance", lotsNaissance.isEmpty() ? null : lotsNaissance.get(0));
+        model.addAttribute("lotsNaissance", lotsNaissance);
         return "reproduction/groupes/detail";
     }
 
@@ -106,7 +105,8 @@ public class GroupeReproductionController {
             @PathVariable Long id,
             @Valid @ModelAttribute("dto") ConfirmationMiseBasDTO dto,
             BindingResult result,
-            Model model
+            Model model,
+            RedirectAttributes ra
     ) {
         if (result.hasErrors()) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));
@@ -114,30 +114,21 @@ public class GroupeReproductionController {
         }
 
         try {
+            // 1. On enregistre la mise bas
             miseBasService.confirmerMiseBas(id, dto);
+            // 2. On cree automatiquement le(s) lot(s) naissance (femelle / male)
+            String resultatLots = lotNaissanceService.creerLotsNaissance(id, dto);
+            if ("SUCCESS".equals(resultatLots)) {
+                ra.addFlashAttribute("message", "Mise bas confirmée et lot(s) naissance créé(s).");
+            } else {
+                ra.addFlashAttribute("message", "Mise bas confirmée. " + resultatLots);
+            }
             return "redirect:/reproduction/groupes/" + id;
         } catch (IllegalArgumentException e) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));
             model.addAttribute("erreur", e.getMessage());
             return "reproduction/groupes/confirmerMiseBas";
         }
-    }
-
-    // Creation du lot naissance (declenchee par l'utilisateur depuis le detail).
-    @PostMapping("/reproduction/groupes/{id}/lot-naissance")
-    public String creerLotNaissance(@PathVariable Long id, RedirectAttributes ra) {
-        try {
-            LotNaissanceDTO dto = lotNaissanceService.preparerLotNaissanceDepuisGroupe(id);
-            String resultat = lotNaissanceService.creerLotNaissanceApresMiseBas(id, dto);
-            if (!"SUCCESS".equals(resultat)) {
-                ra.addFlashAttribute("erreur", resultat);
-            } else {
-                ra.addFlashAttribute("message", "Lot naissance créé avec succès.");
-            }
-        } catch (IllegalArgumentException e) {
-            ra.addFlashAttribute("erreur", e.getMessage());
-        }
-        return "redirect:/reproduction/groupes/" + id;
     }
 
     // Cloture du groupe de reproduction.
