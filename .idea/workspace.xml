@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="98ca7530-0630-4d3d-97a2-d7a7ec5cc88e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/ChangerMotDePasseDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/ClientDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/CycleProductionDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/DashboardDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/DepenseDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/DetailVenteDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/DistributionAlimentDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/EmployeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/EvenementReproductionDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/FactureDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/FicheSalaireDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/IngredientDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/LoginDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/LotDetailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/LotFiltreDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/LotPorcDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MelangeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MelangeDetailDTO$IngredientDetail.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MelangeDetailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MelangeIngredientDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MouvementLotDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/MouvementStockDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/PaiementDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/PeseeLotDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/PresenceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/ProfilUtilisateurDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportFinancierDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportPresenceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportProductionDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportSanitaireDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RapportStockDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/ReproducteurDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/ReproducteurDetailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/RolePermissionDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/SalaireEmployeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/SuiviSanitaireDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/UtilisateurDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/VaccinDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/VaccinationDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/DTO/VenteDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/MadaporcApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/AuthController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/ClientController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/CycleProductionController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/DashboardController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/DepenseController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/DistributionAlimentController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/EmployeController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/EvenementReproductionController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/IngredientController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/LotPorcController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/MelangeController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/MouvementLotController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/MouvementStockController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/PaiementFactureController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/PeseeLotController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/PresenceController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/ProfilController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/RapportController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/ReproducteurController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/SalaireController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/SuiviSanitaireController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/UtilisateurController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/VaccinController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/VaccinationController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/controller/VenteController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/CategorieDepense.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Client.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/CycleProduction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Depense.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/DetailVente.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/DistributionAliment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Employe.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/EvenementReproduction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Facture.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Ingredient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/LotPorc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Maladie.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Melange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/MelangeIngredient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/MouvementLotPorc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/MouvementStockAliment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Paiement.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Permission.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/PeseeLot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/PosteEmploye.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Presence.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Race.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/RatioCroissance.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Reproducteur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Role.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/RolePermission.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/SalaireEmploye.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Sexe.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/StatutEmploye.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/StatutLot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/StatutReproducteur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/StatutSuiviSanitaire.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/StatutUtilisateur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Traitement.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Transport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/TypeEvenementReproduction.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/TypeMouvementLot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/TypeMouvementStock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Utilisateur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Vaccin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Vaccination.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/model/Vente.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/CategorieDepenseRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/ClientRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/CycleProductionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/DepenseRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/DetailVenteRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/DistributionAlimentRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/EmployeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/EvenementReproductionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/FactureRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/IngredientRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/LotPorcRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/MaladieRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/MelangeIngredientRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/MelangeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/MouvementLotPorcRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/MouvementStockAlimentRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/PaiementRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/PermissionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/PeseeLotRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/PosteEmployeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/PresenceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/RaceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/RatioCroissanceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/ReproducteurRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/RolePermissionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/RoleRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/SalaireEmployeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/SexeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/StatutEmployeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/StatutLotRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/StatutReproducteurRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/StatutSuiviSanitaireRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/StatutUtilisateurRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/TraitementRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/TransportRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/TypeEvenementReproductionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/TypeMouvementLotRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/TypeMouvementStockRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/UtilisateurRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/VaccinRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/VaccinationRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/repository/VenteRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/AdminUtilisateurService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/ClientService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/CycleProductionService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/DashboardService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/DepenseService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/DistributionAlimentService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/EmployeService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/EvenementReproductionService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/IngredientService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/LotPorcService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/MelangeService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/MouvementLotService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/MouvementStockService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/PaiementFactureService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/PeseeLotService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/PresenceService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/ProfilService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/RapportService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/ReproducteurService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/SalaireService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/SuiviSanitaireService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/UtilisateurService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/VaccinService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/VaccinationService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/madaporc/service/VenteService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/@{/css/app.css}" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/fonts.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/material-symbols.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Black.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-BlackItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-BoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-ExtraBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-ExtraBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-ExtraLight.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-ExtraLightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-LightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-MediumItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-SemiBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-Thin.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_18pt-ThinItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Black.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-BlackItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-BoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-ExtraBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-ExtraBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-ExtraLight.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-ExtraLightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-LightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-MediumItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-SemiBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-Thin.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_24pt-ThinItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Black.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-BlackItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-BoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-ExtraBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-ExtraBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-ExtraLight.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-ExtraLightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-LightItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-MediumItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-SemiBoldItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-Thin.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/Inter_28pt-ThinItalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/fonts/material-symbols-outlined.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/commerce/clients.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/commerce/factureDetail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/commerce/ventes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/dashboard/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/finance/depenses.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragments/sidebar.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/lots/detailLot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/lots/formLot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/lots/listeLots.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/lots/mouvements.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/lots/pesees.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/personnel/employes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/personnel/presences.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/personnel/salaires.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/placeholder.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/production/cycles.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/rapports/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/reproducteurs/detailReproducteur.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/reproducteurs/listeReproducteurs.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/reproduction/evenements.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/ressources/distributions.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/ressources/ingredients.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/ressources/melanges.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/ressources/mouvementsStock.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/sante/suivisSanitaires.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/sante/vaccinations.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/sante/vaccins.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/settings/profil.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/settings/utilisateurs.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotChats">
+    <option name="panelChat">
+      <chat>
+        <option name="activeSessionId" value="6746c4a1-09b3-4a1d-a03d-27aebc827b1a" />
+        <option name="sessions">
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="6746c4a1-09b3-4a1d-a03d-27aebc827b1a" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="auto" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+        </option>
+        <option name="type" value="PANEL" />
+      </chat>
+    </option>
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Noah/Documents/GitHub/MADAPORCS" value="3F4kP8kcdMaKca9MudCbuvortKW" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="3F4kP8kcdMaKca9MudCbuvortKW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MadaporcApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev__Noah&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Noah/Documents/GitHub/MADAPORCS&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="MadaporcApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Eclipse Adoptium/jdk-21.0.9.10-hotspot" />
+      <option name="MAIN_CLASS_NAME" value="com.madaporc.MadaporcApplication" />
+      <module name="madaporc" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.madaporc.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="MADAPORCS" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="MADAPORCS" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MadaporcApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="98ca7530-0630-4d3d-97a2-d7a7ec5cc88e" name="Changes" comment="" />
+      <created>1781341702713</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781341702713</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

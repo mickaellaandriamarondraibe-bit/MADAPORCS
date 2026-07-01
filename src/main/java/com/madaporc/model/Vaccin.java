@@ -1,14 +1,34 @@
 package com.madaporc.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Model placeholder pour la table vaccins.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
 @Getter
 @Setter
+@Entity
+@Table(name = "vaccins")
 public class Vaccin {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nom", nullable = false)
+    private String nom;
+
+    @Column(name = "description")
+    private String description;
+
+    // Champs supplémentaires (affichés dans les JSP) : non présents dans schema.sql.
+    // Pour ne pas bloquer, on les expose via getters/setters non persistés.
+    @Transient
+    private String maladieCiblee;
+
+    @Transient
+    private String voie;
+
+    @Transient
+    private Integer delaiRappel;
 }
+

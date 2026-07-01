@@ -1,14 +1,17 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
-/**
- * Model placeholder pour la table races.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
+@Entity
+@Table(name= "race")
 public class Race {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nom", nullable = false)
+    private String nom;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 }

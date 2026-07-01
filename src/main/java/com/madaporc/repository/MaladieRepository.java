@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Maladie;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Repository placeholder pour Maladie.
- * À transformer plus tard en JpaRepository<Maladie, Long> après création de l'Entity JPA.
- */
-public interface MaladieRepository {
+@Repository
+public interface MaladieRepository extends JpaRepository<Maladie, Long> {
 }
+

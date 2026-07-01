@@ -1,10 +1,9 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.DetailVente;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-/**
- * Repository placeholder pour DetailVente.
- * À transformer plus tard en JpaRepository<DetailVente, Long> après création de l'Entity JPA.
- */
-public interface DetailVenteRepository {
+public interface DetailVenteRepository extends JpaRepository<DetailVente, Long> {
+    List<DetailVente> findByVenteId(Long venteId);
 }

@@ -1,10 +1,8 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Race;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Repository placeholder pour Race.
- * À transformer plus tard en JpaRepository<Race, Long> après création de l'Entity JPA.
- */
-public interface RaceRepository {
+public interface RaceRepository extends JpaRepository<Race, Long> {
+    
 }

@@ -1,10 +1,17 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Vente;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Repository placeholder pour Vente.
- * À transformer plus tard en JpaRepository<Vente, Long> après création de l'Entity JPA.
- */
-public interface VenteRepository {
+import java.time.LocalDate;
+import java.util.*;
+
+public interface VenteRepository extends JpaRepository<Vente, Long> {
+    List<Vente> findAllByOrderByDateVenteDesc();
+
+    List<Vente> findByDateVenteBetween(LocalDate debut, LocalDate fin);
+
+    List<Vente> findByStatutOrderByDateVenteDesc(String statut);
+
+    
 }

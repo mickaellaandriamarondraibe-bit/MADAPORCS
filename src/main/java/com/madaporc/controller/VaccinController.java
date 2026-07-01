@@ -1,27 +1,44 @@
 package com.madaporc.controller;
 
-import com.madaporc.DTO.VaccinDTO;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
+import com.madaporc.dto.VaccinDTO;
+import com.madaporc.model.Vaccin;
+import com.madaporc.service.VaccinService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class VaccinController {
+
+    private final VaccinService vaccinService;
 
     @GetMapping("/vaccins")
     public String listVaccins(Model model) {
-        model.addAttribute("titre", "Gestion des Vaccins - MADAPORC / GestPorc");
-        model.addAttribute("referenceFigma", "Gestion des Vaccins - MADAPORC / GestPorc");
-        model.addAttribute("controllerName", "VaccinController");
-        model.addAttribute("methodName", "listVaccins");
-        model.addAttribute("route", "/vaccins");
-        return "placeholder";
+        List<Vaccin> vaccins = vaccinService.getAll();
+        model.addAttribute("vaccins", vaccins);
+        return "sante/vaccins";
     }
 
+    @GetMapping("/vaccins/form")
+    public String formVaccin(@RequestParam(required = false) Long id, Model model) {
+        VaccinDTO dto = (id == null) ? new VaccinDTO() : vaccinService.getDtoById(id);
+        model.addAttribute("vaccin", dto);
+        return "sante/formVaccin";
+    }
+
+    @PostMapping("/vaccins/save")
+    public String saveVaccin(@ModelAttribute VaccinDTO dto, Model model) {
+        String error = vaccinService.enregistrer(dto);
+        if (error != null) {
+            model.addAttribute("error", error);
+            model.addAttribute("vaccin", dto);
+            return "sante/formVaccin";
+        }
+        return "redirect:/vaccins";
+    }
 }
+

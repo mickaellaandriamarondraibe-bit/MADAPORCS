@@ -1,10 +1,10 @@
 package com.madaporc.repository;
 
 import com.madaporc.model.Traitement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Repository placeholder pour Traitement.
- * À transformer plus tard en JpaRepository<Traitement, Long> après création de l'Entity JPA.
- */
-public interface TraitementRepository {
+@Repository
+public interface TraitementRepository extends JpaRepository<Traitement, Long> {
 }
+

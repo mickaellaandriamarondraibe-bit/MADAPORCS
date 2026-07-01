@@ -1,4 +1,4 @@
-# MADAPORC - Squelette strict PDF, placeholders uniquement
+éè`rèèè`éÈ# MADAPORC - Squelette strict PDF, placeholders uniquement
 
 Cette version respecte les noms du PDF :
 
@@ -19,7 +19,7 @@ Les seuls fichiers ajoutés hors PDF sont les fichiers techniques obligatoires d
 - `application.properties`
 - `.gitignore`
 - `README.md`
-- `static/css/app.css`
+- `@{/css/app.css}`
 - `templates/placeholder.html`
 - `templates/fragments/sidebar.html`
 - `docs/CONFORMITE_PDF.md`
@@ -33,9 +33,9 @@ mvn spring-boot:run
 Puis ouvrir directement une route du PDF, par exemple :
 
 ```text
-http://localhost:8080/login
-http://localhost:8080/dashboard
-http://localhost:8080/lots
+http://localhost:8082/login
+http://localhost:8082/dashboard
+http://localhost:8082/lots
 ```
 
 ## Vérification

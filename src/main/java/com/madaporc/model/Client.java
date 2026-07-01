@@ -1,14 +1,9 @@
 package com.madaporc.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
-/**
- * Model placeholder pour la table clients.
- * Les colonnes exactes seront ajoutées pendant le développement du module.
- */
-@Getter
-@Setter
+@Table(name = "clients")
+@Entity
 public class Client {
-    private Long id;
+    
 }
