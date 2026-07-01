@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.madaporc.dto.MouvementLotDTO;
 import com.madaporc.model.LotPorc;
+import java.time.*;
 import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.repository.MouvementLotPorcRepository;
 import java.util.List;
@@ -34,7 +35,7 @@ public class MouvementLotService {
         mouvement.setQuantite(dto.getQuantite());
         mouvement.setDateMouvement(dto.getDateMouvement());
         mouvement.setObservation(dto.getObservation());
-        mouvement.setCreatedAt(dto.getCreatedAt());
+        mouvement.setCreatedAt(LocalDateTime.now());
 
         mouvementLotRepository.save(mouvement);
         return "redirect:/lots/" + dto.getLotId();
@@ -59,9 +60,9 @@ public class MouvementLotService {
         mouvement.setId(lotId);
         mouvement.setTypeMouvement("AUGMENTATION");
         mouvement.setQuantite(quantite);
-        mouvement.setDateMouvement(java.time.LocalDate.now());
+        mouvement.setDateMouvement(LocalDate.now());
         mouvement.setObservation("Augmentation de l'effectif du lot");
-        mouvement.setCreatedAt(java.time.LocalDateTime.now());
+        mouvement.setCreatedAt(LocalDateTime.now());
 
         mouvementLotRepository.save(mouvement);
     }
@@ -74,9 +75,9 @@ public class MouvementLotService {
         mouvement.setId(lotId);
         mouvement.setTypeMouvement("DIMINUTION");
         mouvement.setQuantite(quantite);
-        mouvement.setDateMouvement(java.time.LocalDate.now());
+        mouvement.setDateMouvement(LocalDate.now());
         mouvement.setObservation("Diminution de l'effectif du lot");
-        mouvement.setCreatedAt(java.time.LocalDateTime.now());
+        mouvement.setCreatedAt(LocalDateTime.now());
 
         mouvementLotRepository.save(mouvement);
     }

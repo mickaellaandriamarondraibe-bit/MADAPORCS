@@ -43,14 +43,28 @@ public class VenteService {
 
     public VenteDTO getForm(Long id) {
         Vente vente = findById(id);
+
         if (vente == null) {
             return null;
         }
 
+        List<DetailVente> detailVente = getDetailsVente(vente.getId());
+        if(detailVente.size() <= 0) {
+            return null;
+        }
+
+        BigDecimal qteTotal = new BigDecimal(0);
+        for(DetailVente dv : detailVente) {
+            qteTotal.add(dv.getPoidsTotal());
+        }
+
         VenteDTO venteDTO = new VenteDTO();
         venteDTO.setId(vente.getId());
+        venteDTO.setPoidsTotal(qteTotal);
+        venteDTO.setPrixUnitaire(detailVente.get(0).getPrixUnitaire());
+        // venteDTO.setClientId(vente.getClient().getId());
         venteDTO.setDateVente(vente.getDateVente());
-        venteDTO.setStatut(vente.getStatut());
+        // venteDTO.setStatut(vente.getStatut());
 
         return venteDTO;
     }
@@ -133,10 +147,11 @@ public class VenteService {
     public String creerMouvementVente(Long lotId, Integer quantite, Long venteId) {
         MouvementLotPorc mouvement = new MouvementLotPorc();
         LotPorc lot = lotPorcService.getLotById(lotId);
+        Integer quantiteActuel = lot.getEffectifActuel();
 
         mouvement.setLot(lot);
         mouvement.setTypeMouvement("VENTE");
-        mouvement.setQuantite(quantite);
+        mouvement.setQuantite(quantiteActuel - quantite);
         mouvement.setDateMouvement(LocalDate.now());
         mouvement.setObservation("Vente num" + venteId);
 
