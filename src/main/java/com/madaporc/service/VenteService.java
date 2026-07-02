@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,6 +87,8 @@ public class VenteService {
 
 	@Transactional
 	public Vente creerVente(VenteDTO dto) {
+		verifierQuantitesDisponibles(dto);
+
 		Vente vente = new Vente();
 		appliquerDto(vente, dto);
 		vente.setStatut("BROUILLON");
@@ -139,6 +143,42 @@ public class VenteService {
 		return chargerVente(venteEnregistree.getId());
 	}
 
+	private void verifierQuantitesDisponibles(VenteDTO dto) {
+		if (dto == null || dto.getLignes() == null) {
+			return;
+		}
+
+		Map<Long, Integer> quantitesParLot = new HashMap<>();
+		for (DetailVenteDTO ligneDto : dto.getLignes()) {
+			if (ligneDto == null || ligneDto.getLotId() == null || ligneDto.getQuantite() == null) {
+				continue;
+			}
+
+			if (ligneDto.getQuantite() <= 0) {
+				throw new IllegalArgumentException("La quantité doit être supérieure à zéro");
+			}
+
+			quantitesParLot.merge(ligneDto.getLotId(), ligneDto.getQuantite(), Integer::sum);
+		}
+
+		for (Map.Entry<Long, Integer> entry : quantitesParLot.entrySet()) {
+			LotPorc lot = lotPorcRepository.findById(entry.getKey())
+					.orElseThrow(() -> new IllegalArgumentException("Lot introuvable"));
+
+			if (entry.getValue() > lot.getEffectifActuel()) {
+				throw new IllegalArgumentException(
+						"La quantité demandée pour le lot " + lot.getCodeLot() + " dépasse l'effectif disponible.");
+			}
+		}
+	}
+
+    public boolean quantiteDisponible(LotPorc lot, Integer quantiteDemandee) {
+        if (lot == null || quantiteDemandee == null) {
+            return false;
+        }
+        return quantiteDemandee <= lot.getEffectifActuel();
+    }
+
 	public VenteDTO toDto(Vente vente) {
 		VenteDTO dto = new VenteDTO();
 		dto.setId(vente.getId());
@@ -159,7 +199,7 @@ public class VenteService {
 
                 ligneDto.setQuantite(detail.getQuantite());
                 ligneDto.setPrixUnitaire(detail.getPrixUnitaire());
-                ligneDto.setPoidsTotal(detail.getPoidsTotal());
+                ligneDto.setPoidsTotal(detail.VTE-00003getPoidsTotal());
 
                 lignes.add(ligneDto);
             }
@@ -193,11 +233,31 @@ public class VenteService {
 		return lignes;
 	}
 
-    public void annulerVente(Long id) {
-        Vente vente = chargerVente(id);
-        vente.setStatut("ANNULEE");
-        venteRepository.save(vente);
-    }
+	@Transactional
+	public void annulerVente(Long id) {
+		Vente vente = chargerVente(id);
+
+		if ("ANNULEE".equalsIgnoreCase(vente.getStatut())) {
+			return;
+		}
+
+		if ("VALIDEE".equalsIgnoreCase(vente.getStatut())) {
+			if (vente.getLignes() == null || vente.getLignes().isEmpty()) {
+				throw new IllegalArgumentException("Impossible d'annuler une vente validée sans lignes.");
+			}
+
+			for (DetailVente detail : vente.getLignes()) {
+				if (detail.getLot() == null || detail.getQuantite() == null || detail.getQuantite() <= 0) {
+					throw new IllegalArgumentException("Une ligne de vente est incomplète.");
+				}
+
+				mouvementService.augmenterEffectif(detail.getLot().getId(), detail.getQuantite());
+			}
+		}
+
+		vente.setStatut("ANNULEE");
+		venteRepository.save(vente);
+	}
 
 	@Transactional
 	public void validerVente(Long id) {
