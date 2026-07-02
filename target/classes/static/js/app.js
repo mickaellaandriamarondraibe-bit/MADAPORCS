@@ -109,6 +109,53 @@
     check();
   }
 
+  /* ---- Notifications temps réel par SSE sur toutes les pages ---- */
+  function setupRealtimeNotifications() {
+    if (!window.EventSource) return;
+
+    var base = window.MADAPORC_CTX || "";
+    var streamUrl = base + "/notifications/stream";
+    var container = document.querySelector("[data-notification-stack]");
+
+    if (!container) {
+      container = document.createElement("div");
+      container.setAttribute("data-notification-stack", "true");
+      container.className = "notification-stack";
+      document.body.appendChild(container);
+    }
+
+    function showToast(message) {
+      var toast = document.createElement("div");
+      toast.className = "notification-toast";
+      toast.innerHTML = '<i class="fa-solid fa-bell"></i><span>' + message + '</span>';
+      container.appendChild(toast);
+
+      window.setTimeout(function () {
+        toast.classList.add("is-visible");
+      }, 20);
+
+      window.setTimeout(function () {
+        toast.classList.remove("is-visible");
+        window.setTimeout(function () {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 250);
+      }, 5000);
+    }
+
+    try {
+      var source = new EventSource(streamUrl);
+      source.addEventListener("notification", function (event) {
+        if (event && event.data) {
+          showToast(event.data);
+        }
+      });
+    } catch (error) {
+      // Pas de fallback silencieux.
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     setupMenu();
     setupActiveNav();
@@ -116,5 +163,6 @@
     setupTableFilter();
     setupAutoTotal();
     setupMiseBasCheck();
+    setupRealtimeNotifications();
   });
 })();
