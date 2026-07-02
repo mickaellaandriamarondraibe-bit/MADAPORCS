@@ -17,7 +17,7 @@
 
   <form method="post" action="${ctx}/reproduction/analyse/generer/${a.lotId}">
     <button class="btn btn--primary" type="submit">
-      <i class="fa-solid fa-rotate"></i> Régénérer l'analyse
+       Régénérer l'analyse
     </button>
   </form>
 </div>

@@ -22,7 +22,6 @@
   <title>${empty pageTitle ? 'MADAPORC' : pageTitle} · MADAPORC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="${ctx}/css/app.css">
 </head>
 <body>
@@ -55,7 +54,7 @@
 
     <main class="content">
       <%-- Messages flash standardisés --%>
-      <c:if test="${not empty success}"><div class="alert alert--ok"><i class="fa-solid fa-circle-check"></i> <span>${success}</span></div></c:if>
-      <c:if test="${not empty error}"><div class="alert alert--err"><i class="fa-solid fa-circle-xmark"></i> <span>${error}</span></div></c:if>
-      <c:if test="${not empty warning}"><div class="alert alert--warn"><i class="fa-solid fa-triangle-exclamation"></i> <span>${warning}</span></div></c:if>
-      <c:if test="${not empty info}"><div class="alert alert--info"><i class="fa-solid fa-circle-info"></i> <span>${info}</span></div></c:if>
+      <c:if test="${not empty success}"><div class="alert alert--ok"> <span>${success}</span></div></c:if>
+      <c:if test="${not empty error}"><div class="alert alert--err"> <span>${error}</span></div></c:if>
+      <c:if test="${not empty warning}"><div class="alert alert--warn"> <span>${warning}</span></div></c:if>
+      <c:if test="${not empty info}"><div class="alert alert--info"> <span>${info}</span></div></c:if>

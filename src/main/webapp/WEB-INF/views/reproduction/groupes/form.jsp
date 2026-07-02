@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>${pageTitle}</h1><p>Seule une partie du lot femelle entre en reproduction</p></div>
-  <a class="btn btn--ghost" href="${ctx}/reproduction/groupes"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/reproduction/groupes"> Retour</a>
 </div>
 
 <div class="card" style="max-width:820px">

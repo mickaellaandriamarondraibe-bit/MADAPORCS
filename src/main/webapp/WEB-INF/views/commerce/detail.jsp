@@ -11,8 +11,8 @@
     <p>Fiche client</p>
   </div>
   <div class="flex gap-8">
-    <a class="btn btn--ghost" href="${ctx}/clients"><i class="fa-solid fa-arrow-left"></i> Retour</a>
-    <a class="btn btn--primary" href="${ctx}/clients/form?id=${cl.id}"><i class="fa-solid fa-pen"></i> Modifier</a>
+    <a class="btn btn--ghost" href="${ctx}/clients"> Retour</a>
+    <a class="btn btn--primary" href="${ctx}/clients/form?id=${cl.id}"> Modifier</a>
   </div>
 </div>
 

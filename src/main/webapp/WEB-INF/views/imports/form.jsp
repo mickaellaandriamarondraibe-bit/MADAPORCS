@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>Import / Export</h1><p>Importer des données depuis Excel, exporter en Excel ou PDF</p></div>
-  <a class="btn btn--ghost" href="${ctx}/imports-exports/historique"><i class="fa-solid fa-clock-rotate-left"></i> Historique</a>
+  <a class="btn btn--ghost" href="${ctx}/imports-exports/historique"> Historique</a>
 </div>
 
 <div class="grid-2">
@@ -31,7 +31,7 @@
           <input class="input" type="file" name="file" accept=".xlsx,.xls" required>
           <span class="hint">La première ligne doit contenir les en-têtes de colonnes attendus.</span>
         </div>
-        <div class="alert alert--info"><i class="fa-solid fa-circle-info"></i> <span>Colonnes attendues selon le module : Lots (code, sexe, race, objectif, effectif) · Clients (nom, téléphone, adresse) · Ingrédients (nom, unité, stock, seuil).</span></div>
+        <div class="alert alert--info"> <span>Colonnes attendues selon le module : Lots (code, sexe, race, objectif, effectif) · Clients (nom, téléphone, adresse) · Ingrédients (nom, unité, stock, seuil).</span></div>
         <button class="btn btn--primary w-full" style="justify-content:center" type="submit">Importer le fichier</button>
       </form>
     </div>

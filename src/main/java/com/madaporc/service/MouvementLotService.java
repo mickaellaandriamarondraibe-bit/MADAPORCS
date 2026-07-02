@@ -26,6 +26,10 @@ public class MouvementLotService {
         this.lotPorcRepository = lotPorcRepository;
     }
 
+    public void saveMouvement(MouvementLotPorc mouvement) {
+        mouvementLotRepository.save(mouvement);
+    }
+
     @Transactional(readOnly = true)
     public List<MouvementLotPorc> getMouvementsByLot(Long lotId) {
         return mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);

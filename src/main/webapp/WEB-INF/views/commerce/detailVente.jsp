@@ -18,7 +18,7 @@
     <p>Client : ${v.nomClient} · ${v.dateVente}</p>
   </div>
   <div class="flex gap-8">
-    <a class="btn btn--ghost" href="${ctx}/ventes/recu/pdf/${v.id}"><i class="fa-solid fa-file-pdf"></i> Reçu PDF</a>
+    <a class="btn btn--ghost" href="${ctx}/ventes/recu/pdf/${v.id}"> Reçu PDF</a>
     <c:if test="${v.statut == 'BROUILLON'}">
       <form method="post" action="${ctx}/ventes/valider/${v.id}" data-confirm="Valider cette vente ? L'effectif des lots sera diminué." style="display:inline">
         <button class="btn btn--primary" type="submit">Valider</button>

@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>Mouvements de stock</h1><p>Entrées et sorties d'ingrédients</p></div>
-  <a class="btn btn--primary" href="${ctx}/stocks/mouvements/form"><i class="fa-solid fa-plus"></i> Nouveau mouvement</a>
+  <a class="btn btn--primary" href="${ctx}/stocks/mouvements/form"> Nouveau mouvement</a>
 </div>
 
 <div class="card">
@@ -27,7 +27,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="5"><div class="empty"><i class="ico fa-solid fa-right-left"></i><p>Aucun mouvement de stock.</p></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="5"><div class="empty"><p>Aucun mouvement de stock.</p></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>

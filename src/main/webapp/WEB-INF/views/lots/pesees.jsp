@@ -19,7 +19,7 @@
   </div>
 
   <a class="btn btn--ghost" href="${ctx}/lots/${lot.id}">
-    <i class="fa-solid fa-arrow-left"></i> Retour au lot
+     Retour au lot
   </a>
 </div>
 

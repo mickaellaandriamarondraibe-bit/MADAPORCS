@@ -13,7 +13,7 @@
   </div>
 
   <a class="btn btn--primary" href="${ctx}/utilisateurs/form">
-    <i class="fa-solid fa-plus"></i> Nouvel utilisateur
+     Nouvel utilisateur
   </a>
 </div>
 
@@ -105,7 +105,7 @@
             <tr>
               <td colspan="6">
                 <div class="empty">
-                  <i class="ico fa-solid fa-user"></i>
+                  
                   <p>Aucun utilisateur enregistré.</p>
 
                   <a class="btn btn--primary" href="${ctx}/utilisateurs/form">

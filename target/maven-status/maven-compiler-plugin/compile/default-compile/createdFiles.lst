@@ -1,4 +1,3 @@
-com/madaporc/controller/MouvementStockController.class
 com/madaporc/dto/ConfirmationMiseBasDTO.class
 com/madaporc/dto/GroupeReproductionDTO.class
 com/madaporc/model/MouvementStock.class
@@ -15,7 +14,6 @@ com/madaporc/repository/TraitementRepository.class
 com/madaporc/dto/RepartitionReproductiveDTO.class
 com/madaporc/dto/SuiviSanitaireDTO.class
 com/madaporc/dto/LotFiltreDTO.class
-com/madaporc/service/MouvementStockService.class
 com/madaporc/model/DetailVente.class
 com/madaporc/repository/MaladieRepository.class
 com/madaporc/service/LotPorcService.class
@@ -53,7 +51,11 @@ com/madaporc/repository/MouvementLotPorcRepository.class
 com/madaporc/dto/AnalyseReproductionLotDTO.class
 com/madaporc/dto/GroupeReproductionDetailDTO.class
 com/madaporc/service/AnalyseReproductionService.class
+<<<<<<< HEAD
 com/madaporc/service/IngredientService.class
+=======
+com/madaporc/repository/DepenseRepository.class
+>>>>>>> 5e4d8bf (correction)
 com/madaporc/model/Vaccin.class
 com/madaporc/repository/DepenseRepository.class
 com/madaporc/controller/GroupeReproductionController.class

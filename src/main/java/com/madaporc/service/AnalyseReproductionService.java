@@ -74,8 +74,7 @@ public class AnalyseReproductionService {
                 + nbASurveiller
                 + nbARetirerReproduction;
 
-        Integer nbFemellesSailliesTotal = nbPretesJamaisSaillies
-                + nbEnCycle;
+        Integer nbFemellesSailliesTotal = nbEnCycle + + nbDejaReproductricesAptes;
 
         Integer nbFemellesGestantesTotal = nbEnCycle;
 
@@ -189,7 +188,7 @@ public class AnalyseReproductionService {
         if (tauxRecommande.compareTo(BigDecimal.valueOf(50)) >= 0
                 && tauxFertilite.compareTo(BigDecimal.valueOf(60)) >= 0) {
 
-            return "A SURVEILLER";
+            return "A SURVEILLER , TAUX INFERIEUR A 50 % ";
         }
 
         if (lot.compareTo(Integer.valueOf(8)) < 0) {

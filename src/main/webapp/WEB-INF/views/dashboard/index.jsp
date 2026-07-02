@@ -17,7 +17,7 @@
   </div>
 
   <a class="btn btn--gold" href="${ctx}/rapports">
-    <i class="fa-solid fa-file-lines"></i> Générer un rapport
+     Générer un rapport
   </a>
 </div>
 

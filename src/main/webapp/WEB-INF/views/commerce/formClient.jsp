@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>${pageTitle}</h1></div>
-  <a class="btn btn--ghost" href="${ctx}/clients"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/clients"> Retour</a>
 </div>
 
 <div class="card" style="max-width:760px">

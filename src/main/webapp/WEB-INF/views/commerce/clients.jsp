@@ -6,7 +6,7 @@
 
 <div class="page-head">
   <div><h1>Clients</h1><p>Répertoire des acheteurs</p></div>
-  <a class="btn btn--primary" href="${ctx}/clients/form"><i class="fa-solid fa-plus"></i> Nouveau client</a>
+  <a class="btn btn--primary" href="${ctx}/clients/form"> Nouveau client</a>
 </div>
 
 <div class="toolbar"><div class="search"><input class="input" placeholder="Rechercher un client…" data-filter-input="#tbl-clients"></div></div>
@@ -26,7 +26,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="4"><div class="empty"><i class="ico fa-solid fa-user"></i><p>Aucun client.</p><a class="btn btn--primary" href="${ctx}/clients/form">Ajouter un client</a></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="4"><div class="empty"><p>Aucun client.</p><a class="btn btn--primary" href="${ctx}/clients/form">Ajouter un client</a></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>

@@ -14,7 +14,7 @@
   </div>
 
   <a class="btn btn--primary" href="${ctx}/vaccinations/form">
-    <i class="fa-solid fa-plus"></i> Enregistrer une vaccination
+     Enregistrer une vaccination
   </a>
 </div>
 
@@ -77,7 +77,7 @@
             <tr>
               <td colspan="6">
                 <div class="empty">
-                  <i class="ico fa-solid fa-calendar-days"></i>
+                  
                   <p>Aucune vaccination enregistrée.</p>
                 </div>
               </td>

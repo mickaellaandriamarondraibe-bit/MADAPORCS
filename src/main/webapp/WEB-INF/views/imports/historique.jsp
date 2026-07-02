@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>Historique des imports / exports</h1><p>Traçabilité des opérations de données</p></div>
-  <a class="btn btn--ghost" href="${ctx}/imports"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/imports"> Retour</a>
 </div>
 
 <div class="card">
@@ -35,7 +35,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="7"><div class="empty"><i class="ico fa-solid fa-clock-rotate-left"></i><p>Aucune opération enregistrée.</p></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="7"><div class="empty"><p>Aucune opération enregistrée.</p></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>

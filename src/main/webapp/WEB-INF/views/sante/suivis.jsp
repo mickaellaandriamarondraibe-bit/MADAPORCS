@@ -14,7 +14,7 @@
   </div>
 
   <a class="btn btn--primary" href="${ctx}/sante/suivis/form">
-    <i class="fa-solid fa-plus"></i> Nouveau suivi
+     Nouveau suivi
   </a>
 </div>
 
@@ -94,7 +94,7 @@
             <tr>
               <td colspan="7">
                 <div class="empty">
-                  <i class="ico fa-solid fa-stethoscope"></i>
+                  
                   <p>Aucun suivi sanitaire.</p>
                 </div>
               </td>

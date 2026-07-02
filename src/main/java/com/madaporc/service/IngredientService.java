@@ -1,21 +1,28 @@
 package com.madaporc.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.madaporc.dto.IngredientDTO;
+import com.madaporc.dto.MouvementStockDTO;
 import com.madaporc.model.Ingredient;
+import com.madaporc.model.MouvementStock;
 import com.madaporc.repository.IngredientRepository;
+import com.madaporc.repository.MouvementLotPorcRepository;
+import com.madaporc.repository.MouvementStockRepository;
 
 @Service
 public class IngredientService {
     
     private final IngredientRepository ingredientRepository;
-    public IngredientService(IngredientRepository ingredientRepository) {
+    private final MouvementStockRepository mouvementStockRepository;
+    public IngredientService(IngredientRepository ingredientRepository , MouvementStockRepository mouvementStockRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.mouvementStockRepository = mouvementStockRepository;
     }
 
     public List<Ingredient> findAllIngredients() {
@@ -55,7 +62,20 @@ public class IngredientService {
         ingredient.setSeuilAlerte(dto.getSeuilAlerte());
         ingredient.setCreatedAt(LocalDateTime.now());
         ingredient.setUpdatedAt(LocalDateTime.now());
+
+        
         ingredientRepository.save(ingredient);
+        
+        MouvementStockDTO mouvement = new MouvementStockDTO();
+        mouvement.setIngredientId(ingredientRepository.findFirstByOrderByCreatedAtDesc().getId());
+        mouvement.setQuantite(dto.getStockActuel());
+        mouvement.setTypeMouvement("ENTREE");
+
+        
+        MouvementStockService stock = new MouvementStockService(mouvementStockRepository, ingredientRepository);
+        stock.enregistrerMouvementStock(mouvement);
+
+        
         return "Ingredient created successfully";
     }
 

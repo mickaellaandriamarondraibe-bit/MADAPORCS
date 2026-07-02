@@ -14,7 +14,7 @@
   </div>
 
   <a class="btn btn--ghost" href="${ctx}/vaccins">
-    <i class="fa-solid fa-arrow-left"></i> Retour
+     Retour
   </a>
 </div>
 

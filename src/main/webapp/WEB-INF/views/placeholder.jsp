@@ -7,10 +7,10 @@
 <div class="card">
   <div class="card__body">
     <div class="empty">
-      <i class="ico fa-solid fa-screwdriver-wrench"></i>
+      
       <h2 style="margin-bottom:6px">${empty titre ? 'Module en préparation' : titre}</h2>
       <p>${empty message ? 'Cette page sera disponible prochainement. Le module est en cours de développement par l équipe MADAPORC.' : message}</p>
-      <a class="btn btn--ghost" href="${ctx}/dashboard"><i class="fa-solid fa-arrow-left"></i> Retour au tableau de bord</a>
+      <a class="btn btn--ghost" href="${ctx}/dashboard"> Retour au tableau de bord</a>
     </div>
   </div>
 </div>

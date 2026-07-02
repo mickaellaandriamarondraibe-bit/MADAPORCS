@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>Groupes de reproduction</h1><p>Saillie partielle d'un lot femelle, date de mise bas calculée automatiquement</p></div>
-  <a class="btn btn--primary" href="${ctx}/reproduction/groupes/form"><i class="fa-solid fa-plus"></i> Nouveau groupe</a>
+  <a class="btn btn--primary" href="${ctx}/reproduction/groupes/form"> Nouveau groupe</a>
 </div>
 
 <div class="toolbar">
@@ -44,7 +44,7 @@
             </c:forEach>
           </c:when>
           <c:otherwise>
-            <tr><td colspan="8"><div class="empty"><i class="ico fa-solid fa-venus-mars"></i><p>Aucun groupe de reproduction.</p><a class="btn btn--primary" href="${ctx}/reproduction/groupes/form">Créer un groupe</a></div></td></tr>
+            <tr><td colspan="8"><div class="empty"><p>Aucun groupe de reproduction.</p><a class="btn btn--primary" href="${ctx}/reproduction/groupes/form">Créer un groupe</a></div></td></tr>
           </c:otherwise>
         </c:choose>
       </tbody>

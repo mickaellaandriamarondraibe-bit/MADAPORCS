@@ -13,7 +13,7 @@
   </div>
 
   <a class="btn btn--primary" href="${ctx}/lots/form">
-    <i class="fa-solid fa-plus"></i> Nouveau lot
+     Nouveau lot
   </a>
 </div>
 
@@ -89,13 +89,13 @@
                   <c:choose>
                     <c:when test="${l.sexe == 'FEMELLE'}">
                       <span class="badge badge--gold">
-                        <i class="fa-solid fa-venus"></i> Femelle
+                         Femelle
                       </span>
                     </c:when>
 
                     <c:otherwise>
                       <span class="badge badge--blue">
-                        <i class="fa-solid fa-mars"></i> Mâle
+                         Mâle
                       </span>
                     </c:otherwise>
                   </c:choose>
@@ -147,7 +147,7 @@
             <tr>
               <td colspan="7">
                 <div class="empty">
-                  <i class="ico fa-solid fa-piggy-bank"></i>
+                  
                   <p>Aucun lot ne correspond.</p>
 
                   <a class="btn btn--primary" href="${ctx}/lots/form">

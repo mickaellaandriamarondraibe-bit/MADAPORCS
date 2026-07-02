@@ -47,7 +47,7 @@
             </c:forEach>
           </c:when>
           <c:otherwise>
-            <tr><td colspan="6"><div class="empty"><i class="ico fa-solid fa-bell"></i><p>Aucune alerte active. Tout est sous contrôle.</p></div></td></tr>
+            <tr><td colspan="6"><div class="empty"><p>Aucune alerte active. Tout est sous contrôle.</p></div></td></tr>
           </c:otherwise>
         </c:choose>
       </tbody>

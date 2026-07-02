@@ -10,7 +10,7 @@
 
 <%-- ===== Bilan financier (filtre par dates) ===== --%>
 <div class="card" style="margin-bottom:18px">
-  <div class="card__head"><h2><i class="fa-solid fa-sack-dollar"></i> Bilan financier</h2></div>
+  <div class="card__head"><h2> Bilan financier</h2></div>
   <div class="card__body">
 
     <c:if test="${not empty erreur}">
@@ -59,42 +59,42 @@
 <div class="grid-3">
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-stethoscope"></i> Sanitaire</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Sanitaire</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Vaccinations et suivis sur la période.</p>
       <a class="btn btn--primary w-full" style="justify-content:center" href="${ctx}/rapports/sanitaire/pdf">Générer le PDF</a>
     </div>
   </div>
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-receipt"></i> Commercial</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Commercial</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Ventes, clients et chiffre d'affaires.</p>
       <a class="btn btn--primary w-full" style="justify-content:center" href="${ctx}/rapports/commercial/pdf">Générer le PDF</a>
     </div>
   </div>
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-sack-dollar"></i> Financier</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Financier</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Recettes, dépenses et bénéfice net.</p>
       <a class="btn btn--primary w-full" style="justify-content:center" href="${ctx}/rapports/financier/pdf">Générer le PDF</a>
     </div>
   </div>
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-venus-mars"></i> Reproduction</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Reproduction</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Groupes, mises bas et taux de fertilité.</p>
       <a class="btn btn--primary w-full" style="justify-content:center" href="${ctx}/rapports/reproduction/pdf">Générer le PDF</a>
     </div>
   </div>
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-file-excel"></i> Export global Excel</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Export global Excel</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Toutes les données dans un classeur.</p>
       <a class="btn btn--gold w-full" style="justify-content:center" href="${ctx}/rapports/export/excel">Télécharger Excel</a>
     </div>
   </div>
   <div class="card">
     <div class="card__body">
-      <h2 style="font-size:15px;margin-bottom:4px"><i class="fa-solid fa-file-import"></i> Import / Export</h2>
+      <h2 style="font-size:15px;margin-bottom:4px"> Import / Export</h2>
       <p class="muted" style="font-size:12.5px;margin-bottom:14px">Outils détaillés par module.</p>
       <a class="btn btn--ghost w-full" style="justify-content:center" href="${ctx}/imports">Ouvrir les outils</a>
     </div>

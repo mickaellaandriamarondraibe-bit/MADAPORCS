@@ -353,4 +353,8 @@ public class LotPorcService {
     public List<Race> getAllRaces() {
         return raceRepository.findAll();
     }
+
+    public LotPorc getLotById(Long lotId) {
+        return lotPorcRepository.findById(lotId).orElse(null);
+    }
 }
