@@ -7,18 +7,18 @@
 
 <div class="page-head">
   <div><h1>Dépenses</h1><p>Charges et sorties de trésorerie</p></div>
-  <a class="btn btn--primary" href="${ctx}/depenses/form"><i class="fa-solid fa-plus"></i> Nouvelle dépense</a>
+  <a class="btn btn--primary" href="${ctx}/depenses/form"> Nouvelle dépense</a>
 </div>
 
 <%-- Filtre par période / catégorie -> GET /depenses --%>
 <form method="get" action="${ctx}/depenses" class="toolbar">
   <input class="input" type="date" name="dateDebut" value="${filtre.dateDebut}">
-  <span class="muted"><i class="fa-solid fa-arrow-right-long"></i></span>
+  <span class="muted"></span>
   <input class="input" type="date" name="dateFin" value="${filtre.dateFin}">
-  <select class="select" name="categorie">
+  <select class="select" name="categorieId">
     <option value="">Catégorie (toutes)</option>
     <c:forEach var="cat" items="${categories}">
-      <option value="${cat}" ${filtre.categorie == cat ? 'selected' : ''}>${cat}</option>
+      <option value="${cat.id}" ${filtre.categorieId == cat.id ? 'selected' : ''}>${cat.nom}</option>
     </c:forEach>
   </select>
   <button class="btn btn--ghost" type="submit">Filtrer</button>
@@ -34,15 +34,15 @@
           <c:when test="${not empty depenses}">
             <c:forEach var="d" items="${depenses}">
               <tr>
-                <td><fmt:formatDate value="${d.dateDepense}" pattern="dd/MM/yyyy"/></td>
-                <td><span class="badge badge--gray">${d.categorie}</span></td>
+                <td>${d.dateDepense}</td>
+                <td><span class="badge badge--gray">${d.categorie.nom}</span></td>
                 <td class="muted">${d.description}</td>
                 <td class="num"><b><fmt:formatNumber value="${d.montant}" type="number" maxFractionDigits="0"/></b></td>
                 <td class="actions"><a href="${ctx}/depenses/form?id=${d.id}">Modifier</a></td>
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="5"><div class="empty"><i class="ico fa-solid fa-money-bill-wave"></i><p>Aucune dépense enregistrée.</p><a class="btn btn--primary" href="${ctx}/depenses/form">Ajouter une dépense</a></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="5"><div class="empty"><p>Aucune dépense enregistrée.</p><a class="btn btn--primary" href="${ctx}/depenses/form">Ajouter une dépense</a></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
       <c:if test="${not empty totalDepenses}">

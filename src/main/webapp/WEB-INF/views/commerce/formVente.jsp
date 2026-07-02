@@ -7,14 +7,14 @@
 
 <div class="page-head">
   <div><h1>${pageTitle}</h1><p>Sélectionnez le client et les lignes de vente</p></div>
-  <a class="btn btn--ghost" href="${ctx}/ventes"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/ventes"> Retour</a>
 </div>
 
 <div class="card" style="max-width:900px">
   <div class="card__body">
     <%-- POST /ventes/save, bind VenteDTO (avec lignes DetailVenteDTO) --%>
     <form method="post" action="${ctx}/ventes/save">
-      <input type="hidden" name="id" value="${vente.id}">
+      <input type="hidden" name="id" value="${vente.LotId}">
       <div class="form-grid">
         <div class="field"><label>Client <span class="req">*</span></label>
           <select class="select" name="clientId" required>

@@ -6,7 +6,7 @@
 
 <div class="page-head">
   <div><h1>Nouveau mouvement de stock</h1><p>Une sortie ne peut pas dépasser le stock disponible</p></div>
-  <a class="btn btn--ghost" href="${ctx}/stocks/mouvements"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/stocks/mouvements"> Retour</a>
 </div>
 
 <div class="card" style="max-width:640px">

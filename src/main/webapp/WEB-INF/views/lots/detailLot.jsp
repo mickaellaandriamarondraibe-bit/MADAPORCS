@@ -22,12 +22,12 @@
                 <c:choose>
                     <c:when test="${l.sexe == 'FEMELLE'}">
                         <span class="badge badge--gold">
-                            <i class="fa-solid fa-venus"></i> Femelle
+                             Femelle
                         </span>
                     </c:when>
                     <c:otherwise>
                         <span class="badge badge--blue">
-                            <i class="fa-solid fa-mars"></i> Mâle
+                             Mâle
                         </span>
                     </c:otherwise>
                 </c:choose>
@@ -51,11 +51,11 @@
 
         <div class="detail-hero__actions">
             <a class="btn btn--ghost" href="${ctx}/lots/${l.id}/pesees">
-                <i class="fa-solid fa-scale-balanced"></i> Pesées
+                 Pesées
             </a>
 
             <a class="btn btn--ghost" href="${ctx}/lots/${l.id}/mouvements">
-                <i class="fa-solid fa-right-left"></i> Mouvements
+                 Mouvements
             </a>
 
             <a class="btn btn--primary" href="${ctx}/lots/form?id=${l.id}">
@@ -211,7 +211,7 @@
 
                 <div class="card__body action-list">
                     <a href="${ctx}/lots/${l.id}/pesees" class="action-item">
-                        <i class="fa-solid fa-scale-balanced"></i>
+                        
                         <div>
                             <strong>Suivre les pesées</strong>
                             <span>Historique du poids moyen.</span>
@@ -219,7 +219,7 @@
                     </a>
 
                     <a href="${ctx}/lots/${lot.id}/mouvements" class="action-item">
-    <i class="fa-solid fa-right-left"></i>
+    
     <div>
         <strong>Voir les mouvements</strong>
         <span>Entrées, sorties et ajustements.</span>
@@ -227,7 +227,7 @@
 </a>
 
                     <a href="${ctx}/lots/form?id=${l.id}" class="action-item">
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        
                         <div>
                             <strong>Modifier le lot</strong>
                             <span>Mettre à jour les informations.</span>

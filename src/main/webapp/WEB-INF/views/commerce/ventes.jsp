@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>Ventes</h1><p>Une vente validée diminue l'effectif du lot</p></div>
-  <a class="btn btn--primary" href="${ctx}/ventes/form"><i class="fa-solid fa-plus"></i> Nouvelle vente</a>
+  <a class="btn btn--primary" href="${ctx}/ventes/form"> Nouvelle vente</a>
 </div>
 
 <div class="toolbar"><div class="search"><input class="input" placeholder="Rechercher…" data-filter-input="#tbl-ventes"></div></div>
@@ -39,7 +39,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="6"><div class="empty"><i class="ico fa-solid fa-receipt"></i><p>Aucune vente.</p><a class="btn btn--primary" href="${ctx}/ventes/form">Créer une vente</a></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="6"><div class="empty"><p>Aucune vente.</p><a class="btn btn--primary" href="${ctx}/ventes/saveVente">Créer une vente</a></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>

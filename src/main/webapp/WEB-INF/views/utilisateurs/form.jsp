@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>${pageTitle}</h1><p>Renseignez les informations du compte</p></div>
-  <a class="btn btn--ghost" href="${ctx}/utilisateurs"><i class="fa-solid fa-arrow-left"></i> Retour à la liste</a>
+  <a class="btn btn--ghost" href="${ctx}/utilisateurs"> Retour à la liste</a>
 </div>
 
 <div class="card" style="max-width:760px">

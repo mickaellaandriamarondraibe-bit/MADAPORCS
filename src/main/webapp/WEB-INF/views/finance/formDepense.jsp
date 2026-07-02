@@ -7,7 +7,7 @@
 
 <div class="page-head">
   <div><h1>${pageTitle}</h1></div>
-  <a class="btn btn--ghost" href="${ctx}/depenses"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+  <a class="btn btn--ghost" href="${ctx}/depenses"> Retour</a>
 </div>
 
 <div class="card" style="max-width:760px">
@@ -17,10 +17,10 @@
       <input type="hidden" name="id" value="${depense.id}">
       <div class="form-grid">
         <div class="field"><label>Catégorie <span class="req">*</span></label>
-          <select class="select" name="categorie" required>
+          <select class="select" name="categorieId" required>
             <option value="">— Choisir —</option>
             <c:forEach var="cat" items="${categories}">
-              <option value="${cat}" ${depense.categorie == cat ? 'selected' : ''}>${cat}</option>
+              <option value="${cat.id}" ${depense.categorieId == cat.id ? 'selected' : ''}>${cat.nom}</option>
             </c:forEach>
           </select>
           <span class="hint">Alimentation, Vétérinaire, Matériel, Personnel, Autre…</span>

@@ -16,14 +16,14 @@
 <div class="auth-wrap">
   <div class="auth-card">
     <div class="auth-card__head">
-      <div class="logo"><i class="fa-solid fa-piggy-bank"></i></div>
+      <div class="logo"></div>
       <h1>MADAPORC</h1>
       <p>Connexion à la gestion d'élevage</p>
     </div>
     <div class="auth-card__body">
 
-      <c:if test="${not empty error}"><div class="alert alert--err"><i class="fa-solid fa-circle-xmark"></i> <span>${error}</span></div></c:if>
-      <c:if test="${not empty info}"><div class="alert alert--info"><i class="fa-solid fa-circle-info"></i> <span>${info}</span></div></c:if>
+      <c:if test="${not empty error}"><div class="alert alert--err"> <span>${error}</span></div></c:if>
+      <c:if test="${not empty info}"><div class="alert alert--info"> <span>${info}</span></div></c:if>
 
       <%-- POST vers AuthController @PostMapping("/login"), bind LoginDTO --%>
       <form method="post" action="${ctx}/connexion">

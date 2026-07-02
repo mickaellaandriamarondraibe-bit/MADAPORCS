@@ -7,8 +7,8 @@
 <div class="page-head">
   <div><h1>Ingrédients</h1><p>Aliments et matières premières en stock</p></div>
   <div class="flex gap-8">
-    <a class="btn btn--ghost" href="${ctx}/stocks/mouvements"><i class="fa-solid fa-right-left"></i> Mouvements</a>
-    <a class="btn btn--primary" href="${ctx}/ingredients/form"><i class="fa-solid fa-plus"></i> Nouvel ingrédient</a>
+    <a class="btn btn--ghost" href="${ctx}/stocks/mouvements"> Mouvements</a>
+    <a class="btn btn--primary" href="${ctx}/ingredients/form"> Nouvel ingrédient</a>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="6"><div class="empty"><i class="ico fa-solid fa-wheat-awn"></i><p>Aucun ingrédient.</p><a class="btn btn--primary" href="${ctx}/ingredients/form">Ajouter</a></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="6"><div class="empty"><p>Aucun ingrédient.</p><a class="btn btn--primary" href="${ctx}/ingredients/form">Ajouter</a></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>

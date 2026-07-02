@@ -14,7 +14,7 @@
   </div>
 
   <a class="btn btn--primary" href="${ctx}/vaccins/form">
-    <i class="fa-solid fa-plus"></i> Nouveau vaccin
+     Nouveau vaccin
   </a>
 </div>
 
@@ -64,7 +64,7 @@
             <tr>
               <td colspan="3">
                 <div class="empty">
-                  <i class="ico fa-solid fa-syringe"></i>
+                  
                   <p>Aucun vaccin enregistré.</p>
                   <a class="btn btn--primary" href="${ctx}/vaccins/form">Ajouter un vaccin</a>
                 </div>
