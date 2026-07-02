@@ -80,7 +80,6 @@ public class DetailVente {
     }
 
     public BigDecimal getMontant() {
-<<<<<<< HEAD
         if (montant != null) {
             return montant;
         }
@@ -88,15 +87,11 @@ public class DetailVente {
             return BigDecimal.ZERO;
         }
         return prixUnitaire.multiply(BigDecimal.valueOf(quantite));
-=======
-        return montant;
->>>>>>> 5e4d8bf (correction)
     }
 
     public void setMontant(BigDecimal montant) {
         this.montant = montant;
     }
-<<<<<<< HEAD
 
     @Transient
     public String getCodeLot() {
@@ -107,6 +102,4 @@ public class DetailVente {
     public BigDecimal getTotal() {
         return getMontant();
     }
-=======
->>>>>>> 5e4d8bf (correction)
 }

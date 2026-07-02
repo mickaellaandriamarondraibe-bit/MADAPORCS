@@ -3,10 +3,7 @@ package com.madaporc.repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Optional;
-=======
->>>>>>> 5e4d8bf (correction)
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
