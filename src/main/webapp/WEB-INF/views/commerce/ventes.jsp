@@ -39,7 +39,7 @@
               </tr>
             </c:forEach>
           </c:when>
-          <c:otherwise><tr><td colspan="6"><div class="empty"><p>Aucune vente.</p><a class="btn btn--primary" href="${ctx}/ventes/saveVente">Créer une vente</a></div></td></tr></c:otherwise>
+          <c:otherwise><tr><td colspan="6"><div class="empty"><p>Aucune vente.</p><a class="btn btn--primary" href="${ctx}/ventes/save">Créer une vente</a></div></td></tr></c:otherwise>
         </c:choose>
       </tbody>
     </table>
