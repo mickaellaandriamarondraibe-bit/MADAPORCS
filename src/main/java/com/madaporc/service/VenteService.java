@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +27,15 @@ public class VenteService {
 	private final DetailVenteRepository detailVenteRepository;
 	private final ClientRepository clientRepository;
 	private final LotPorcRepository lotPorcRepository;
+	private final MouvementLotService mouvementService;
 
 	public VenteService(VenteRepository venteRepository,
 			DetailVenteRepository detailVenteRepository,
 			ClientRepository clientRepository,
-			LotPorcRepository lotPorcRepository) {
+			LotPorcRepository lotPorcRepository, 
+            MouvementLotService mouvementService) {
+
+        this.mouvementService = mouvementService;
 		this.venteRepository = venteRepository;
 		this.detailVenteRepository = detailVenteRepository;
 		this.clientRepository = clientRepository;
@@ -66,10 +68,20 @@ public class VenteService {
 	}
 
 	public List<LotPorc> listerLots() {
-		return lotPorcRepository.findAll().stream()
-				.sorted(Comparator.comparing(LotPorc::getCodeLot))
-				.collect(Collectors.toList());
-	}
+        List<LotPorc> lots = lotPorcRepository.findAll();
+
+        for (int i = 0; i < lots.size() - 1; i++) {
+            for (int j = i + 1; j < lots.size(); j++) {
+                if (lots.get(i).getCodeLot().compareTo(lots.get(j).getCodeLot()) > 0) {
+                    LotPorc temp = lots.get(i);
+                    lots.set(i, lots.get(j));
+                    lots.set(j, temp);
+                }
+            }
+        }
+
+        return lots;
+    }
 
 	@Transactional
 	public Vente creerVente(VenteDTO dto) {
@@ -135,16 +147,23 @@ public class VenteService {
 		dto.setMontantTotal(vente.getMontantTotal());
 		dto.setStatut(vente.getStatut());
 
-		List<DetailVenteDTO> lignes = vente.getLignes() == null ? new ArrayList<>() : vente.getLignes().stream()
-				.map(detail -> {
-					DetailVenteDTO ligneDto = new DetailVenteDTO();
-					ligneDto.setLotId(detail.getLot() != null ? detail.getLot().getId() : null);
-					ligneDto.setQuantite(detail.getQuantite());
-					ligneDto.setPrixUnitaire(detail.getPrixUnitaire());
-					ligneDto.setPoidsTotal(detail.getPoidsTotal());
-					return ligneDto;
-				})
-				.collect(Collectors.toList());
+		List<DetailVenteDTO> lignes = new ArrayList<>();
+
+        if (vente.getLignes() != null) {
+            for (DetailVente detail : vente.getLignes()) {
+                DetailVenteDTO ligneDto = new DetailVenteDTO();
+
+                if (detail.getLot() != null) {
+                    ligneDto.setLotId(detail.getLot().getId());
+                }
+
+                ligneDto.setQuantite(detail.getQuantite());
+                ligneDto.setPrixUnitaire(detail.getPrixUnitaire());
+                ligneDto.setPoidsTotal(detail.getPoidsTotal());
+
+                lignes.add(ligneDto);
+            }
+        }
 
 		if (lignes.isEmpty()) {
 			lignes = creerLignesVides(3);
@@ -172,5 +191,39 @@ public class VenteService {
 			lignes.add(new DetailVenteDTO());
 		}
 		return lignes;
+	}
+
+    public void annulerVente(Long id) {
+        Vente vente = chargerVente(id);
+        vente.setStatut("ANNULEE");
+        venteRepository.save(vente);
+    }
+
+	@Transactional
+	public void validerVente(Long id) {
+		Vente vente = chargerVente(id);
+
+		if ("VALIDEE".equalsIgnoreCase(vente.getStatut())) {
+			return;
+		}
+
+		if ("ANNULEE".equalsIgnoreCase(vente.getStatut())) {
+			throw new IllegalArgumentException("Impossible de valider une vente annulée.");
+		}
+
+		if (vente.getLignes() == null || vente.getLignes().isEmpty()) {
+			throw new IllegalArgumentException("Aucune ligne de vente à valider.");
+		}
+
+		for (DetailVente detail : vente.getLignes()) {
+			if (detail.getLot() == null || detail.getQuantite() == null || detail.getQuantite() <= 0) {
+				throw new IllegalArgumentException("Une ligne de vente est incomplète.");
+			}
+
+			mouvementService.diminuerEffectif(detail.getLot().getId(), detail.getQuantite());
+		}
+
+		vente.setStatut("VALIDEE");
+		venteRepository.save(vente);
 	}
 }
