@@ -15,7 +15,7 @@
         <c:otherwise><span class="badge badge--amber">Brouillon</span></c:otherwise>
       </c:choose>
     </h1>
-    <p>Client : ${v.nomClient} · <fmt:formatDate value="${v.dateVente}" pattern="dd/MM/yyyy"/></p>
+    <p>Client : ${v.nomClient} · ${v.dateVente}</p>
   </div>
   <div class="flex gap-8">
     <a class="btn btn--ghost" href="${ctx}/ventes/recu/pdf/${v.id}"><i class="fa-solid fa-file-pdf"></i> Reçu PDF</a>

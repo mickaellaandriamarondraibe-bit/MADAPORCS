@@ -23,7 +23,7 @@
               <tr>
                 <td><a href="${ctx}/ventes/${v.id}"><b>${v.reference}</b></a></td>
                 <td>${v.nomClient}</td>
-                <td><fmt:formatDate value="${v.dateVente}" pattern="dd/MM/yyyy"/></td>
+                <td>${v.dateVente}</td>
                 <td class="num"><fmt:formatNumber value="${v.montantTotal}" type="number" maxFractionDigits="0"/></td>
                 <td>
                   <c:choose>
