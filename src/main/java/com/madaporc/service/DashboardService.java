@@ -35,6 +35,7 @@ public class DashboardService {
     private final IngredientRepository ingredientRepository;
     private final VaccinationRepository vaccinationRepository;
     private final AnalyseReproductionLotRepository analyseRepository;
+    private final NotificationService notificationService;
 
     public DashboardService(LotPorcRepository lotPorcRepository,
                             GroupeReproductionRepository groupeReproductionRepository,
@@ -42,7 +43,8 @@ public class DashboardService {
                             DepenseRepository depenseRepository,
                             IngredientRepository ingredientRepository,
                             VaccinationRepository vaccinationRepository,
-                            AnalyseReproductionLotRepository analyseRepository) {
+                            AnalyseReproductionLotRepository analyseRepository,
+                            NotificationService notificationService) {
         this.lotPorcRepository = lotPorcRepository;
         this.groupeReproductionRepository = groupeReproductionRepository;
         this.venteRepository = venteRepository;
@@ -50,6 +52,7 @@ public class DashboardService {
         this.ingredientRepository = ingredientRepository;
         this.vaccinationRepository = vaccinationRepository;
         this.analyseRepository = analyseRepository;
+        this.notificationService = notificationService;
     }
 
     public DashboardDTO getDashboard() {
@@ -154,10 +157,21 @@ public class DashboardService {
     }
 
     public List<Ingredient> listerStocksFaibles() {
+        
+        if (ingredientRepository.findStocksFaibles() == null || ingredientRepository.findStocksFaibles().isEmpty()) {
+            return new ArrayList<>();
+        }
+        notificationService.envoyerNotification("Alerte : Stock faible détecté !");
         return ingredientRepository.findStocksFaibles();
     }
 
     public List<Vaccination> listerVaccinationsAVenir(LocalDate dateLimite) {
+        if (vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite) == null
+                || vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite)
+                        .isEmpty()) {
+            return new ArrayList<>();
+        }
+        notificationService.envoyerNotification("Alerte : Vaccination à venir détectée !");
         return vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(
                 LocalDate.now(),
                 dateLimite

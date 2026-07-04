@@ -25,6 +25,9 @@
   <link rel="stylesheet" href="${ctx}/css/app.css">
 </head>
 <body>
+
+<div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
 <div class="app-shell">
 
   <%-- Sidebar globale --%>
@@ -32,6 +35,7 @@
   <div class="sidebar-backdrop"></div>
 
   <div class="main">
+
     <header class="topbar">
       <button class="menu-toggle" data-menu-toggle aria-label="Menu">☰</button>
       <div>
@@ -51,7 +55,7 @@
         </div>
       </div>
     </header>
-
+<script src="${pageContext.request.contextPath}/resources/js/notifications.js"></script>
     <main class="content">
       <%-- Messages flash standardisés --%>
       <c:if test="${not empty success}"><div class="alert alert--ok"> <span>${success}</span></div></c:if>
