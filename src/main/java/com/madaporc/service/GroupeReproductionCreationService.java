@@ -16,6 +16,7 @@ import com.madaporc.repository.GroupeReproductionRepository;
 import com.madaporc.repository.LotPorcRepository;
 import com.madaporc.repository.ParametreReproductionRaceRepository;
 import com.madaporc.repository.RepartitionReproductiveLotRepository;
+import com.madaporc.repository.SuiviSanitaireRepository;
 import com.madaporc.dto.GroupeReproductionDTO;
 
 @Service
@@ -26,17 +27,20 @@ public class GroupeReproductionCreationService {
     private final LotPorcRepository lotPorcRepository;
     private final RepartitionReproductiveLotRepository repartitionRepository;
     private final ParametreReproductionRaceRepository parametreRepository;
+    private final SuiviSanitaireRepository suiviSanitaireRepository;
 
     public GroupeReproductionCreationService(
             GroupeReproductionRepository groupeRepository,
             LotPorcRepository lotPorcRepository,
             RepartitionReproductiveLotRepository repartitionRepository,
-            ParametreReproductionRaceRepository parametreRepository) {
+            ParametreReproductionRaceRepository parametreRepository,
+            SuiviSanitaireRepository suiviSanitaireRepository) {
 
         this.groupeRepository = groupeRepository;
         this.lotPorcRepository = lotPorcRepository;
         this.repartitionRepository = repartitionRepository;
         this.parametreRepository = parametreRepository;
+        this.suiviSanitaireRepository = suiviSanitaireRepository;
     }
 
     public String creer(GroupeReproductionDTO dto, Long utilisateurId) {
@@ -133,6 +137,11 @@ public class GroupeReproductionCreationService {
             return "Seuls les lots femelles de type REPRODUCTION peuvent être utilisés pour créer un groupe de reproduction.";
         }
 
+        // On refuse un lot femelle atteint d'une maladie encore en cours.
+        if (suiviSanitaireRepository.countByLotIdAndDateGuerisonIsNull(lotFemelleId) > 0) {
+            return "Le lot femelle a une maladie en cours (non guérie) : impossible de créer un groupe.";
+        }
+
         return null;
     }
 
@@ -146,6 +155,12 @@ public class GroupeReproductionCreationService {
             return "Le lot sélectionné doit être de sexe MALE.";
         if (!"ACTIF".equals(lot.get().getStatut()))
             return "Le lot mâle doit être ACTIF.";
+
+        // On refuse un lot mâle atteint d'une maladie encore en cours.
+        if (suiviSanitaireRepository.countByLotIdAndDateGuerisonIsNull(lotMaleId) > 0) {
+            return "Le lot mâle a une maladie en cours (non guérie) : impossible de créer un groupe.";
+        }
+
         return null;
     }
 

@@ -30,8 +30,9 @@ public class LotPorcController {
     @PostMapping("/lots/save")
     public String save(@ModelAttribute LotPorcDTO dto, Model model) {
         String error;
+        boolean creation = dto.getId() == null;
 
-        if (dto.getId() == null) {
+        if (creation) {
             error = lotPorcService.creerLot(dto);
         } else {
             error = lotPorcService.modifierLot(dto.getId(), dto);
@@ -42,6 +43,12 @@ public class LotPorcController {
             model.addAttribute("lot", dto);
             model.addAttribute("races", lotPorcService.getAllRaces());
             return "lots/formLot";
+        }
+
+        // Après création, on redirige vers les pesées du nouveau lot
+        // pour compléter le poids de départ.
+        if (creation) {
+            return "redirect:/lots/" + dto.getId() + "/pesees";
         }
 
         return "redirect:/lots";

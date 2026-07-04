@@ -19,4 +19,7 @@ public interface SuiviSanitaireRepository extends JpaRepository<SuiviSanitaire, 
         ORDER BY s.dateDiagnostic DESC
     """)
     List<SuiviSanitaire> findAllWithDetails();
+
+    // Nombre de maladies encore en cours (non guéries) pour un lot donné.
+    long countByLotIdAndDateGuerisonIsNull(Long lotId);
 }

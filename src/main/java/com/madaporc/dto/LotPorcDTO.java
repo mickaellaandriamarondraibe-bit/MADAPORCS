@@ -1,5 +1,6 @@
 package com.madaporc.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lombok.Getter;
@@ -22,5 +23,11 @@ public class LotPorcDTO {
     private Long lotParentId;
     private Long groupeReproductionOrigineId;
     private String description;
+
+    // Poids de départ du lot, sert à créer la première pesée.
+    private BigDecimal poidsInitial;
+
+    // Prix d'achat du lot (origine ACHAT), enregistré comme dépense.
+    private BigDecimal prixAchat;
 
 }

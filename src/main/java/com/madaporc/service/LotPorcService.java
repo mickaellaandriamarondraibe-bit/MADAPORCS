@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.madaporc.dto.LotDetailDTO;
 import com.madaporc.dto.LotFiltreDTO;
 import com.madaporc.dto.LotPorcDTO;
+import com.madaporc.dto.PeseeLotDTO;
 import com.madaporc.model.LotPorc;
 import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.model.Race;
@@ -26,16 +27,22 @@ public class LotPorcService {
     private final RaceRepository raceRepository;
     private final MouvementLotPorcRepository mouvementLotPorcRepository;
     private final RepartitionReproductiveService repartitionReproductiveService;
+    private final PeseeLotService peseeLotService;
+    private final DepenseService depenseService;
 
     public LotPorcService(
             LotPorcRepository lotPorcRepository,
             RaceRepository raceRepository,
             MouvementLotPorcRepository mouvementLotPorcRepository,
-            RepartitionReproductiveService repartitionReproductiveService) {
+            RepartitionReproductiveService repartitionReproductiveService,
+            PeseeLotService peseeLotService,
+            DepenseService depenseService) {
         this.lotPorcRepository = lotPorcRepository;
         this.raceRepository = raceRepository;
         this.mouvementLotPorcRepository = mouvementLotPorcRepository;
         this.repartitionReproductiveService = repartitionReproductiveService;
+        this.peseeLotService = peseeLotService;
+        this.depenseService = depenseService;
     }
 
     @Transactional(readOnly = true)
@@ -120,7 +127,9 @@ public class LotPorcService {
 
         LotPorc lot = new LotPorc();
 
-        lot.setCodeLot(dto.getCodeLot().trim().toUpperCase());
+        // Le code est généré automatiquement plus bas (LOT-M-xxx / LOT-F-xxx),
+        // on met un code temporaire unique le temps du premier enregistrement.
+        lot.setCodeLot("LOT-TMP-" + System.nanoTime());
         lot.setDateCreation(dto.getDateCreation() != null ? dto.getDateCreation() : LocalDate.now());
         lot.setSexe(dto.getSexe().toUpperCase());
         lot.setObjectif(dto.getObjectif().toUpperCase());
@@ -154,10 +163,45 @@ public class LotPorcService {
 
         LotPorc lotSauvegarde = lotPorcRepository.save(lot);
 
+        // Génération automatique du code à partir du sexe et de l'id auto-incrémenté.
+        // Exemple : 9e lot femelle -> LOT-F-009, mâle -> LOT-M-009.
+        String prefixeSexe = "MALE".equalsIgnoreCase(lotSauvegarde.getSexe()) ? "M" : "F";
+        lotSauvegarde.setCodeLot(String.format("LOT-%s-%03d", prefixeSexe, lotSauvegarde.getId()));
+        lotSauvegarde = lotPorcRepository.save(lotSauvegarde);
+
+        // On renseigne l'id créé dans le DTO pour permettre la redirection
+        // vers la page des pesées (saisie du poids de départ).
+        dto.setId(lotSauvegarde.getId());
+
         /*
          * Mouvement automatique de création du lot.
          */
         creerMouvementInitial(lotSauvegarde);
+
+        /*
+         * Poids de départ : si un poids initial est saisi, on crée la première pesée.
+         */
+        if (dto.getPoidsInitial() != null && dto.getPoidsInitial().compareTo(java.math.BigDecimal.ZERO) > 0) {
+            PeseeLotDTO peseeDTO = new PeseeLotDTO();
+            peseeDTO.setLotId(lotSauvegarde.getId());
+            peseeDTO.setPoidsMoyen(dto.getPoidsInitial());
+            peseeDTO.setDatePesee(lotSauvegarde.getDateCreation());
+            peseeDTO.setObservation("Poids de départ à la création du lot.");
+            peseeLotService.enregistrerPesee(peseeDTO);
+        }
+
+        /*
+         * Achat du lot : le prix d'achat est enregistré comme dépense.
+         * C'est ce qui permet au bénéfice (ventes - dépenses) de tenir compte
+         * du prix d'achat, différent pour chaque lot.
+         */
+        if ("ACHAT".equalsIgnoreCase(lotSauvegarde.getOrigine())) {
+            depenseService.creerDepense(
+                    dto.getPrixAchat(),
+                    "Achat du lot " + lotSauvegarde.getCodeLot(),
+                    lotSauvegarde.getDateCreation(),
+                    "ACHAT ANIMAUX");
+        }
 
         /*
          * Pour un lot femelle, on remplit tout de suite la répartition
@@ -321,13 +365,8 @@ public class LotPorcService {
     }
 
     private String validerCreation(LotPorcDTO dto) {
-        if (dto.getCodeLot() == null || dto.getCodeLot().trim().isEmpty()) {
-            return "Le code du lot est obligatoire.";
-        }
-
-        if (existeCodeLot(dto.getCodeLot())) {
-            return "Ce code lot existe déjà.";
-        }
+        // Le code n'est plus saisi à la main : il est généré automatiquement
+        // à partir du sexe et de l'id (LOT-M-xxx / LOT-F-xxx).
 
         if (dto.getSexe() == null || dto.getSexe().isBlank()) {
             return "Le sexe du lot est obligatoire.";

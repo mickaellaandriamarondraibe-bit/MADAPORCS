@@ -21,6 +21,7 @@ public class VaccinationService {
     private final VaccinationRepository vaccinationRepository;
     private final LotPorcRepository lotPorcRepository;
     private final VaccinRepository vaccinRepository;
+    private final DepenseService depenseService;
 
     @Transactional(readOnly = true)
     public List<Vaccination> getAll() {
@@ -70,6 +71,8 @@ public VaccinationDTO getDtoById(Long id) {
 
         Vaccination vaccination;
 
+        boolean creation = dto.getId() == null;
+
         if (dto.getId() == null) {
             vaccination = new Vaccination();
         } else {
@@ -90,6 +93,15 @@ public VaccinationDTO getDtoById(Long id) {
         vaccination.setObservation(dto.getObservation());
 
         vaccinationRepository.save(vaccination);
+
+        // Une vaccination est une dépense : on l'enregistre (seulement à la création).
+        if (creation) {
+            depenseService.creerDepense(
+                    dto.getCout(),
+                    "Vaccination " + vaccin.getNom() + " - lot " + lot.getCodeLot(),
+                    dto.getDateVaccination(),
+                    "SANTE");
+        }
 
         return null;
     }

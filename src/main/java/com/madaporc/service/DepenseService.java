@@ -105,6 +105,37 @@ public class DepenseService {
         return null;
     }
 
+    // Methode reutilisable : cree et enregistre une depense dans la table depenses.
+    // Appelee par tous les modules qui depensent de l'argent (achat lot, ingredient, vaccination...).
+    // Retourne la depense creee, ou null si le montant est absent/nul.
+    public Depense creerDepense(BigDecimal montant, String description, LocalDate dateDepense, String nomCategorie) {
+        if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
+            return null;
+        }
+
+        Depense depense = new Depense();
+        depense.setMontant(montant);
+        depense.setDescription(description);
+        depense.setDateDepense(dateDepense != null ? dateDepense : LocalDate.now());
+        depense.setCategorie(trouverOuCreerCategorie(nomCategorie));
+
+        return depenseRepository.save(depense);
+    }
+
+    // Retrouve une categorie par son nom, la cree si elle n'existe pas encore.
+    private CategorieDepense trouverOuCreerCategorie(String nom) {
+        if (nom == null || nom.trim().isEmpty()) {
+            return null;
+        }
+
+        return categorieDepenseRepository.findFirstByNomIgnoreCase(nom.trim())
+                .orElseGet(() -> {
+                    CategorieDepense categorie = new CategorieDepense();
+                    categorie.setNom(nom.trim());
+                    return categorieDepenseRepository.save(categorie);
+                });
+    }
+
     public BigDecimal calculerTotalDepenses() {
         return depenseRepository.totalDepenses();
     }

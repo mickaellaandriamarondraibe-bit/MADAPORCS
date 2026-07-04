@@ -20,9 +20,12 @@ public class IngredientService {
     
     private final IngredientRepository ingredientRepository;
     private final MouvementStockRepository mouvementStockRepository;
-    public IngredientService(IngredientRepository ingredientRepository , MouvementStockRepository mouvementStockRepository) {
+    private final MouvementStockService mouvementStockService;
+    public IngredientService(IngredientRepository ingredientRepository , MouvementStockRepository mouvementStockRepository,
+            MouvementStockService mouvementStockService) {
         this.ingredientRepository = ingredientRepository;
         this.mouvementStockRepository = mouvementStockRepository;
+        this.mouvementStockService = mouvementStockService;
     }
 
     public List<Ingredient> findAllIngredients() {
@@ -72,8 +75,7 @@ public class IngredientService {
         mouvement.setTypeMouvement("ENTREE");
 
         
-        MouvementStockService stock = new MouvementStockService(mouvementStockRepository, ingredientRepository);
-        stock.enregistrerMouvementStock(mouvement);
+        mouvementStockService.enregistrerMouvementStock(mouvement);
 
         
         return "Ingredient created successfully";
