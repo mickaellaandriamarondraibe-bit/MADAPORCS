@@ -14,7 +14,7 @@
   <div class="card__body">
     <%-- POST /ventes/save, bind VenteDTO (avec lignes DetailVenteDTO) --%>
     <form method="post" action="${ctx}/ventes/save">
-      <input type="hidden" name="id" value="${vente.LotId}">
+      <input type="hidden" name="id" value="${vente.id}">
       <div class="form-grid">
         <div class="field"><label>Client <span class="req">*</span></label>
           <select class="select" name="clientId" required>
