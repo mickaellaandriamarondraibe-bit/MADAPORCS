@@ -10,6 +10,10 @@
   <a class="btn btn--ghost" href="${ctx}/imports"> Retour</a>
 </div>
 
+<c:if test="${not empty message}">
+  <div class="alert alert--info"><span>${message}</span></div>
+</c:if>
+
 <div class="card">
   <div class="table-wrap">
     <table class="tbl">
@@ -19,10 +23,10 @@
           <c:when test="${not empty historique}">
             <c:forEach var="h" items="${historique}">
               <tr>
-                <td><fmt:formatDate value="${h.dateOperation}" pattern="dd/MM/yyyy HH:mm"/></td>
+                <td>${h.dateFormatee}</td>
                 <td><b>${h.module}</b></td>
                 <td class="muted">${h.nomFichier}</td>
-                <td><span class="badge badge--blue">${h.format}</span></td>
+                <td><span class="badge badge--blue">${h.formatFichier}</span></td>
                 <td>
                   <c:choose>
                     <c:when test="${h.statut == 'SUCCES'}"><span class="badge badge--green">Succès</span></c:when>

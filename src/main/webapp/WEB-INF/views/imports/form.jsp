@@ -20,18 +20,20 @@
           <label>Module cible <span class="req">*</span></label>
           <select class="select" name="module" required>
             <option value="">— Choisir —</option>
-            <option value="LOTS">Lots de porcs</option>
             <option value="CLIENTS">Clients</option>
-            <option value="VACCINATIONS">Vaccinations</option>
             <option value="INGREDIENTS">Ingrédients</option>
           </select>
         </div>
         <div class="field">
-          <label>Fichier Excel (.xlsx) <span class="req">*</span></label>
-          <input class="input" type="file" name="file" accept=".xlsx,.xls" required>
-          <span class="hint">La première ligne doit contenir les en-têtes de colonnes attendus.</span>
+          <label>Fichier CSV <span class="req">*</span></label>
+          <input class="input" type="file" name="file" accept=".csv" required>
+          <span class="hint">La première ligne doit contenir les en-têtes exacts (voir les modèles ci-dessous). Le CSV s'ouvre directement dans Excel.</span>
         </div>
-        <div class="alert alert--info"> <span>Colonnes attendues selon le module : Lots (code, sexe, race, objectif, effectif) · Clients (nom, téléphone, adresse) · Ingrédients (nom, unité, stock, seuil).</span></div>
+        <div class="alert alert--info"><span>Téléchargez d'abord le modèle du module, remplissez-le, puis importez-le :</span></div>
+        <div class="stack">
+          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=CLIENTS">Modèle Clients (nom, téléphone, adresse)</a>
+          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=INGREDIENTS">Modèle Ingrédients (nom, unité, stock, seuil)</a>
+        </div>
         <button class="btn btn--primary w-full" style="justify-content:center" type="submit">Importer le fichier</button>
       </form>
     </div>
@@ -42,7 +44,7 @@
     <div class="card__head"><h2>Exporter</h2></div>
     <div class="card__body stack">
       <p class="muted">Téléchargez les données d'un module au format Excel ou PDF.</p>
-      <c:set var="modules" value="LOTS,CLIENTS,VENTES,DEPENSES,INGREDIENTS,VACCINATIONS" />
+      <c:set var="modules" value="LOTS,CLIENTS,VENTES,DEPENSES,INGREDIENTS" />
       <table class="tbl">
         <thead><tr><th>Module</th><th class="right">Formats</th></tr></thead>
         <tbody>
