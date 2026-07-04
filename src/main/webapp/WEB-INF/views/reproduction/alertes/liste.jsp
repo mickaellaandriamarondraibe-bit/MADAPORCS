@@ -21,9 +21,9 @@
             <c:forEach var="al" items="${alertes}">
               <tr>
                 <td><span class="badge badge--amber">${al.typeAlerte}</span></td>
-                <td><a href="${ctx}/reproduction/groupes/${al.groupeId}"><b>${al.codeGroupe}</b></a></td>
-                <td>${al.lotFemelle.codeLot}</td>
-                <td><fmt:formatDate value="${al.datePrevue}" pattern="dd/MM/yyyy"/></td>
+                <td><a href="${ctx}/reproduction/groupes/${al.groupeReproduction.id}"><b>${al.groupeReproduction.codeGroupe}</b></a></td>
+                <td>${al.groupeReproduction.lotFemelle}</td>
+                <td>${al.dateAlerteFormattee}</td>
                 <td>
                   <c:choose>
                     <c:when test="${al.statut == 'NOUVELLE'}"><span class="badge badge--red"><span class="dot"></span>Nouvelle</span></c:when>

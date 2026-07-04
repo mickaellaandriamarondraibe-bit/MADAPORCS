@@ -150,18 +150,37 @@ public class AlerteReproductionService {
         }
 
         StringBuilder corps = new StringBuilder();
-        corps.append("<div style=\"font-family:Arial,sans-serif;padding:20px\">")
-                .append("<h2 style=\"color:#1b4332\">Alertes du jour</h2>")
-                .append("<p>Voici le résumé des alertes générées aujourd'hui :</p>")
-                .append("<ul>");
 
+        corps.append("<div style=\"font-family:'Segoe UI',Arial,sans-serif; padding:20px; color:#333333; max-width:600px; margin:0 auto; border:1px solid #e0e0e0; border-radius:8px;\">")
+            // En-tête / Salutations
+            .append("<p style=\"font-size:16px; margin-bottom:15px;\">Bonjour,</p>")
+            
+            // Objectif du mail
+            .append("<p style=\"font-size:14px; line-height:1.6; margin-bottom:20px;\">")
+            .append("Dans le cadre du suivi opérationnel de nos systèmes, vous trouverez ci-dessous le <strong>rapport consolidé des alertes</strong> générées ce jour. ")
+            .append("L'objectif de ce récapitulatif est de vous permettre d'identifier rapidement les anomalies et de planifier les actions correctives nécessaires.")
+            .append("</p>")
+            
+            // Titre de la section
+            .append("<h2 style=\"color:#1b4332; font-size:18px; border-bottom:2px solid #1b4332; padding-bottom:5px; margin-top:25px;\">Synthèse des alertes</h2>")
+            
+            // Structure de la liste (ou tableau)
+            .append("<ul style=\"padding-left:20px; line-height:1.8; font-size:14px;\">");
+
+        // Déduplication et insertion des messages
         Set<String> uniques = new LinkedHashSet<>(messages);
         for (String message : uniques) {
-            corps.append("<li>").append(message).append("</li>");
+            corps.append("<li style=\"margin-bottom:8px;\">").append(message).append("</li>");
         }
 
         corps.append("</ul>")
-                .append("</div>");
+            .append("<hr style=\"border:0; border-top:1px solid #e0e0e0; margin:25px 0;\">")
+            
+            // Pied de page / Clôture
+            .append("<p style=\"font-size:14px; margin-bottom:5px;\">Nos équipes restent à votre disposition pour tout complément d'information ou pour vous accompagner dans la résolution de ces incidents.</p>")
+            .append("<p style=\"font-size:14px; font-weight:bold; margin-top:15px;\">Cordialement,<br>")
+            .append("<span style=\"color:#666666; font-weight:normal; font-size:13px;\">Le service Support & Supervision</span></p>")
+            .append("</div>");
 
         if (emailService.envoyerHTML(null, "MADAPORC - Alertes du jour", corps.toString())) {
             marquerEmailCommeEnvoyeAujourdHui();

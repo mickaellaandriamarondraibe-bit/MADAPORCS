@@ -1,6 +1,7 @@
 package com.madaporc.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "alertes_reproduction")
@@ -106,5 +109,9 @@ public class AlerteReproduction {
 
     public void setStatut(String statut) {
         this.statut = statut;
+    }
+        public String getDateAlerteFormattee() {
+        if (this.date_alerte == null) return "";
+        return this.date_alerte.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }
