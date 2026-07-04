@@ -20,6 +20,7 @@ public class MouvementLotController {
 
     @GetMapping("/lots/{id}/mouvements")
     public String listMouvements(@PathVariable Long id, Model model) {
+        model.addAttribute("lot", mouvementLotService.getLot(id));
         model.addAttribute("mouvements", mouvementLotService.getMouvementsByLot(id));
         model.addAttribute("effectifTotal", mouvementLotService.getEffectifTotal(id));
         return "lots/mouvements";
@@ -27,6 +28,17 @@ public class MouvementLotController {
 
     @PostMapping("/lots/mouvements/save")
     public String saveMouvement(@ModelAttribute MouvementLotDTO dto, Model model) {
-        return mouvementLotService.enregistrerMouvement(dto);
+        String error = mouvementLotService.enregistrerMouvement(dto);
+
+        if (error != null) {
+            model.addAttribute("lot", mouvementLotService.getLot(dto.getLotId()));
+            model.addAttribute("mouvements", mouvementLotService.getMouvementsByLot(dto.getLotId()));
+            model.addAttribute("effectifTotal", mouvementLotService.getEffectifTotal(dto.getLotId()));
+            model.addAttribute("mouvement", dto);
+            model.addAttribute("error", error);
+            return "lots/mouvements";
+        }
+
+        return "redirect:/lots/" + dto.getLotId() + "/mouvements";
     }
 }

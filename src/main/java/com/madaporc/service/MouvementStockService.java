@@ -17,10 +17,14 @@ public class MouvementStockService {
 
     private final MouvementStockRepository mouvementRepository;
     private final IngredientRepository ingredientRepository;
+    private final DepenseService depenseService;
 
-    public MouvementStockService(MouvementStockRepository mouvementRepository, IngredientRepository ingredientRepository) {
+    public MouvementStockService(MouvementStockRepository mouvementRepository,
+            IngredientRepository ingredientRepository,
+            DepenseService depenseService) {
         this.mouvementRepository = mouvementRepository;
         this.ingredientRepository = ingredientRepository;
+        this.depenseService = depenseService;
     }
 
     // liste de tous les mouvements (le plus recent en premier)
@@ -39,7 +43,14 @@ public class MouvementStockService {
             return "Ingrédient introuvable";
         }
         if (dto.getTypeMouvement().equals("ENTREE")) {
-            return appliquerEntree(ingredient, dto.getQuantite());
+            String resultat = appliquerEntree(ingredient, dto.getQuantite());
+            // Une entrée en stock est un achat : on enregistre la dépense.
+            depenseService.creerDepense(
+                    dto.getMontant(),
+                    "Achat ingrédient " + ingredient.getNom(),
+                    LocalDate.now(),
+                    "ALIMENTATION");
+            return resultat;
         } else {
             return appliquerSortie(ingredient, dto.getQuantite());
         }

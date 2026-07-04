@@ -50,7 +50,7 @@ public class VenteController {
 		return "redirect:/ventes/" + id;
 	}
 
-    @PostMapping("/ventes/{id}/annuler")
+    @PostMapping("/ventes/annuler/{id}")
     public String annulerVente(@PathVariable Long id) {
         venteService.annulerVente(id);
         return "redirect:/ventes";

@@ -24,7 +24,7 @@
       </div>
       <div class="field">
         <label>Type de mouvement <span class="req">*</span></label>
-        <select class="select" name="typeMouvement" required>
+        <select class="select" id="typeMouvement" name="typeMouvement" required>
           <option value="ENTREE">Entrée</option>
           <option value="SORTIE">Sortie</option>
         </select>
@@ -33,6 +33,11 @@
         <label>Quantité <span class="req">*</span></label>
         <input class="input" type="number" step="0.01" min="0.01" name="quantite" required>
       </div>
+      <div class="field" id="champMontant">
+        <label>Montant dépensé (Ar)</label>
+        <input class="input" type="number" step="0.01" min="0" name="montant" placeholder="Ex: 50000">
+        <span class="hint">Pour une entrée (achat), enregistré comme dépense.</span>
+      </div>
       <div class="form-actions">
         <a class="btn btn--ghost" href="${ctx}/stocks/mouvements">Annuler</a>
         <button class="btn btn--primary" type="submit">Enregistrer</button>
@@ -40,5 +45,18 @@
     </form>
   </div>
 </div>
+
+<%-- Le montant ne concerne qu'une entrée (achat). --%>
+<script>
+  const selectType = document.getElementById("typeMouvement");
+  const champMontant = document.getElementById("champMontant");
+
+  function majAffichageMontant() {
+    champMontant.style.display = selectType.value === "ENTREE" ? "" : "none";
+  }
+
+  selectType.addEventListener("change", majAffichageMontant);
+  majAffichageMontant();
+</script>
 
 <%@ include file="/WEB-INF/views/layout/footer.jsp" %>

@@ -30,18 +30,26 @@
 
       <div class="form-grid">
 
-        <div class="field">
-          <label for="codeLot">Code du lot <span class="req">*</span></label>
-          <input
-            class="input"
-            id="codeLot"
-            name="codeLot"
-            value="${lot.codeLot}"
-            placeholder="LOT-F-001"
-            required
-          />
-          <span class="hint">Unique. Ex. LOT-F-001, LOT-M-001.</span>
-        </div>
+        <c:if test="${edition}">
+          <div class="field">
+            <label for="codeLot">Code du lot</label>
+            <input
+              class="input"
+              id="codeLot"
+              name="codeLot"
+              value="${lot.codeLot}"
+              readonly
+            />
+            <span class="hint">Généré automatiquement à partir du sexe et de l'id.</span>
+          </div>
+        </c:if>
+        <c:if test="${not edition}">
+          <div class="field">
+            <label>Code du lot</label>
+            <input class="input" value="Généré automatiquement (LOT-M-xxx / LOT-F-xxx)" readonly />
+            <span class="hint">Le code est créé selon le sexe et l'id du lot.</span>
+          </div>
+        </c:if>
 
         <div class="field">
           <label for="dateCreation">Date de création</label>
@@ -116,6 +124,23 @@
           <span class="hint">Âge moyen des animaux achetés, en mois.</span>
         </div>
 
+        <%-- Prix d'achat : visible seulement si l'origine est "Achat".
+             Enregistré comme dépense pour le calcul du bénéfice. --%>
+        <div class="field" id="champPrixAchat" style="display:none">
+          <label for="prixAchat">Prix d'achat (Ar)</label>
+          <input
+            class="input"
+            type="number"
+            step="0.01"
+            min="0"
+            id="prixAchat"
+            name="prixAchat"
+            value="${lot.prixAchat}"
+            placeholder="Ex: 500000"
+          />
+          <span class="hint">Enregistré comme dépense (achat du lot).</span>
+        </div>
+
         <div class="field">
           <label for="effectifInitial">Effectif initial <span class="req">*</span></label>
           <input
@@ -129,6 +154,23 @@
           />
           <span class="hint">Doit être strictement supérieur à 0.</span>
         </div>
+
+        <c:if test="${not edition}">
+          <div class="field">
+            <label for="poidsInitial">Poids de départ (kg)</label>
+            <input
+              class="input"
+              type="number"
+              step="0.01"
+              min="0"
+              id="poidsInitial"
+              name="poidsInitial"
+              value="${lot.poidsInitial}"
+              placeholder="Ex: 12.5"
+            />
+            <span class="hint">Crée la première pesée du lot. Complétable ensuite.</span>
+          </div>
+        </c:if>
 
         <div class="field">
           <label for="effectifActuel">Effectif actuel</label>
@@ -195,12 +237,13 @@
 <script>
   const selectOrigine = document.getElementById("origine");
   const champAge = document.getElementById("champAge");
+  const champPrixAchat = document.getElementById("champPrixAchat");
 
   function majAffichageAge() {
-    if (selectOrigine.value === "ACHAT") {
-      champAge.style.display = "";
-    } else {
-      champAge.style.display = "none";
+    const estAchat = selectOrigine.value === "ACHAT";
+    champAge.style.display = estAchat ? "" : "none";
+    if (champPrixAchat) {
+      champPrixAchat.style.display = estAchat ? "" : "none";
     }
   }
 

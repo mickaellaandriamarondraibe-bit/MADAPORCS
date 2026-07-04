@@ -31,6 +31,12 @@ public class MouvementLotService {
     }
 
     @Transactional(readOnly = true)
+    public LotPorc getLot(Long lotId) {
+        return lotPorcRepository.findById(lotId)
+                .orElseThrow(() -> new IllegalArgumentException("Lot introuvable avec l'id : " + lotId));
+    }
+
+    @Transactional(readOnly = true)
     public List<MouvementLotPorc> getMouvementsByLot(Long lotId) {
         return mouvementLotRepository.findByLotIdOrderByDateMouvementDesc(lotId);
     }

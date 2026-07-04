@@ -7,6 +7,17 @@ public class MouvementStockDTO {
     private String typeMouvement;
     private BigDecimal quantite;
 
+    // Montant dépensé pour une entrée en stock (achat d'ingrédient).
+    private BigDecimal montant;
+
+    public BigDecimal getMontant() {
+        return montant;
+    }
+
+    public void setMontant(BigDecimal montant) {
+        this.montant = montant;
+    }
+
     public Long getIngredientId() {
         return ingredientId;
     }
