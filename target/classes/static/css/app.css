@@ -1386,3 +1386,15 @@ table.tbl tbody tr:last-child td {
 .badge {
   font-weight: 600 !important;
 }
+/* Pagination (js/pagination.js) */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.pagination__info {
+  font-size: .9rem;
+  color: #666;
+}

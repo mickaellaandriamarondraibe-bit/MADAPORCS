@@ -13,7 +13,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-clients">
+    <table class="tbl" data-paginate="10" id="tbl-clients">
       <thead><tr><th>Nom</th><th>Téléphone</th><th>Adresse</th><th class="actions"></th></tr></thead>
       <tbody>
         <c:choose>

@@ -26,7 +26,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-vaccins">
+    <table class="tbl" data-paginate="10" id="tbl-vaccins">
       <thead>
         <tr>
           <th>Nom</th>

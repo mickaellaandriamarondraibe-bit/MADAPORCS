@@ -16,7 +16,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-gr">
+    <table class="tbl" data-paginate="10" id="tbl-gr">
       <thead>
         <tr><th>Code</th><th>Lot femelle</th><th>Lot mâle</th><th class="num">Femelles</th><th>Saillie</th><th>Mise bas prévue</th><th>Statut</th><th class="actions"></th></tr>
       </thead>

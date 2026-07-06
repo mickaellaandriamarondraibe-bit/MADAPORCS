@@ -26,7 +26,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-suivis">
+    <table class="tbl" data-paginate="10" id="tbl-suivis">
       <thead>
         <tr>
           <th>Lot</th>

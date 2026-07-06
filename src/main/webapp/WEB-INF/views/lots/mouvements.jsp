@@ -35,7 +35,7 @@
     </div>
 
     <div class="card__body" style="padding:0">
-      <table class="tbl">
+      <table class="tbl" data-paginate="10">
         <thead>
           <tr>
             <th>Date</th>

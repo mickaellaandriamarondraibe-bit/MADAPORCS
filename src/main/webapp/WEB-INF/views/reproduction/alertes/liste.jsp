@@ -11,7 +11,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl">
+    <table class="tbl" data-paginate="10">
       <thead>
         <tr><th>Type</th><th>Groupe</th><th>Lot femelle</th><th>Date prévue</th><th>Statut</th><th class="actions">Actions</th></tr>
       </thead>

@@ -26,7 +26,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-vac">
+    <table class="tbl" data-paginate="10" id="tbl-vac">
       <thead>
         <tr>
           <th>Lot</th>

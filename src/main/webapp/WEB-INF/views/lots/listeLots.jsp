@@ -61,7 +61,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl">
+    <table class="tbl" data-paginate="10">
       <thead>
         <tr>
           <th>Code</th>

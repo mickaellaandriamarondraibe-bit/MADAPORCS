@@ -22,6 +22,8 @@
             <option value="">— Choisir —</option>
             <option value="CLIENTS">Clients</option>
             <option value="INGREDIENTS">Ingrédients</option>
+            <option value="LOTS">Lots de porcs</option>
+            <option value="VACCINATIONS">Vaccinations</option>
           </select>
         </div>
         <div class="field">
@@ -33,6 +35,8 @@
         <div class="stack">
           <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=CLIENTS">Modèle Clients (nom, téléphone, adresse)</a>
           <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=INGREDIENTS">Modèle Ingrédients (nom, unité, stock, seuil)</a>
+          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=LOTS">Modèle Lots (code, sexe, objectif, origine, race, effectif)</a>
+          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=VACCINATIONS">Modèle Vaccinations (code_lot, vaccin, date, rappel, obs.)</a>
         </div>
         <button class="btn btn--primary w-full" style="justify-content:center" type="submit">Importer le fichier</button>
       </form>
@@ -44,7 +48,7 @@
     <div class="card__head"><h2>Exporter</h2></div>
     <div class="card__body stack">
       <p class="muted">Téléchargez les données d'un module au format Excel ou PDF.</p>
-      <c:set var="modules" value="LOTS,CLIENTS,VENTES,DEPENSES,INGREDIENTS" />
+      <c:set var="modules" value="LOTS,CLIENTS,VENTES,DEPENSES,INGREDIENTS,GROUPES,ANALYSE" />
       <table class="tbl">
         <thead><tr><th>Module</th><th class="right">Formats</th></tr></thead>
         <tbody>

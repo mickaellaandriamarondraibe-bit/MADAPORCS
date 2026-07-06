@@ -16,7 +16,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl">
+    <table class="tbl" data-paginate="10">
       <thead><tr><th>Date</th><th>Module</th><th>Fichier</th><th>Format</th><th>Statut</th><th>Message</th><th>Utilisateur</th></tr></thead>
       <tbody>
         <c:choose>

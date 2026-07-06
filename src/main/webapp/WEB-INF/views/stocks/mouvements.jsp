@@ -12,7 +12,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl">
+    <table class="tbl" data-paginate="10">
       <thead><tr><th>Date</th><th>Ingrédient</th><th>Type</th><th class="num">Quantité</th><th class="num">Stock après</th></tr></thead>
       <tbody>
         <c:choose>

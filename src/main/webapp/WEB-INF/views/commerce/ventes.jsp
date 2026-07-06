@@ -14,7 +14,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-ventes">
+    <table class="tbl" data-paginate="10" id="tbl-ventes">
       <thead><tr><th>Référence</th><th>Client</th><th>Date</th><th class="num">Montant (Ar)</th><th>Statut</th><th class="actions">Actions</th></tr></thead>
       <tbody>
         <c:choose>

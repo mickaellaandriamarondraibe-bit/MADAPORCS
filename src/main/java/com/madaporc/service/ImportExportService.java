@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +28,34 @@ public class ImportExportService {
     private final LotPorcRepository lotPorcRepository;
     private final VenteRepository venteRepository;
     private final DepenseRepository depenseRepository;
+    private final RaceRepository raceRepository;
+    private final VaccinRepository vaccinRepository;
+    private final VaccinationRepository vaccinationRepository;
+    private final GroupeReproductionRepository groupeReproductionRepository;
+    private final AnalyseReproductionLotRepository analyseReproductionLotRepository;
 
     public ImportExportService(ImportExportRepository importExportRepository,
                                ClientRepository clientRepository,
                                IngredientRepository ingredientRepository,
                                LotPorcRepository lotPorcRepository,
                                VenteRepository venteRepository,
-                               DepenseRepository depenseRepository) {
+                               DepenseRepository depenseRepository,
+                               RaceRepository raceRepository,
+                               VaccinRepository vaccinRepository,
+                               VaccinationRepository vaccinationRepository,
+                               GroupeReproductionRepository groupeReproductionRepository,
+                               AnalyseReproductionLotRepository analyseReproductionLotRepository) {
         this.importExportRepository = importExportRepository;
         this.clientRepository = clientRepository;
         this.ingredientRepository = ingredientRepository;
         this.lotPorcRepository = lotPorcRepository;
         this.venteRepository = venteRepository;
         this.depenseRepository = depenseRepository;
+        this.raceRepository = raceRepository;
+        this.vaccinRepository = vaccinRepository;
+        this.vaccinationRepository = vaccinationRepository;
+        this.groupeReproductionRepository = groupeReproductionRepository;
+        this.analyseReproductionLotRepository = analyseReproductionLotRepository;
     }
 
     // ================= HISTORIQUE =================
@@ -66,17 +82,21 @@ public class ImportExportService {
 
     public String enteteModule(String module) {
         switch (module) {
-            case "CLIENTS":     return "nom;telephone;adresse";
-            case "INGREDIENTS": return "nom;unite;stock_actuel;seuil_alerte";
-            default:            return null;
+            case "CLIENTS":       return "nom;telephone;adresse";
+            case "INGREDIENTS":   return "nom;unite;stock_actuel;seuil_alerte";
+            case "LOTS":          return "code;sexe;objectif;origine;race;effectif";
+            case "VACCINATIONS":  return "code_lot;vaccin;date_vaccination;date_rappel;observation";
+            default:              return null;
         }
     }
 
     private String exempleModule(String module) {
         switch (module) {
-            case "CLIENTS":     return "Rakoto Jean;0341234567;Lot II Antananarivo";
-            case "INGREDIENTS": return "Mais;kg;100;20";
-            default:            return "";
+            case "CLIENTS":       return "Rakoto Jean;0341234567;Lot II Antananarivo";
+            case "INGREDIENTS":   return "Mais;kg;100;20";
+            case "LOTS":          return "LOT-M-010;MALE;ENGRAISSEMENT;ACHAT;Large White;12";
+            case "VACCINATIONS":  return "LOT-M-001;Peste Porcine;2026-06-01;2026-12-01;RAS";
+            default:              return "";
         }
     }
 
@@ -98,8 +118,10 @@ public class ImportExportService {
             List<String[]> lignes = lireCsv(file);
             int n;
             switch (module) {
-                case "CLIENTS":     n = importerClients(lignes);     break;
-                case "INGREDIENTS": n = importerIngredients(lignes); break;
+                case "CLIENTS":      n = importerClients(lignes);       break;
+                case "INGREDIENTS":  n = importerIngredients(lignes);   break;
+                case "LOTS":         n = importerLots(lignes);          break;
+                case "VACCINATIONS": n = importerVaccinations(lignes);  break;
                 default:
                     tracer("IMPORT", "EXCEL", module, nom, "ECHEC", "Import non supporte pour ce module.");
                     return "Import non supporte pour le module " + module + ".";
@@ -137,6 +159,47 @@ public class ImportExportService {
             i.setCreatedAt(LocalDateTime.now());
             i.setUpdatedAt(LocalDateTime.now());
             ingredientRepository.save(i);
+            n++;
+        }
+        return n;
+    }
+
+    private int importerLots(List<String[]> lignes) {
+        int n = 0;
+        for (String[] c : lignes) {
+            LotPorc l = new LotPorc();
+            l.setCodeLot(valeur(c, 0));
+            l.setSexe(valeur(c, 1));
+            l.setObjectif(valeur(c, 2));
+            String origine = valeur(c, 3);
+            l.setOrigine(origine.isBlank() ? "ACHAT" : origine);
+            trouverRace(valeur(c, 4)).ifPresent(l::setRace);
+            int effectif = entier(valeur(c, 5));
+            l.setEffectifInitial(effectif);
+            l.setEffectifActuel(effectif);
+            l.setStatut("ACTIF");
+            l.setDateCreation(LocalDate.now());
+            l.setCreatedAt(LocalDateTime.now());
+            lotPorcRepository.save(l);
+            n++;
+        }
+        return n;
+    }
+
+    private int importerVaccinations(List<String[]> lignes) {
+        int n = 0;
+        for (String[] c : lignes) {
+            LotPorc lot = lotPorcRepository.findByCodeLot(valeur(c, 0)).orElse(null);
+            Vaccin vaccin = trouverVaccin(valeur(c, 1)).orElse(null);
+            // lot et vaccin sont obligatoires : on ignore les lignes introuvables
+            if (lot == null || vaccin == null) continue;
+            Vaccination v = new Vaccination();
+            v.setLot(lot);
+            v.setVaccin(vaccin);
+            v.setDateVaccination(date(valeur(c, 2)));
+            v.setDateRappel(dateOuNull(valeur(c, 3)));
+            v.setObservation(valeur(c, 4));
+            vaccinationRepository.save(v);
             n++;
         }
         return n;
@@ -238,6 +301,27 @@ public class ImportExportService {
                     lignes.add(new String[]{texte(d.getDateDepense()), cat, texte(d.getMontant()), d.getDescription()});
                 }
                 return lignes;
+            case "GROUPES":
+                lignes.add(new String[]{"code", "lot_femelle", "lot_male", "date_saillie", "date_prevue_mise_bas", "statut", "porcelets_nes"});
+                for (GroupeReproduction g : groupeReproductionRepository.findAll()) {
+                    String femelle = g.getLotFemelle() != null ? g.getLotFemelle().getCodeLot() : "";
+                    String male = g.getLotMale() != null ? g.getLotMale().getCodeLot() : "";
+                    lignes.add(new String[]{g.getCodeGroupe(), femelle, male,
+                            texte(g.getDateSaillie()), texte(g.getDatePrevueMiseBas()),
+                            g.getStatut(), texte(g.getNbPorceletsNes())});
+                }
+                return lignes;
+            case "ANALYSE":
+                lignes.add(new String[]{"lot", "date_analyse", "pretes_jamais_saillies", "deja_reproductrices",
+                        "en_cycle", "a_surveiller", "a_retirer", "femelles_total"});
+                for (AnalyseReproductionLot a : analyseReproductionLotRepository.findAll()) {
+                    String lot = a.getLotPorc() != null ? a.getLotPorc().getCodeLot() : "";
+                    lignes.add(new String[]{lot, texte(a.getDateAnalyse()),
+                            texte(a.getNbPretesJamaisSaillies()), texte(a.getNbDejaReproductricesAptes()),
+                            texte(a.getNbEnCycle()), texte(a.getNbASurveiller()),
+                            texte(a.getNbARetirerReproduction()), texte(a.getNbFemellesTotal())});
+                }
+                return lignes;
             default:
                 return null;
         }
@@ -265,6 +349,33 @@ public class ImportExportService {
     private BigDecimal nombre(String v) {
         if (v == null || v.isBlank()) return BigDecimal.ZERO;
         return new BigDecimal(v.trim().replace(",", "."));
+    }
+
+    private int entier(String v) {
+        if (v == null || v.isBlank()) return 0;
+        return Integer.parseInt(v.trim());
+    }
+
+    private LocalDate date(String v) {
+        return LocalDate.parse(v.trim()); // format attendu : yyyy-MM-dd
+    }
+
+    private LocalDate dateOuNull(String v) {
+        return (v == null || v.isBlank()) ? null : LocalDate.parse(v.trim());
+    }
+
+    private java.util.Optional<Race> trouverRace(String nom) {
+        if (nom == null || nom.isBlank()) return java.util.Optional.empty();
+        return raceRepository.findAll().stream()
+                .filter(r -> nom.trim().equalsIgnoreCase(r.getNom()))
+                .findFirst();
+    }
+
+    private java.util.Optional<Vaccin> trouverVaccin(String nom) {
+        if (nom == null || nom.isBlank()) return java.util.Optional.empty();
+        return vaccinRepository.findAll().stream()
+                .filter(vac -> nom.trim().equalsIgnoreCase(vac.getNom()))
+                .findFirst();
     }
 
     private String texte(Object o) {

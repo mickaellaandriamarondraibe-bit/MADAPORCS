@@ -27,7 +27,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl">
+    <table class="tbl" data-paginate="10">
       <thead><tr><th>Date</th><th>Catégorie</th><th>Description</th><th class="num">Montant (Ar)</th><th class="actions"></th></tr></thead>
       <tbody>
         <c:choose>

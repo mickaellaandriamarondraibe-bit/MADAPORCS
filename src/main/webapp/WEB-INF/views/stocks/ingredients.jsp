@@ -16,7 +16,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-ing">
+    <table class="tbl" data-paginate="10" id="tbl-ing">
       <thead><tr><th>Nom</th><th>Unité</th><th class="num">Stock actuel</th><th class="num">Seuil d'alerte</th><th>État</th><th class="actions"></th></tr></thead>
       <tbody>
         <c:choose>

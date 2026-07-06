@@ -29,7 +29,7 @@
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" id="tbl-users">
+    <table class="tbl" data-paginate="10" id="tbl-users">
       <thead>
         <tr>
           <th>Nom</th>
