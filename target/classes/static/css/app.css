@@ -1398,3 +1398,301 @@ table.tbl tbody tr:last-child td {
   font-size: .9rem;
   color: #666;
 }
+
+/* =============================================================
+   Dashboard exploitation — UI (portée : /dashboard)
+   ============================================================= */
+
+/* Bouton rapport sobre (foncé) */
+.btn--report {
+  background: var(--vert-900);
+  color: #fff;
+  border-radius: 10px;
+}
+.btn--report:hover { background: var(--vert-800); }
+
+/* ---------- KPI cards ---------- */
+.kpi {
+  border-radius: 16px;
+  border-bottom: 3px solid var(--gris-200);
+  transition: transform .15s, box-shadow .15s;
+  display: flex;
+  flex-direction: column;
+}
+.kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.kpi__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.kpi-icon {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: var(--vert-050);
+  color: var(--vert-600);
+}
+.kpi__top .kpi__label { margin: 0; }
+.kpi__value.is-neg { color: var(--rouge-600); }
+.kpi__foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gris-100);
+}
+.kpi__trend { font-size: 12px; font-weight: 700; }
+.kpi__trend.up   { color: var(--vert-600); }
+.kpi__trend.down { color: var(--rouge-600); }
+.kpi__trend.warn { color: var(--ambre-600); }
+.kpi__trend.info { color: var(--bleu-600); }
+.kpi__trend.flat { color: var(--gris-500); }
+
+/* Accents (gauche via ::before + bordure basse) */
+.kpi.kpi--green::before  { background: var(--vert-500); }
+.kpi.kpi--green          { border-bottom-color: var(--vert-500); }
+.kpi.kpi--teal::before   { background: var(--vert-400); }
+.kpi.kpi--teal           { border-bottom-color: var(--vert-400); }
+.kpi.kpi--teal .kpi-icon { background: var(--vert-050); color: var(--vert-500); }
+.kpi.kpi--gold           { border-bottom-color: var(--or-500); }
+.kpi.kpi--gold .kpi-icon { background: var(--or-100); color: #8a6d0b; }
+.kpi.kpi--blue           { border-bottom-color: var(--bleu-600); }
+.kpi.kpi--blue .kpi-icon { background: var(--bleu-100); color: var(--bleu-600); }
+.kpi.kpi--danger           { border-bottom-color: var(--rouge-600); }
+.kpi.kpi--danger .kpi-icon { background: var(--rouge-100); color: var(--rouge-600); }
+
+/* ---------- Titre de section ---------- */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.section-title h2 {
+  font-size: 15px;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid var(--vert-500);
+  line-height: 1.1;
+}
+.section-title--inline { margin: 0; padding: 14px 18px 0; }
+.section-title__link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--vert-600);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.section-title__link:hover { color: var(--vert-800); }
+
+/* ---------- Barre "Alertes prioritaires" ---------- */
+.alert-strip {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--blanc);
+  border: 1px solid var(--gris-200);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.alert-strip__item {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-left: 1px solid var(--gris-100);
+}
+.alert-strip__item:first-child { border-left: none; }
+.alert-strip__icon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  background: var(--gris-100);
+  color: var(--gris-700);
+}
+.alert-strip__icon.is-ok     { background: var(--vert-050);  color: var(--vert-600); }
+.alert-strip__icon.is-warn   { background: var(--ambre-100); color: var(--ambre-600); }
+.alert-strip__icon.is-danger { background: var(--rouge-100); color: var(--rouge-600); }
+.alert-strip__body { flex: 1; min-width: 0; }
+.alert-strip__title { font-size: 12px; color: var(--gris-500); font-weight: 600; }
+.alert-strip__value { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.alert-strip__sub { font-size: 11px; color: var(--gris-400); margin-top: 1px; }
+
+/* ---------- Badges soft ---------- */
+.badge-soft {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-soft-success { background: var(--vert-100);  color: var(--vert-700); }
+.badge-soft-warning { background: var(--ambre-100); color: var(--ambre-600); }
+.badge-soft-danger  { background: var(--rouge-100); color: var(--rouge-600); }
+.badge-soft-info    { background: var(--bleu-100);  color: var(--bleu-600); }
+
+/* ---------- Carte graphique ---------- */
+.chart-card .card__body { padding-top: 12px; }
+.chart-tabs {
+  display: flex;
+  gap: 18px;
+  padding: 10px 18px 0;
+  border-bottom: 1px solid var(--gris-200);
+}
+.chart-tab {
+  background: none;
+  border: none;
+  padding: 8px 2px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris-500);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.chart-tab:hover { color: var(--gris-900); }
+.chart-tab.is-active { color: var(--vert-700); border-bottom-color: var(--vert-600); }
+
+.dashboard-chart__title {
+  color: var(--gris-700);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.dashboard-chart__plot { position: relative; width: 100%; height: 260px; }
+.dashboard-chart__plot canvas { width: 100% !important; height: 100% !important; }
+.chart-legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--gris-600, var(--gris-500));
+}
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.dashboard-chart__note {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--gris-500);
+  background: var(--gris-050);
+  border-left: 3px solid var(--vert-400);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+/* ---------- Résumé financier ---------- */
+.fin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--gris-100);
+}
+.fin-row:last-child { border-bottom: none; }
+.fin-label { font-size: 13.5px; color: var(--gris-700); font-weight: 500; }
+.fin-value { font-size: 15px; font-weight: 800; }
+.fin-value--blue  { color: var(--bleu-600); }
+.fin-value--red   { color: var(--rouge-600); }
+.fin-value--green { color: var(--vert-600); }
+.fin-row--highlight {
+  margin-top: 6px;
+  padding: 12px 14px;
+  background: var(--gris-050);
+  border: 1px solid var(--gris-200);
+  border-radius: 12px;
+}
+
+/* ---------- Grille tableaux bas ---------- */
+.grid-2--even { grid-template-columns: 1.1fr 1fr; }
+
+/* ---------- Tableaux ---------- */
+.table-modern thead th {
+  background: var(--gris-050);
+  font-size: 11.5px;
+  letter-spacing: .3px;
+}
+.table-modern tbody td { padding-top: 12px; padding-bottom: 12px; }
+.jours-restants { font-weight: 700; color: var(--gris-700); }
+.jours-restants.is-soon { color: var(--ambre-600); }
+.jours-restants.is-late { color: var(--rouge-600); }
+.tbl-foot {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--gris-500);
+  border-top: 1px solid var(--gris-100);
+}
+.empty--sm { padding: 26px 20px; }
+.empty--sm .ico { font-size: 26px; color: var(--gris-400); }
+
+/* ---------- Sidebar (actif / hover plus nets) ---------- */
+.nav__link:hover { background: rgba(255, 255, 255, .09); }
+.nav__link.is-active { box-shadow: inset 4px 0 0 var(--or-500); font-weight: 600; }
+.nav__section { color: #8fb7a3; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .grid-2--even { grid-template-columns: 1fr; }
+  .alert-strip__item { border-left: none; border-top: 1px solid var(--gris-100); }
+  .alert-strip__item:first-child { border-top: none; }
+}
+
+/* =============================================================
+   Calendrier — filtres de catégorie (portée : /calendrier)
+   ============================================================= */
+.cal-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.cal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--gris-300);
+  background: var(--blanc);
+  color: var(--gris-500);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: .5;
+  transition: opacity .15s, box-shadow .15s;
+}
+.cal-btn::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--_c, var(--gris-400));
+}
+.cal-btn.is-active {
+  opacity: 1;
+  color: var(--gris-900);
+  box-shadow: var(--shadow-sm);
+}
+.cal-btn[data-type="misebas"] { --_c: #e0a800; }
+.cal-btn[data-type="depense"] { --_c: #e34948; }
+.cal-btn[data-type="vente"]   { --_c: #1baf7a; }
+.cal-btn[data-type="mort"]    { --_c: #6b7480; }
+
+#calendar { max-width: 100%; font-size: 14px; }

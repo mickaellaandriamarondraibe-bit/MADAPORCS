@@ -2,6 +2,9 @@ package com.madaporc.controller;
 
 import com.madaporc.dto.VenteDTO;
 import com.madaporc.service.VenteService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +57,18 @@ public class VenteController {
     public String annulerVente(@PathVariable Long id) {
         venteService.annulerVente(id);
         return "redirect:/ventes";
+    }
+
+    @GetMapping("/ventes/recu/pdf/{id}")
+    public ResponseEntity<byte[]> recuPdf(@PathVariable Long id) {
+        byte[] data = venteService.genererRecuPdf(id);
+        if (data == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"recu-vente-" + id + ".pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(data);
     }
 
 }

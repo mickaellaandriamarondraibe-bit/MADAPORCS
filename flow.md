@@ -250,3 +250,21 @@ Quand ces deux contrôleurs seront codés, le scénario se complétera ainsi :
 | Générer une analyse | aptitude %, fertilité %, onglet Reproduction | Dashboard |
 | (à venir) Valider une vente | ventes du mois, bénéfice | Dashboard / Rapports |
 | (à venir) Créer une dépense | dépenses du mois, bénéfice | Dashboard / Rapports |
+
+---
+
+## Recu PDF d'une vente (facture)
+
+Depuis la page detail d'une vente, le bouton "Recu PDF" genere une facture PDF.
+
+Flux :
+1. Vue detailVente.jsp : lien vers `/ventes/recu/pdf/{id}`.
+2. VenteController.recuPdf(id) appelle VenteService.genererRecuPdf(id).
+3. VenteService construit le HTML (reference, client, date, statut, lignes, total)
+   et le rend en PDF avec openhtmltopdf (meme librairie que les exports).
+4. Le PDF s'ouvre dans le navigateur (Content-Disposition: inline).
+
+Points cles :
+- Aucune nouvelle table, aucune modif du calcul : on relit la vente existante.
+- Le total affiche est le montantTotal deja calcule cote serveur (Somme prix x quantite).
+- Fonctionne quel que soit le statut (brouillon, validee, annulee).

@@ -11,6 +11,9 @@
     <a class="nav__link" data-match="/dashboard" href="${ctx}/dashboard">
        Tableau de bord
     </a>
+    <a class="nav__link" data-match="/calendrier" href="${ctx}/calendrier">
+       Calendrier
+    </a>
 
     <div class="nav__section">Cheptel</div>
     <a class="nav__link" data-match="/lots" href="${ctx}/lots">

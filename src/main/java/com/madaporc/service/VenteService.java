@@ -1,15 +1,20 @@
 package com.madaporc.service;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import com.madaporc.dto.DetailVenteDTO;
 import com.madaporc.dto.VenteDTO;
@@ -285,5 +290,55 @@ public class VenteService {
 
 		vente.setStatut("VALIDEE");
 		venteRepository.save(vente);
+	}
+
+	// Genere le recu PDF d'une vente (facture). Retourne null en cas d'erreur.
+	public byte[] genererRecuPdf(Long id) {
+		Vente vente = chargerVente(id);
+		NumberFormat nf = NumberFormat.getIntegerInstance(Locale.FRANCE);
+
+		StringBuilder html = new StringBuilder();
+		html.append("<html><head><meta charset='UTF-8'/><style>")
+			.append("body{font-family:sans-serif;color:#222;font-size:12px;}")
+			.append("h1{color:#1b4332;margin:0;} .muted{color:#666;}")
+			.append("table{width:100%;border-collapse:collapse;margin-top:14px;}")
+			.append("th,td{border:1px solid #ccc;padding:6px;text-align:left;}")
+			.append("th{background:#eee;} .num{text-align:right;}")
+			.append("</style></head><body>");
+		html.append("<h1>MADAPORC</h1><p class='muted'>Recu de vente</p>")
+			.append("<p><b>").append(vente.getReference()).append("</b><br/>")
+			.append("Client : ").append(esc(vente.getNomClient())).append("<br/>")
+			.append("Date : ").append(vente.getDateVente()).append("<br/>")
+			.append("Statut : ").append(esc(vente.getStatut())).append("</p>");
+		html.append("<table><tr><th>Lot</th><th class='num'>Quantite</th>")
+			.append("<th class='num'>Prix unitaire</th><th class='num'>Montant</th></tr>");
+		if (vente.getLignes() != null) {
+			for (DetailVente d : vente.getLignes()) {
+				BigDecimal pu = d.getPrixUnitaire() != null ? d.getPrixUnitaire() : BigDecimal.ZERO;
+				html.append("<tr><td>").append(esc(d.getCodeLot())).append("</td>")
+					.append("<td class='num'>").append(d.getQuantite()).append("</td>")
+					.append("<td class='num'>").append(nf.format(pu)).append(" Ar</td>")
+					.append("<td class='num'>").append(nf.format(d.getTotal())).append(" Ar</td></tr>");
+			}
+		}
+		html.append("<tr><td colspan='3' class='num'><b>Montant total</b></td>")
+			.append("<td class='num'><b>").append(nf.format(vente.getMontantTotal())).append(" Ar</b></td></tr>")
+			.append("</table></body></html>");
+
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			PdfRendererBuilder builder = new PdfRendererBuilder();
+			builder.useFastMode();
+			builder.withHtmlContent(html.toString(), null);
+			builder.toStream(out);
+			builder.run();
+			return out.toByteArray();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private String esc(String s) {
+		return s == null ? "" : s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 	}
 }
