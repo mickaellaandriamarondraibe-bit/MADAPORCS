@@ -270,6 +270,11 @@ public class LotPorcService {
         lot.setOrigine(dto.getOrigine() != null ? dto.getOrigine().toUpperCase() : lot.getOrigine());
         lot.setDescription(dto.getDescription());
 
+        // Le statut (ACTIF / ARCHIVE) est modifiable depuis le formulaire.
+        if (dto.getStatut() != null && !dto.getStatut().isBlank()) {
+            lot.setStatut(dto.getStatut().toUpperCase());
+        }
+
         // On met à jour l'âge seulement pour un lot acheté.
         if ("ACHAT".equalsIgnoreCase(lot.getOrigine())) {
             lot.setAgeMois(dto.getAgeMois());

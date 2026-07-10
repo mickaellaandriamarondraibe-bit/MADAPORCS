@@ -2,6 +2,7 @@ package com.madaporc.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,11 @@ public class GroupeReproductionCreationService {
             String erreurMale = verifierLotMale(dto.getLotMaleId());
             if (erreurMale != null)
                 return erreurMale;
+
+            // regle de re-saillie (ecart avec la derniere mise bas <= 60 jours)
+            String erreurResaillie = verifierDelaiResaillie(dto.getLotFemelleId(), dto.getDateSaillie());
+            if (erreurResaillie != null)
+                return erreurResaillie;
 
             // efectif dispo
             String erreurDispo = verifierFemellesDisponibles(dto.getLotFemelleId(), dto.getNombreFemellesConcernees());
@@ -159,6 +165,30 @@ public class GroupeReproductionCreationService {
         // On refuse un lot mâle atteint d'une maladie encore en cours.
         if (suiviSanitaireRepository.countByLotIdAndDateGuerisonIsNull(lotMaleId) > 0) {
             return "Le lot mâle a une maladie en cours (non guérie) : impossible de créer un groupe.";
+        }
+
+        return null;
+    }
+
+    // Un lot femelle ne peut etre re-sailli que si l'ecart entre la nouvelle date
+    // de saillie et sa derniere mise bas ne depasse pas 60 jours.
+    public String verifierDelaiResaillie(Long lotFemelleId, LocalDate dateSaillie) {
+        if (lotFemelleId == null || dateSaillie == null) {
+            return null;
+        }
+
+        LocalDate derniereMiseBas = null;
+        for (GroupeReproduction g : groupeRepository.findByLotFemelleIdOrderByDateSaillieDesc(lotFemelleId)) {
+            if (g.getDateMiseBasReelle() != null
+                    && (derniereMiseBas == null || g.getDateMiseBasReelle().isAfter(derniereMiseBas))) {
+                derniereMiseBas = g.getDateMiseBasReelle();
+            }
+        }
+
+        if (derniereMiseBas != null
+                && ChronoUnit.DAYS.between(derniereMiseBas, dateSaillie) > 60) {
+            return "Re-saillie impossible : plus de 60 jours se sont écoulés depuis la dernière mise bas ("
+                    + derniereMiseBas + ").";
         }
 
         return null;

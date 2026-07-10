@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.madaporc.dto.EvenementCalendrier;
 import com.madaporc.model.Depense;
@@ -34,6 +35,9 @@ public class CalendrierService {
     }
 
     /** Rassemble tous les événements datés du projet dans un format commun. */
+    // Transaction ouverte pour charger le lot (LAZY) des mouvements DECES,
+    // sinon l'accès à m.getLot() échoue (open-in-view désactivé).
+    @Transactional(readOnly = true)
     public List<EvenementCalendrier> tousLesEvenements() {
         List<EvenementCalendrier> events = new ArrayList<>();
 
