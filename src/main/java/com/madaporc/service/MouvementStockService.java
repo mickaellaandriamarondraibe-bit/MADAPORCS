@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.madaporc.dto.MouvementStockDTO;
 import com.madaporc.model.Ingredient;
@@ -33,6 +34,8 @@ public class MouvementStockService {
     }
 
     // methode principale : on valide puis on applique le mouvement
+    // @Transactional : la mise a jour du stock et l'enregistrement de la depense sont atomiques.
+    @Transactional
     public String enregistrerMouvementStock(MouvementStockDTO dto) {
         String erreur = validerMouvementStock(dto);
         if (erreur != null) {

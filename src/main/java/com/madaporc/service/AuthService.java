@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     public String connecter(LoginDTO dto, HttpSession session) {
         Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findByEmail(dto.getEmail());
 
@@ -27,8 +29,9 @@ public class AuthService {
             if (utilisateur.getActif() && verifierMotDePasse(dto.getMotDePasse(), utilisateur.getMotDePasse())) {
                 session.setAttribute("userId", utilisateur.getId());
                 session.setAttribute("roleId", utilisateur.getRole().getId());
+                session.setAttribute("roleNom", utilisateur.getRole().getNom());
                 session.setAttribute("nom", utilisateur.getNom());
-                return "placeholder";
+                return "redirect:/dashboard";
             }
         }
 

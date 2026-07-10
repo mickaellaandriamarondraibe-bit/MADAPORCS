@@ -12,5 +12,6 @@ public interface AlerteReproductionRepository extends JpaRepository<AlerteReprod
  List<AlerteReproduction> findByStatut(String statut);
 List<AlerteReproduction> findByTypeAlerteAndStatut(String typeAlerte, String
 statut);
- 
+ List<AlerteReproduction> findByTypeAlerte(String typeAlerte);
+
 }

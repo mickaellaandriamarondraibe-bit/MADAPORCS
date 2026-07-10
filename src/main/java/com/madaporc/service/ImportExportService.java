@@ -4,6 +4,7 @@ import com.madaporc.model.*;
 import com.madaporc.repository.*;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -207,6 +208,7 @@ public class ImportExportService {
 
     // ================= EXPORT EXCEL (CSV) =================
 
+    @Transactional
     public byte[] exporterCsv(String module) {
         List<String[]> lignes = donneesExport(module);
         if (lignes == null) {
@@ -227,6 +229,7 @@ public class ImportExportService {
 
     // ================= EXPORT PDF =================
 
+    @Transactional
     public byte[] exporterPdf(String module) {
         List<String[]> lignes = donneesExport(module);
         if (lignes == null) {
@@ -322,9 +325,59 @@ public class ImportExportService {
                             texte(a.getNbARetirerReproduction()), texte(a.getNbFemellesTotal())});
                 }
                 return lignes;
+            case "SANITAIRE":
+                lignes.add(new String[]{"lot", "vaccin", "date_vaccination", "date_rappel", "statut"});
+                for (Vaccination vac : vaccinationRepository.findAll()) {
+                    lignes.add(new String[]{texte(vac.getCodeLot()), texte(vac.getNomVaccin()),
+                            texte(vac.getDateVaccination()), texte(vac.getDateRappel()), texte(vac.getStatut())});
+                }
+                return lignes;
+            case "FINANCIER":
+                BigDecimal totalV = BigDecimal.ZERO;
+                for (Vente v : venteRepository.findAll()) {
+                    if ("VALIDEE".equals(v.getStatut()) && v.getMontantTotal() != null) {
+                        totalV = totalV.add(v.getMontantTotal());
+                    }
+                }
+                BigDecimal totalD = BigDecimal.ZERO;
+                for (Depense d : depenseRepository.findAll()) {
+                    if (d.getMontant() != null) {
+                        totalD = totalD.add(d.getMontant());
+                    }
+                }
+                lignes.add(new String[]{"indicateur", "valeur"});
+                lignes.add(new String[]{"Total ventes validees", texte(totalV)});
+                lignes.add(new String[]{"Total depenses", texte(totalD)});
+                lignes.add(new String[]{"Benefice net", texte(totalV.subtract(totalD))});
+                return lignes;
             default:
                 return null;
         }
+    }
+
+    // Export global : toutes les donnees dans un seul CSV, une section par module.
+    @Transactional
+    public byte[] exporterCsvGlobal() {
+        String[] modules = {"LOTS", "GROUPES", "ANALYSE", "SANITAIRE", "VENTES", "DEPENSES",
+                "CLIENTS", "INGREDIENTS", "FINANCIER"};
+        StringBuilder sb = new StringBuilder();
+        for (String module : modules) {
+            List<String[]> lignes = donneesExport(module);
+            if (lignes == null) {
+                continue;
+            }
+            sb.append("### ").append(module).append("\n");
+            for (String[] ligne : lignes) {
+                for (int i = 0; i < ligne.length; i++) {
+                    if (i > 0) sb.append(SEP);
+                    sb.append(echapper(ligne[i]));
+                }
+                sb.append("\n");
+            }
+            sb.append("\n");
+        }
+        tracer("EXPORT", "EXCEL", "GLOBAL", "export_global.csv", "SUCCES", "Export global reussi.");
+        return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private List<String[]> lireCsv(MultipartFile file) throws Exception {

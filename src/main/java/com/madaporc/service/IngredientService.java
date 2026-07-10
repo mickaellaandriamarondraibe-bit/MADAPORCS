@@ -61,7 +61,9 @@ public class IngredientService {
         Ingredient ingredient = new Ingredient();
         ingredient.setNom(dto.getNom().trim());
         ingredient.setUnite(dto.getUnite());
-        ingredient.setStockActuel(dto.getStockActuel());
+        // Le stock démarre à zéro : le mouvement ENTREE ci-dessous l'amène au stock saisi
+        // (sinon le stock initial serait compté deux fois).
+        ingredient.setStockActuel(BigDecimal.ZERO);
         ingredient.setSeuilAlerte(dto.getSeuilAlerte());
         ingredient.setCreatedAt(LocalDateTime.now());
         ingredient.setUpdatedAt(LocalDateTime.now());

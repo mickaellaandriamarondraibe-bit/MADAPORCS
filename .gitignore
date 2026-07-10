@@ -1,0 +1,17 @@
+# Build Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+
+# LibreOffice / bureautique (fichiers de verrouillage temporaires)
+.~lock.*#
+
+# Secrets / config locale (ne jamais committer de mots de passe)
+application-local.properties
+*.env

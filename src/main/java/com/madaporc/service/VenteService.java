@@ -94,11 +94,22 @@ public class VenteService {
 	public Vente creerVente(VenteDTO dto) {
 		verifierQuantitesDisponibles(dto);
 
-		Vente vente = new Vente();
+		Vente vente;
+		if (dto.getId() != null) {
+			// Edition d'une vente existante (autorisee uniquement au statut BROUILLON).
+			vente = chargerVente(dto.getId());
+			if (!"BROUILLON".equalsIgnoreCase(vente.getStatut())) {
+				throw new IllegalArgumentException("Seule une vente au statut BROUILLON peut être modifiée.");
+			}
+			// Pas de cascade/orphanRemoval sur la relation : on supprime les anciennes lignes a la main.
+			detailVenteRepository.deleteAll(detailVenteRepository.findByVenteIdOrderByIdAsc(vente.getId()));
+		} else {
+			vente = new Vente();
+			vente.setStatut("BROUILLON");
+			vente.setCreatedAt(LocalDateTime.now());
+		}
 		appliquerDto(vente, dto);
-		vente.setStatut("BROUILLON");
 		vente.setMontantTotal(BigDecimal.ZERO);
-		vente.setCreatedAt(LocalDateTime.now());
 		vente.setUpdatedAt(LocalDateTime.now());
 
 		Vente venteEnregistree = venteRepository.save(vente);

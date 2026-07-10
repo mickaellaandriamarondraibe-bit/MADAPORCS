@@ -1,0 +1,26 @@
+# Modele de configuration - copier vers application.properties et renseigner les valeurs.
+# Ne jamais committer de secrets reels dans application.properties.
+
+spring.application.name=madaporc
+server.port=8082
+
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/madaporc
+spring.datasource.username=${DB_USER:postgres}
+spring.datasource.password=${DB_PASSWORD:postgres}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.open-in-view=false
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+app.mail.expediteur=votre-adresse@gmail.com
+# App-password Google, fourni via variable d'environnement (jamais en clair ici)
+app.mail.mot-de-passe=${APP_MAIL_PASSWORD:}
+app.mail.destinataire=destinataire@example.com

@@ -133,8 +133,11 @@ public class AnalyseReproductionService {
 
         BigDecimal nbPretes = BigDecimal.valueOf(valeurZero(analyse.getNbPretesJamaisSaillies()));
         BigDecimal nbDejaAptes = BigDecimal.valueOf(valeurZero(analyse.getNbDejaReproductricesAptes()));
+        // Les femelles EN_CYCLE sont comptees au denominateur (nbFemellesTotal) : il faut aussi
+        // les compter ici, sinon un lot entierement en cycle tombe a 0 % et est classe a tort en reforme.
+        BigDecimal nbEnCycle = BigDecimal.valueOf(valeurZero(analyse.getNbEnCycle()));
 
-        BigDecimal total = nbPretes.add(nbDejaAptes);
+        BigDecimal total = nbPretes.add(nbDejaAptes).add(nbEnCycle);
 
         return total
                 .multiply(BigDecimal.valueOf(100))

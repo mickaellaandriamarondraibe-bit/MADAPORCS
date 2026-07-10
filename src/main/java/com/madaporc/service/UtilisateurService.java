@@ -32,6 +32,10 @@ public class UtilisateurService {
     }
 
     public String creer(UtilisateurDTO dto) {
+        if (dto.getRoleId() == null
+                || dto.getMotDePasse() == null || dto.getMotDePasse().isBlank()) {
+            return "error";
+        }
         if (emailExiste(dto.getEmail())) {
             return "error";
         }
@@ -54,6 +58,9 @@ public class UtilisateurService {
     }
 
     public String modifier(Long id, UtilisateurDTO dto) {
+        if (dto.getRoleId() == null) {
+            return "error";
+        }
         Utilisateur utilisateur = utilisateurRepository.findById(id).orElse(null);
         if (utilisateur == null) {
             return "error";

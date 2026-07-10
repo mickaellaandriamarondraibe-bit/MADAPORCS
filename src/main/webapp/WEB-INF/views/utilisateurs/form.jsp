@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="edition" value="${not empty utilisateur.id}" />
+<c:set var="edition" value="${not empty utilisateurDTO.id}" />
 <c:set var="pageTitle" value="${edition ? 'Modifier un utilisateur' : 'Nouvel utilisateur'}" />
 <c:set var="crumbs"    value="Administration / Utilisateurs / <b>${edition ? 'Édition' : 'Création'}</b>" />
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
@@ -14,15 +14,15 @@
   <div class="card__body">
     <%-- POST vers UtilisateurController @PostMapping("/utilisateurs/save"), bind UtilisateurDTO --%>
     <form method="post" action="${ctx}/utilisateurs/save">
-      <input type="hidden" name="id" value="${utilisateur.id}">
+      <input type="hidden" name="id" value="${utilisateurDTO.id}">
       <div class="form-grid">
         <div class="field">
           <label for="nom">Nom complet <span class="req">*</span></label>
-          <input class="input" id="nom" name="nom" value="${utilisateur.nom}" required>
+          <input class="input" id="nom" name="nom" value="${utilisateurDTO.nom}" required>
         </div>
         <div class="field">
           <label for="email">E-mail <span class="req">*</span></label>
-          <input class="input" type="email" id="email" name="email" value="${utilisateur.email}" required>
+          <input class="input" type="email" id="email" name="email" value="${utilisateurDTO.email}" required>
           <span class="hint">Doit être unique.</span>
         </div>
         <div class="field">
@@ -31,16 +31,17 @@
           <span class="hint">${edition ? 'Laisser vide pour conserver le mot de passe actuel.' : 'Sera stocké de façon hashée.'}</span>
         </div>
         <div class="field">
-          <label for="role">Rôle <span class="req">*</span></label>
-          <select class="select" id="role" name="role" required>
+          <label for="roleId">Rôle <span class="req">*</span></label>
+          <select class="select" id="roleId" name="roleId" required>
             <option value="">— Choisir —</option>
-            <option value="ADMIN" ${utilisateur.role == 'ADMIN' ? 'selected' : ''}>ADMIN</option>
-            <option value="GESTIONNAIRE" ${utilisateur.role == 'GESTIONNAIRE' ? 'selected' : ''}>GESTIONNAIRE</option>
+            <c:forEach var="r" items="${roles}">
+              <option value="${r.id}" ${utilisateurDTO.roleId == r.id ? 'selected' : ''}>${r.nom}</option>
+            </c:forEach>
           </select>
         </div>
         <div class="field span-2">
           <label class="flex items-center gap-8" style="font-weight:600">
-            <input type="checkbox" name="actif" value="true" ${empty utilisateur.id or utilisateur.actif ? 'checked' : ''}>
+            <input type="checkbox" name="actif" value="true" ${empty utilisateurDTO.id or utilisateurDTO.actif ? 'checked' : ''}>
             Compte actif
           </label>
           <span class="hint">Un compte désactivé ne peut pas se connecter.</span>

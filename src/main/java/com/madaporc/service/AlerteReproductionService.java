@@ -139,7 +139,9 @@ public class AlerteReproductionService {
     // }
 
     private boolean alerteExiste(String typeAlerte, String message) {
-        return alerteReproductionRepository.findByTypeAlerteAndStatut(typeAlerte, STATUT_NON_LUE)
+        // On teste tous les statuts (NON_LUE, LUE, TRAITEE) : sinon une alerte deja lue/traitee
+        // serait recreee a chaque execution planifiee (toutes les 60 s).
+        return alerteReproductionRepository.findByTypeAlerte(typeAlerte)
                 .stream()
                 .anyMatch(alerte -> message.equals(alerte.getMessage()));
     }

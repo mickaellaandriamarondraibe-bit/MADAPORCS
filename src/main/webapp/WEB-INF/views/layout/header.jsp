@@ -51,7 +51,7 @@
         </div>
         <div>
           <span><c:out value="${empty sessionScope.nom ? 'Utilisateur' : sessionScope.nom}"/></span><br>
-          <small><c:out value="${empty sessionScope.role ? 'GESTIONNAIRE' : sessionScope.role}"/></small>
+          <small><c:out value="${empty sessionScope.roleNom ? 'UTILISATEUR' : sessionScope.roleNom}"/></small>
         </div>
       </div>
     </header>
