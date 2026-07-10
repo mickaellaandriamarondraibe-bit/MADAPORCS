@@ -1,7 +1,3 @@
--- Remise a zero complete : supprime toutes les tables et donnees a chaque demarrage
-DROP SCHEMA IF EXISTS public CASCADE;
-CREATE SCHEMA public;
-
 CREATE TABLE roles (
     id BIGSERIAL PRIMARY KEY,
     nom VARCHAR(50) UNIQUE NOT NULL

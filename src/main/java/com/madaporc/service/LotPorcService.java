@@ -197,7 +197,7 @@ public class LotPorcService {
          */
         if ("ACHAT".equalsIgnoreCase(lotSauvegarde.getOrigine())) {
             depenseService.creerDepense(
-                    dto.getPrixAchat(),
+                    dto.getPrixAchat().multiply(new java.math.BigDecimal(lotSauvegarde.getEffectifInitial())),
                     "Achat du lot " + lotSauvegarde.getCodeLot(),
                     lotSauvegarde.getDateCreation(),
                     "ACHAT ANIMAUX");

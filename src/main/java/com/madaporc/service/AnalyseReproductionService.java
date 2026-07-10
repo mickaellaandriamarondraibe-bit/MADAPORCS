@@ -80,6 +80,7 @@ public class AnalyseReproductionService {
 
         AnalyseReproductionLotDTO analyseReproductionLotDTO = new AnalyseReproductionLotDTO();
 
+        analyseReproductionLotDTO.setLotId(lotId);
         analyseReproductionLotDTO.setLotPorc(lotPorc.getCodeLot());
         analyseReproductionLotDTO.setDateAnalyse(LocalDateTime.now());
 
@@ -203,10 +204,21 @@ public class AnalyseReproductionService {
 
     @Transactional
     public void enregistrerAnalyse(AnalyseReproductionLotDTO analyse) {
-        AnalyseReproductionLot analyseEntity = new AnalyseReproductionLot();
-
         LotPorc lot = lotPorcRepository.findByCodeLot(analyse.getLotPorc())
                 .orElseThrow(() -> new RuntimeException("Lot non trouvé: " + analyse.getLotPorc()));
+
+        // Une seule analyse par lot : on met a jour l'existante et on supprime les doublons.
+        List<AnalyseReproductionLot> existantes = analyseReproductionLotRepository
+                .findByLotIdOrderByDateAnalyseDesc(lot.getId());
+        AnalyseReproductionLot analyseEntity;
+        if (existantes.isEmpty()) {
+            analyseEntity = new AnalyseReproductionLot();
+        } else {
+            analyseEntity = existantes.get(0);
+            if (existantes.size() > 1) {
+                analyseReproductionLotRepository.deleteAll(existantes.subList(1, existantes.size()));
+            }
+        }
 
         BigDecimal tauxAptitudeGlobal = calculerTauxAptitudeGlobal(analyse);
         BigDecimal tauxRecommande = calculerTauxRecommande(analyse);
