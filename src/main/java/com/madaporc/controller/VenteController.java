@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class VenteController {
@@ -34,8 +35,16 @@ public class VenteController {
 	}
 
 	@PostMapping("/ventes/save")
-	public String saveVente(@ModelAttribute VenteDTO dto) {
-		return "redirect:/ventes/" + venteService.creerVente(dto).getId();
+	public String saveVente(@ModelAttribute VenteDTO dto, Model model) {
+		try {
+			return "redirect:/ventes/" + venteService.creerVente(dto).getId();
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("error", e.getMessage());
+			model.addAttribute("vente", dto);
+			model.addAttribute("clients", venteService.listerClients());
+			model.addAttribute("lots", venteService.listerLots());
+			return "commerce/formVente";
+		}
 	}
 
 	@GetMapping("/ventes/{id}")
@@ -45,15 +54,25 @@ public class VenteController {
 	}
 
 	@PostMapping("/ventes/valider/{id}")
-	public String validerVente(@PathVariable Long id) {
-		venteService.validerVente(id);
+	public String validerVente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		try {
+			venteService.validerVente(id);
+			redirectAttributes.addFlashAttribute("success", "Vente validée avec succès.");
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+		}
 		return "redirect:/ventes/" + id;
 	}
 
-    @PostMapping("/ventes/annuler/{id}")
-    public String annulerVente(@PathVariable Long id) {
-        venteService.annulerVente(id);
-        return "redirect:/ventes";
-    }
+	@PostMapping("/ventes/annuler/{id}")
+	public String annulerVente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		try {
+			venteService.annulerVente(id);
+			redirectAttributes.addFlashAttribute("success", "Vente annulée avec succès.");
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+		}
+		return "redirect:/ventes";
+	}
 
 }

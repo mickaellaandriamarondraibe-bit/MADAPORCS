@@ -30,8 +30,8 @@
         <table class="tbl">
           <thead><tr><th>Lot</th><th class="num">Quantité</th><th class="num">Prix unitaire (Ar)</th><th class="num">Total ligne</th></tr></thead>
           <tbody>
-            <%-- 3 lignes par défaut ; le contrôleur peut en pré-remplir davantage --%>
-            <c:forEach var="i" begin="0" end="2">
+            <%-- 5 lignes par défaut ; le contrôleur peut en pré-remplir davantage --%>
+            <c:forEach var="i" begin="0" end="4">
               <tr data-line>
                 <td>
                   <select class="select" name="lignes[${i}].lotId">

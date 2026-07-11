@@ -57,7 +57,7 @@ public class VenteService {
 		if (id == null) {
 			VenteDTO dto = new VenteDTO();
 			dto.setDateVente(LocalDate.now());
-			dto.setLignes(creerLignesVides(3));
+			dto.setLignes(creerLignesVides(5));
 			return dto;
 		}
 
@@ -116,6 +116,15 @@ public class VenteService {
 					throw new IllegalArgumentException("Le prix unitaire ne peut pas être négatif");
 				}
 
+				if(!quantiteDisponible(lotPorcRepository.findById(ligneDto.getLotId())
+						.orElseThrow(() -> new IllegalArgumentException("Lot introuvable")), ligneDto.getQuantite())) {
+					throw new IllegalArgumentException("La quantité demandée pour le lot " + ligneDto.getLotId() + " dépasse l'effectif disponible.");
+				}
+
+				if(ligneDto.getPrixUnitaire().compareTo(BigDecimal.ZERO) <= 0) {
+					throw new IllegalArgumentException("Le prix unitaire doit etre superieur à zéro");
+				}
+
 				LotPorc lot = lotPorcRepository.findById(ligneDto.getLotId())
 						.orElseThrow(() -> new IllegalArgumentException("Lot introuvable"));
 
@@ -172,6 +181,30 @@ public class VenteService {
 		}
 	}
 
+	private void verifierQuantitesDisponibles(Vente vente) {
+		Map<Long, Integer> quantitesParLot = new HashMap<>();
+		Map<Long, LotPorc> lotsParId = new HashMap<>();
+
+		for (DetailVente detail : vente.getLignes()) {
+			if (detail.getLot() == null || detail.getQuantite() == null || detail.getQuantite() <= 0) {
+				throw new IllegalArgumentException("Une ligne de vente est incomplète.");
+			}
+
+			Long lotId = detail.getLot().getId();
+			quantitesParLot.merge(lotId, detail.getQuantite(), Integer::sum);
+			lotsParId.putIfAbsent(lotId, detail.getLot());
+		}
+
+		for (Map.Entry<Long, Integer> entry : quantitesParLot.entrySet()) {
+			LotPorc lot = lotsParId.get(entry.getKey());
+
+			if (!quantiteDisponible(lot, entry.getValue())) {
+				throw new IllegalArgumentException(
+						"La quantité demandée pour le lot " + lot.getCodeLot() + " dépasse l'effectif disponible.");
+			}
+		}
+	}
+
     public boolean quantiteDisponible(LotPorc lot, Integer quantiteDemandee) {
         if (lot == null || quantiteDemandee == null) {
             return false;
@@ -205,8 +238,9 @@ public class VenteService {
             }
         }
 
+		// ---
 		if (lignes.isEmpty()) {
-			lignes = creerLignesVides(3);
+			lignes = creerLignesVides(5);
 		}
 
 		dto.setLignes(lignes);
@@ -275,11 +309,9 @@ public class VenteService {
 			throw new IllegalArgumentException("Aucune ligne de vente à valider.");
 		}
 
-		for (DetailVente detail : vente.getLignes()) {
-			if (detail.getLot() == null || detail.getQuantite() == null || detail.getQuantite() <= 0) {
-				throw new IllegalArgumentException("Une ligne de vente est incomplète.");
-			}
+		verifierQuantitesDisponibles(vente);
 
+		for (DetailVente detail : vente.getLignes()) {
 			mouvementService.diminuerEffectif(detail.getLot().getId(), detail.getQuantite());
 		}
 
