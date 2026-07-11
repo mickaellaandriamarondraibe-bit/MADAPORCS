@@ -172,28 +172,28 @@ Points de coordination :
 
 | #      | Cas de test                 | Resultat attendu                          | Statut | Remarques |
 | ------ | --------------------------- | ----------------------------------------- | ------ | --------- |
-| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |        |           |
-| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |        |           |
-| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        |           |
-| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        |           |
+| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |    ok    |           |
+| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |      ok  |           |
+| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        ok|           |
+| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        ok|           |
 
 ## 10. Sante - Vaccinations
 
 | #      | Cas de test                                     | Resultat attendu                                              | Statut | Remarques |
 | ------ | ----------------------------------------------- | ------------------------------------------------------------- | ------ | --------- |
-| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |        |           |
-| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |        |           |
-| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |        |           |
-| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |        |           |
+| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |    ok    |           |
+| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |     ok   |           |
+| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |      ok  |           |
+| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |       ok |           |
 
 ## 11. Sante - Suivis sanitaires
 
 | #      | Cas de test                                        | Resultat attendu                                        | Statut | Remarques |
 | ------ | -------------------------------------------------- | ------------------------------------------------------- | ------ | --------- |
-| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |        |           |
-| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |        |           |
-| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |        |           |
-| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |        |           |
+| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |   ok     |           |
+| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |     ok   |           |
+| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |      ok  |           |
+| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |       ok |           |
 
 ## 12. Commerce - Clients
 
@@ -256,15 +256,15 @@ Points de coordination :
 
 | #      | Cas de test                                 | Resultat attendu                                    | Statut | Remarques |
 | ------ | ------------------------------------------- | --------------------------------------------------- | ------ | --------- |
-| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |        |           |
-| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |        |           |
-| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |        |           |
-| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |        |           |
-| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |        |           |
-| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        |           |
-| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |           |
+| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |    ok    |           |
+| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |     ok   |           |
+| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |      ok  |           |
+| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |      ok  |           |
+| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |      ok  |           |
+| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        ok|           |
+| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |ok           |
 
 ## 18. Administration - Utilisateurs (ADMIN uniquement)
 
