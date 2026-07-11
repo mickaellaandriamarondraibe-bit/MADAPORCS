@@ -75,7 +75,7 @@ Points de coordination :
 | AUTH-11 | Connecte en GESTIONNAIRE, ouvrir /imports (Import/Export) | Acces refuse (403) | OK |  |
 | AUTH-12 | Connecte en GESTIONNAIRE, lancer un export Excel/PDF (/exports) | Acces refuse (403) | OK | |
 | AUTH-13 | Connecte en ADMIN, ouvrir Utilisateurs, Depenses, Import/Export | Acces autorise a tous les modules | OK | |
-| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE | KO | Mbola mipotra ilay menu fa misy erreur raha compte GESTIONNAIRE no miditra ao |
+| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE | OK | |
 
 ## 2. Navigation et interface generale
 
