@@ -19,13 +19,13 @@
 
     <form method="get" action="${ctx}/rapports" class="filtre-form"
           style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px">
-      <div>
-        <label>Date début</label><br/>
-        <input type="date" name="dateDebut" value="${filtre.dateDebut}" />
+      <div class="field">
+        <label>Date début</label>
+        <input type="date" name="dateDebut" value="${filtre.dateDebut}" class="input" />
       </div>
-      <div>
-        <label>Date fin</label><br/>
-        <input type="date" name="dateFin" value="${filtre.dateFin}" />
+      <div class="field">
+        <label>Date fin</label>
+        <input type="date" name="dateFin" value="${filtre.dateFin}" class="input" />
       </div>
       <button class="btn btn--primary" type="submit">Calculer</button>
     </form>

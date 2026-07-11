@@ -39,7 +39,6 @@
     <header class="topbar">
       <button class="menu-toggle" data-menu-toggle aria-label="Menu">☰</button>
       <div>
-        <div class="topbar__title">${empty pageTitle ? 'MADAPORC' : pageTitle}</div>
         <c:if test="${not empty crumbs}">
           <div class="topbar__crumbs">${crumbs}</div>
         </c:if>
