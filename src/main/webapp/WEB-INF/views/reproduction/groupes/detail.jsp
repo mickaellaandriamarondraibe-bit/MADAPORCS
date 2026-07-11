@@ -134,19 +134,7 @@
             <dl class="dl">
                 <dt>Code groupe</dt>
                 <dd>${g.codeGroupe}</dd>
-<p>
-    Lot mère ${g.codeLotFemelle}
-    ×
-    <c:choose>
-        <c:when test="${not empty g.codeLotMale}">
-            ${g.codeLotMale} 
-        </c:when>
-        <c:otherwise>
-            <span class="muted">Aucun lot mâle</span>
-        </c:otherwise>
-    </c:choose>
-    · ${g.nombreFemellesConcernees} femelle(s)
-</p>
+
 
                 <dt>Femelles concernées</dt>
                 <dd>${g.nombreFemellesConcernees}</dd>

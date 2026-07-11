@@ -81,12 +81,12 @@ Points de coordination :
 
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
-| NAV-01 | Cliquer chaque entree du menu lateral | Chaque lien ouvre la bonne page sans erreur | | |
-| NAV-02 | Verifier la surbrillance du menu | L'entree de la page courante est mise en evidence (etat actif) | | |
-| NAV-03 | Verifier le fil d'Ariane en haut | Correspond a la page affichee | | |
-| NAV-04 | Reduire la fenetre / mobile : bouton menu | Le menu s'ouvre et se ferme correctement | | |
-| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages | | |
-| NAV-06 | Titre de page non duplique | Le titre n'apparait qu'une fois (pas de doublon topbar + contenu) | | |
+| NAV-01 | Cliquer chaque entree du menu lateral | Chaque lien ouvre la bonne page sans erreur |OK|R à S|
+| NAV-02 | Verifier la surbrillance du menu | L'entree de la page courante est mise en evidence (etat actif) |Pas en marche|L'entree de la page n'est pas mise en évidence dans le sidebar|
+| NAV-03 | Verifier le fil d'Ariane en haut | Correspond a la page affichee |OK|La representation n'est pas totalement homogène sur tout les pages ex: Reproduction (light) / Groupes (gras) alors que Reproduction (light) / Analyse reproductive (light)|
+| NAV-04 | Reduire la fenetre / mobile : bouton menu | Le menu s'ouvre et se ferme correctement |Pas en marche|Le bouton pour étaler le menu lateral ne fonctionne pas encore et le contenu de certaine tableau sur version mobile n'est pas correctement affiché (problème de responsive design)|
+| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages |OK|Le Bouton Générer un rapport pourrait être changé pour être conforme aux autres boutons|
+| NAV-06 | Titre de page non duplique | Le titre n'apparait qu'une fois (pas de doublon topbar + contenu) |OK|R à S|
 
 ## 3. Tableau de bord
 
@@ -172,28 +172,28 @@ Points de coordination :
 
 | #      | Cas de test                 | Resultat attendu                          | Statut | Remarques |
 | ------ | --------------------------- | ----------------------------------------- | ------ | --------- |
-| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |        |           |
-| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |        |           |
-| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        |           |
-| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        |           |
+| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |    ok    |           |
+| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |      ok  |           |
+| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        ok|           |
+| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        ok|           |
 
 ## 10. Sante - Vaccinations
 
 | #      | Cas de test                                     | Resultat attendu                                              | Statut | Remarques |
 | ------ | ----------------------------------------------- | ------------------------------------------------------------- | ------ | --------- |
-| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |        |           |
-| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |        |           |
-| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |        |           |
-| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |        |           |
+| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |    ok    |           |
+| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |     ok   |           |
+| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |      ok  |           |
+| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |       ok |           |
 
 ## 11. Sante - Suivis sanitaires
 
 | #      | Cas de test                                        | Resultat attendu                                        | Statut | Remarques |
 | ------ | -------------------------------------------------- | ------------------------------------------------------- | ------ | --------- |
-| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |        |           |
-| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |        |           |
-| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |        |           |
-| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |        |           |
+| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |   ok     |           |
+| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |     ok   |           |
+| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |      ok  |           |
+| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |       ok |           |
 
 ## 12. Commerce - Clients
 
@@ -256,26 +256,26 @@ Points de coordination :
 
 | #      | Cas de test                                 | Resultat attendu                                    | Statut | Remarques |
 | ------ | ------------------------------------------- | --------------------------------------------------- | ------ | --------- |
-| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |        |           |
-| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |        |           |
-| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |        |           |
-| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |        |           |
-| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |        |           |
-| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        |           |
-| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |           |
+| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |    ok    |           |
+| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |     ok   |           |
+| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |      ok  |           |
+| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |      ok  |           |
+| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |      ok  |           |
+| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        ok|           |
+| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |ok           |
 
 ## 18. Administration - Utilisateurs (ADMIN uniquement)
 
-| #      | Cas de test                                      | Resultat attendu                                   | Statut | Remarques                                                                                                  |
-| ------ | ------------------------------------------------ | -------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------- |
-| USR-01 | Ouvrir la liste des utilisateurs                 | Liste affichee avec role et statut                 | OK     | bouton "rechercher" manquant                                                                               |
-| USR-02 | Creer un utilisateur GESTIONNAIRE                | Compte cree, connexion possible avec ce compte     | OK     | mieux si il y a filtre de roles (seules les pages dont l'admin a acces ne sont pas vu par le gestionnaire) |
-| USR-03 | Creer un utilisateur avec un email deja existant | Refus / message d'erreur (email unique)            | OK     |                                                                                                            |
-| USR-04 | Modifier un utilisateur                          | Modifications enregistrees                         | OK     |                                                                                                            |
-| USR-05 | Desactiver un utilisateur                        | Le compte ne peut plus se connecter (voir AUTH-04) | OK     |                                                                                                            |
-| USR-06 | Champs obligatoires vides                        | Refus / message d'erreur                           | OK     | mieux avec un message d'erreur personnalise                                                                |
+| #      | Cas de test                                      | Resultat attendu                                   | Statut | Remarques |
+| ------ | ------------------------------------------------ | -------------------------------------------------- | ------ | --------- |
+| USR-01 | Ouvrir la liste des utilisateurs                 | Liste affichee avec role et statut                 |        |           |
+| USR-02 | Creer un utilisateur GESTIONNAIRE                | Compte cree, connexion possible avec ce compte     |        |           |
+| USR-03 | Creer un utilisateur avec un email deja existant | Refus / message d'erreur (email unique)            |        |           |
+| USR-04 | Modifier un utilisateur                          | Modifications enregistrees                         |        |           |
+| USR-05 | Desactiver un utilisateur                        | Le compte ne peut plus se connecter (voir AUTH-04) |        |           |
+| USR-06 | Champs obligatoires vides                        | Refus / message d'erreur                           |        |           |
 
 ## 19. Import / Export de donnees (ADMIN uniquement)
 
@@ -315,20 +315,20 @@ Points de coordination :
 
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
-| JS-01 | Taper dans le champ de recherche d'une liste | Les lignes du tableau se filtrent en temps reel, sans recharger la page | | |
-| JS-02 | Vider le champ de filtre | Toutes les lignes reapparaissent | | |
-| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement | | |
-| JS-04 | Confirmation "Valider cette vente ?" puis Annuler | Aucune action, la vente reste en BROUILLON | | |
-| JS-05 | Confirmation "Valider cette vente ?" puis OK | La vente est validee | | |
-| JS-06 | Confirmation "Annuler cette vente ?" (Annuler puis OK) | Annuler = aucune action ; OK = vente annulee | | |
-| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK) | Annuler = aucune action ; OK = lot archive | | |
-| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK) | Annuler = aucune action ; OK = groupe cloture | | |
-| JS-09 | Confirmation "Desactiver X ?" (Annuler puis OK) | Annuler = aucune action ; OK = utilisateur desactive | | |
-| JS-10 | Formulaire de vente : total d'une ligne | Le total de ligne se recalcule en direct (quantite x prix unitaire) | | |
-| JS-11 | Formulaire de vente : total general | Le total general se met a jour en direct a chaque modification | | |
-| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes | Un avertissement s'affiche ET le bouton d'enregistrement est desactive | | |
-| JS-13 | Confirmer mise bas avec (vivants + morts) inferieur ou egal aux nes | Pas d'avertissement, bouton actif | | |
-| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond | Ouverture et fermeture correctes dans les trois cas | | |
+| JS-01 | Taper dans le champ de recherche d'une liste | Les lignes du tableau se filtrent en temps reel, sans recharger la page |Pas en marche|Pages à revoir: Groupes de reproduction, vaccins, Suivi Sanitaire, Clients, Ventes, Ingredients, Utilisateurs|
+| JS-02 | Vider le champ de filtre | Toutes les lignes reapparaissent |Pas en marche|Besoin de la correction de JS-01|
+| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement |À revoir|Pas de filtre mais juste un champs de recherche avec les pages concernées mais seulement avec Lots de porcs, Dépense et rapport. Le filtre de recherche n'est pas encore fonctionnel (JS-01)|
+| JS-04 | Confirmation "Valider cette vente ?" puis Annuler | Aucune action, la vente reste en BROUILLON |OK|R à S|
+| JS-05 | Confirmation "Valider cette vente ?" puis OK | La vente est validee |OK|R à S|
+| JS-06 | Confirmation "Annuler cette vente ?" (Annuler puis OK) | Annuler = aucune action ; OK = vente annulee |OK|R à S|
+| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK) | Annuler = aucune action ; OK = lot archive |À revoir|Pas de confirmation mais directement Archivé|
+| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK) | Annuler = aucune action ; OK = groupe cloture |À revoir|Pas de confirmation mais directement Cloturé|
+| JS-09 | Confirmation "Desactiver X ?" (Annuler puis OK) | Annuler = aucune action ; OK = utilisateur desactive |OK|R à S|
+| JS-10 | Formulaire de vente : total d'une ligne | Le total de ligne se recalcule en direct (quantite x prix unitaire) |Pas en marche|Les calculs ne se font pas encore directement|
+| JS-11 | Formulaire de vente : total general | Le total general se met a jour en direct a chaque modification |Pas en marche|Les calculs ne se font pas encore directement|
+| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes | Un avertissement s'affiche ET le bouton d'enregistrement est desactive |À revoir|Le bouton reste toujours actif mais le message d'erreur s'affiche bien. Message d'erreur doit être en rouge|
+| JS-13 | Confirmer mise bas avec (vivants + morts) inferieur ou egal aux nes | Pas d'avertissement, bouton actif |OK|R à S|
+| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond | Ouverture et fermeture correctes dans les trois cas |À revoir|Même cas que NAV-04|
 
 ## 23. Notifications temps reel et e-mail
 
