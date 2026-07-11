@@ -16,7 +16,7 @@
 <div class="auth-wrap">
   <div class="auth-card">
     <div class="auth-card__head">
-      <div class="logo"></div>
+      <div class="logo"><img src="${ctx}/css/logo.png" class="logo"></div>
       <h1>MADAPORC</h1>
       <p>Connexion à la gestion d'élevage</p>
     </div>

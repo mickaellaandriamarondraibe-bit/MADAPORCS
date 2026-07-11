@@ -3,7 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <aside class="sidebar">
   <div class="sidebar__brand">
-    <span class="logo"></span>
+    <span class="logo"><img src="${ctx}/css/logo.png" class="logo"></span>
     <div>MADAPORC<small>Gestion d'élevage</small></div>
   </div>
 
