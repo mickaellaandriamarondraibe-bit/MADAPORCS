@@ -843,7 +843,7 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: radial-gradient(1200px 600px at 20% -10%, #1f5740 0%, var(--vert-900) 55%, #0e241a 100%);
+  background: radial-gradient(1200px 600px at 20% -10%, #1c4a7e 0%, var(--marine-900) 55%, #06182f 100%);
 }
 
 .auth-card {
@@ -864,7 +864,7 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: var(--vert-600);
+  background: var(--marine-600);
   color: #fff;
   display: grid;
   place-items: center;
