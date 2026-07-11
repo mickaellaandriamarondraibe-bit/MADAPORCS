@@ -113,27 +113,27 @@ Points de coordination :
 | CAL-01 | Ouvrir le calendrier | Le calendrier s'affiche sur le mois courant |OK | |
 | CAL-02 | Les evenements apparaissent (mises bas, vaccinations, ventes) | Evenements positionnes aux bonnes dates |OK| |
 | CAL-03 | Changer de mois (precedent/suivant) | Les evenements se mettent a jour |OK | |
-| CAL-04 | Cliquer un evenement | Detail lisible / accessible | | Evenement qui ne fonctionne pas apres click|
-| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | | Les ventes non validee meme refusee est encore afficher sur la calendrier|
+| CAL-04 | Cliquer un evenement | Detail lisible / accessible |KO | Evenement qui ne fonctionne pas apres click|
+| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | KO| Les ventes non validee meme refusee est encore afficher sur la calendrier|
 
 ## 5. Cheptel - Lots de porcs
 
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
-| LOT-01 | Ouvrir la liste des lots | Liste affichee avec pagination | | Pas de pagination|
+| LOT-01 | Ouvrir la liste des lots | Liste affichee avec pagination |KO | Pas de pagination|
 | LOT-02 | Rechercher / filtrer un lot | Le filtre retourne les bons resultats |OK | |
 | LOT-03 | Ouvrir le formulaire "Nouveau lot" | Formulaire affiche avec races et statuts |OK | |
 | LOT-04 | Creer un lot NAISSANCE (champs valides) | Enregistrement OK, redirection vers le detail |OK | |
 | LOT-05 | Creer un lot ACHAT avec prix d'achat renseigne | Lot cree ET une depense correspondante enregistree |OK | |
-| LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) | | Si le champs prix d'achat est nul, l'exception n'est pas controlle et on arrive sur une page d'erreur|
+| LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |KO | Si le champs prix d'achat est nul, l'exception n'est pas controlle et on arrive sur une page d'erreur|
 | LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement | OK| Tous les champs possede deja un verification d'exception sauf pour le prix d'achat|
 | LOT-08 | Saisir une quantite negative ou zero | Refus ou message d'erreur |OK | |
-| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree | | La modification n'est pas applique sur la quantite du lot, mais le reste de modification fonctionne correctement|
+| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree |KO | La modification n'est pas applique sur la quantite du lot, mais le reste de modification fonctionne correctement|
 | LOT-10 | Ouvrir le detail d'un lot | Informations, effectif, historique affiches |OK | |
 | LOT-11 | Ajouter un mouvement de lot (entree/sortie/mortalite) | Effectif du lot mis a jour en consequence | OK| |
 | LOT-12 | Consulter les mouvements d'un lot | Historique complet et coherent |OK | |
-| LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles | | Pesee fonctionnelle, mais ne considere pas l'exception: date de pesee < date de creation de lot de porcs|
-| LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible | | Pas de triage , et pas de suivis d'evolution de poids|
+| LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles |KO | Pesee fonctionnelle, mais ne considere pas l'exception: date de pesee < date de creation de lot de porcs|
+| LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible |KO | Pas de triage , et pas de suivis d'evolution de poids|
 | LOT-15 | Archiver un lot | Le lot passe en archive et sort des listes actives |OK | |
 | LOT-16 | Verifier l'impact sur le tableau de bord | "Lots actifs" diminue apres archivage | OK| |
 
