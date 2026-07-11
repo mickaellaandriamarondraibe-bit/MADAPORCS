@@ -224,33 +224,33 @@ Points de coordination :
 
 ## 14. Stocks et Finance - Ingredients
 
-| #      | Cas de test                                        | Resultat attendu                              | Statut | Remarques |
-| ------ | -------------------------------------------------- | --------------------------------------------- | ------ | --------- |
-| ING-01 | Ouvrir la liste des ingredients                    | Liste affichee                                |        |           |
-| ING-02 | Creer un ingredient (unite, seuil d'alerte, stock) | Enregistrement OK                             |        |           |
-| ING-03 | Modifier un ingredient                             | Modifications enregistrees                    |        |           |
-| ING-04 | Ingredient sous le seuil d'alerte                  | Signale en "stock faible" (liste + dashboard) |        |           |
-| ING-05 | Champs obligatoires vides / valeurs negatives      | Refus / message d'erreur                      |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| ING-01 | Ouvrir la liste des ingredients | Liste affichee | OK | |
+| ING-02 | Creer un ingredient (unite, seuil d'alerte, stock) | Enregistrement OK | OK | |
+| ING-03 | Modifier un ingredient | Modifications enregistrees | OK | |
+| ING-04 | Ingredient sous le seuil d'alerte | Signale en "stock faible" (liste + dashboard) | OK | |
+| ING-05 | Champs obligatoires vides / valeurs negatives | Refus / message d'erreur | KO | La barre de recherche ne fonctionne pas. |
 
 ## 15. Stocks et Finance - Mouvements de stock
 
-| #      | Cas de test                             | Resultat attendu               | Statut | Remarques |
-| ------ | --------------------------------------- | ------------------------------ | ------ | --------- |
-| MVS-01 | Ouvrir la liste des mouvements de stock | Liste affichee                 |        |           |
-| MVS-02 | Enregistrer une ENTREE de stock         | Stock de l'ingredient augmente |        |           |
-| MVS-03 | Enregistrer une SORTIE de stock         | Stock de l'ingredient diminue  |        |           |
-| MVS-04 | Sortie superieure au stock disponible   | Refus ou controle attendu      |        |           |
-| MVS-05 | Mouvement faisant passer sous le seuil  | Alerte stock faible declenchee |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| MVS-01 | Ouvrir la liste des mouvements de stock | Liste affichee | OK | |
+| MVS-02 | Enregistrer une ENTREE de stock | Stock de l'ingredient augmente | OK | |
+| MVS-03 | Enregistrer une SORTIE de stock | Stock de l'ingredient diminue | OK | |
+| MVS-04 | Sortie superieure au stock disponible | Refus ou controle attendu | OK  | Test effectué : stock = 50 kg, sortie demandée = 100 kg. La sortie est refusée. |
+| MVS-05 | Mouvement faisant passer sous le seuil | Alerte stock faible declenchee | OK | Test effectué : stock initial = 150 kg, seuil = 100 kg, sortie = 80 kg. Stock final = 70 kg et alerte créée. |
 
 ## 16. Finance - Depenses (ADMIN uniquement)
 
-| #      | Cas de test                                          | Resultat attendu                                               | Statut | Remarques |
-| ------ | ---------------------------------------------------- | -------------------------------------------------------------- | ------ | --------- |
-| DEP-01 | Ouvrir la liste des depenses                         | Liste affichee, total correct                                  |        |           |
-| DEP-02 | Creer une depense (categorie, montant, date)         | Enregistrement OK                                              |        |           |
-| DEP-03 | Montant a 0 ou negatif                               | Refus / message d'erreur                                       |        |           |
-| DEP-04 | Depense sans categorie                               | Verifier le comportement reel vs message (voir vigilance F-06) |        |           |
-| DEP-05 | Impact sur le total des depenses du mois (dashboard) | Depenses du mois mises a jour                                  |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| DEP-01 | Ouvrir la liste des depenses | Liste affichee, total correct | OK | |
+| DEP-02 | Creer une depense (categorie, montant, date) | Enregistrement OK | OK | |
+| DEP-03 | Montant a 0 ou negatif | Refus / message d'erreur | KO | Le message affiché est général : "La catégorie, le montant et la date sont obligatoires" au lieu d'indiquer précisément que le montant est invalide ou négatif. |
+| DEP-04 | Depense sans categorie | Verifier le comportement reel vs message (voir vigilance F-06) | KO | Message affiché indiquant que la catégorie est obligatoire alors que le problème concerne uniquement la catégorie absente. |
+| DEP-05 | Impact sur le total des depenses du mois (dashboard) | Depenses du mois mises a jour | OK | |
 
 ## 17. Rapports
 
@@ -300,16 +300,16 @@ Points de coordination :
 
 ## 21. Robustesse et non-fonctionnel
 
-| #      | Cas de test                                         | Resultat attendu                                           | Statut | Remarques |
-| ------ | --------------------------------------------------- | ---------------------------------------------------------- | ------ | --------- |
-| ROB-01 | Pagination sur toutes les grandes listes            | Navigation entre pages correcte                            |        |           |
-| ROB-02 | Etats vides (liste sans donnee)                     | Message clair "aucun resultat", pas d'erreur               |        |           |
-| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche |        |           |
-| ROB-04 | Rafraichir une page apres un POST (F5)              | Pas de re-soumission accidentelle / doublon                |        |           |
-| ROB-05 | Redemarrer l'application                            | Les donnees saisies sont toujours presentes (persistance)  |        |           |
-| ROB-06 | Caracteres speciaux / accents dans les formulaires  | Sauvegarde et affichage corrects (encodage UTF-8)          |        |           |
-| ROB-07 | Champs numeriques avec du texte                     | Refus / message d'erreur                                   |        |           |
-| ROB-08 | Affichage sur petit ecran (responsive)              | Mise en page lisible, menu accessible                      |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| ROB-01 | Pagination sur toutes les grandes listes | Navigation entre pages correcte | OK | |
+| ROB-02 | Etats vides (liste sans donnee) | Message clair "aucun resultat", pas d'erreur | OK | |
+| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche | KO | Aucune page 404 affichée mais aucune erreur bloquante non plus. |
+| ROB-04 | Rafraichir une page apres un POST (F5) | Pas de re-soumission accidentelle / doublon | OK | |
+| ROB-05 | Redemarrer l'application | Les donnees saisies sont toujours presentes (persistance) | OK | |
+| ROB-06 | Caracteres speciaux / accents dans les formulaires | Sauvegarde et affichage corrects (encodage UTF-8) | OK | |
+| ROB-07 | Champs numeriques avec du texte | Refus / message d'erreur | KO | En modifiant le type du champ en "text" via l'inspecteur navigateur et en envoyant une valeur texte (ex: montant = abc), une erreur 404 apparaît au lieu d'une validation propre. |
+| ROB-08 | Affichage sur petit ecran (responsive) | Mise en page lisible, menu accessible | KO | La sidebar ne fonctionne pas correctement sur mobile. |
 
 ## 22. Comportements interactifs cote client (JavaScript)
 
