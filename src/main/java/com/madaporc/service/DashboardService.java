@@ -105,10 +105,8 @@ public class DashboardService {
         LocalDate aujourdHui = LocalDate.now();
 
         return groupeReproductionRepository
-                .findByDatePrevueMiseBasBetweenAndDateMiseBasReelleIsNullOrderByDatePrevueMiseBasAsc(
-                        aujourdHui,
-                        aujourdHui.plusDays(5)
-                );
+                .findByDatePrevueMiseBasLessThanEqualAndDateMiseBasReelleIsNullOrderByDatePrevueMiseBasAsc(
+                        aujourdHui.plusDays(5));
     }
 
     public BigDecimal calculerTauxAptitudeGlobal() {

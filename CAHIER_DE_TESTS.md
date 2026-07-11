@@ -92,19 +92,19 @@ Points de coordination :
 
 | #       | Cas de test                                                   | Resultat attendu                                                      | Statut | Remarques |
 | ------- | ------------------------------------------------------------- | --------------------------------------------------------------------- | ------ | --------- |
-| DASH-01 | Ouvrir le tableau de bord                                     | Tous les indicateurs (KPI) s'affichent sans erreur                    |        |           |
-| DASH-02 | Verifier "Lots actifs" et "porcs actifs"                      | Valeurs coherentes avec le module Lots                                |        |           |
-| DASH-03 | Verifier "Groupes actifs" et "mises bas proches"              | Coherent avec Reproduction                                            |        |           |
-| DASH-04 | Verifier "Ventes du mois", "Depenses du mois", "Benefice net" | Chiffres coherents avec Ventes/Depenses du mois en cours              |        |           |
-| DASH-05 | Benefice net negatif                                          | Affiche en rouge / signale negatif                                    |        |           |
-| DASH-06 | Bandeau "Alertes prioritaires"                                | Compte mises bas, stocks faibles, alertes sanitaires corrects         |        |           |
-| DASH-07 | Graphique : onglet Finances                                   | Affiche ventes/depenses/benefice                                      |        |           |
-| DASH-08 | Graphique : onglet Reproduction                               | Affiche aptitude et fertilite                                         |        |           |
-| DASH-09 | Graphique : onglet Cheptel                                    | Affiche l'evolution sur 12 mois                                       |        |           |
-| DASH-10 | Tableau "Mises bas a venir"                                   | Liste correcte, colonne "jours restants" calculee                     |        |           |
-| DASH-11 | Tableau "Alertes stock alimentaire"                           | Ingredients sous le seuil listes                                      |        |           |
-| DASH-12 | Bouton "Generer un rapport"                                   | Ouvre la page Rapports                                                |        |           |
-| DASH-13 | Base vide (aucune donnee)                                     | Etats vides affiches proprement, pas d'erreur ni valeurs incoherentes |        |           |
+| DASH-01 | Ouvrir le tableau de bord                                     | Tous les indicateurs (KPI) s'affichent sans erreur                    | ok     |           |
+| DASH-02 | Verifier "Lots actifs" et "porcs actifs"                      | Valeurs coherentes avec le module Lots                                |   ok   |           |
+| DASH-03 | Verifier "Groupes actifs" et "mises bas proches"              | Coherent avec Reproduction                                            |   ok   |           |
+| DASH-04 | Verifier "Ventes du mois", "Depenses du mois", "Benefice net" | Chiffres coherents avec Ventes/Depenses du mois en cours              |   ok   |           |
+| DASH-05 | Benefice net negatif                                          | Affiche en rouge / signale negatif                                    |   ok   |           |
+| DASH-06 | Bandeau "Alertes prioritaires"                                | Compte mises bas, stocks faibles, alertes sanitaires corrects         |   ok   |           |
+| DASH-07 | Graphique : onglet Finances                                   | Affiche ventes/depenses/benefice                                      |   ok   |           |
+| DASH-08 | Graphique : onglet Reproduction                               | Affiche aptitude et fertilite                                         |   ok   |           |
+| DASH-09 | Graphique : onglet Cheptel                                    | Affiche l'evolution sur 12 mois                                       |   ok   |           |
+| DASH-10 | Tableau "Mises bas a venir"                                   | Liste correcte, colonne "jours restants" calculee                     |   ok   |           |
+| DASH-11 | Tableau "Alertes stock alimentaire"                           | Ingredients sous le seuil listes                                      |   ok   |           |
+| DASH-12 | Bouton "Generer un rapport"                                   | Ouvre la page Rapports                                                |   ok   |           |
+| DASH-13 | Base vide (aucune donnee)                                     | Etats vides affiches proprement, pas d'erreur ni valeurs incoherentes |   ok   |           |
 
 ## 4. Calendrier
 
@@ -294,9 +294,9 @@ Points de coordination :
 
 | #      | Cas de test                                          | Resultat attendu                                                      | Statut | Remarques |
 | ------ | ---------------------------------------------------- | --------------------------------------------------------------------- | ------ | --------- |
-| NOT-01 | Declencher une condition d'alerte (ex: stock faible) | Notification / toast affiche                                          |        |           |
-| NOT-02 | Verifier les badges d'alerte du menu                 | Compteurs a jour                                                      |        |           |
-| NOT-03 | Rester sur le dashboard (flux notifications)         | Pas d'envoi repete d'e-mails a chaque affichage (voir vigilance F-02) |        |           |
+| NOT-01 | Declencher une condition d'alerte (ex: stock faible) | Notification / toast affiche                                          | ok     |Notifications s' affiche tellement vite|
+| NOT-02 | Verifier les badges d'alerte du menu                 | Compteurs a jour                                                      |   ok   |           |
+| NOT-03 | Rester sur le dashboard (flux notifications)         | Pas d'envoi repete d'e-mails a chaque affichage (voir vigilance F-02) |   ok   |           |
 
 ## 21. Robustesse et non-fonctionnel
 
@@ -334,12 +334,12 @@ Points de coordination :
 
 | #      | Cas de test                                                | Resultat attendu                                                       | Statut | Remarques |
 | ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------- | ------ | --------- |
-| NTF-01 | Ouvrir une page quelconque (flux temps reel SSE)           | La connexion s'etablit sans erreur en console                          |        |           |
-| NTF-02 | Declencher un evenement notifiable                         | Un toast apparait en bas puis disparait apres quelques secondes        |        |           |
-| NTF-03 | Badge de notification du menu                              | Le compteur reflete les notifications en cours                         |        |           |
-| NTF-04 | E-mail d'alertes avec SMTP configure et alertes existantes | Un e-mail recapitulatif des alertes du jour est envoye au destinataire |        |           |
-| NTF-05 | Redeclencher l'envoi le meme jour                          | Aucun second e-mail (un seul envoi par jour)                           |        |           |
-| NTF-06 | SMTP non configure                                         | Aucun e-mail, aucune erreur bloquante (mode degrade)                   |        |           |
+| NTF-01 | Ouvrir une page quelconque (flux temps reel SSE)           | La connexion s'etablit sans erreur en console                          |   ok   |           |
+| NTF-02 | Declencher un evenement notifiable                         | Un toast apparait en bas puis disparait apres quelques secondes        |   ok   |           |
+| NTF-03 | Badge de notification du menu                              | Le compteur reflete les notifications en cours                         |   ok   |           |
+| NTF-04 | E-mail d'alertes avec SMTP configure et alertes existantes | Un e-mail recapitulatif des alertes du jour est envoye au destinataire |   ok   |           |
+| NTF-05 | Redeclencher l'envoi le meme jour                          | Aucun second e-mail (un seul envoi par jour)                           |   ok   |           |
+| NTF-06 | SMTP non configure                                         | Aucun e-mail, aucune erreur bloquante (mode degrade)                   |   ok   |envoye qu' une seule email   |
 
 ## 24. Securite et session
 
