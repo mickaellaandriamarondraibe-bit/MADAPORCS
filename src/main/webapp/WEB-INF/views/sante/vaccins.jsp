@@ -3,7 +3,7 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="pageTitle" value="Vaccins" />
-<c:set var="crumbs" value="Santé / Vaccins" />
+<c:set var="crumbs" value="Santé / <b>Vaccins</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

@@ -2,6 +2,10 @@ package com.madaporc.service;
 
 import com.madaporc.model.*;
 import com.madaporc.repository.*;
+import com.madaporc.dto.ClientDTO;
+import com.madaporc.dto.IngredientDTO;
+import com.madaporc.dto.LotPorcDTO;
+import com.madaporc.dto.VaccinationDTO;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +39,13 @@ public class ImportExportService {
     private final GroupeReproductionRepository groupeReproductionRepository;
     private final AnalyseReproductionLotRepository analyseReproductionLotRepository;
 
+    // Services métier : l'import passe par eux pour appliquer les mêmes règles
+    // et effets de bord que la création via formulaire (dépenses, mouvements...).
+    private final ClientService clientService;
+    private final IngredientService ingredientService;
+    private final LotPorcService lotPorcService;
+    private final VaccinationService vaccinationService;
+
     public ImportExportService(ImportExportRepository importExportRepository,
                                ClientRepository clientRepository,
                                IngredientRepository ingredientRepository,
@@ -45,7 +56,11 @@ public class ImportExportService {
                                VaccinRepository vaccinRepository,
                                VaccinationRepository vaccinationRepository,
                                GroupeReproductionRepository groupeReproductionRepository,
-                               AnalyseReproductionLotRepository analyseReproductionLotRepository) {
+                               AnalyseReproductionLotRepository analyseReproductionLotRepository,
+                               ClientService clientService,
+                               IngredientService ingredientService,
+                               LotPorcService lotPorcService,
+                               VaccinationService vaccinationService) {
         this.importExportRepository = importExportRepository;
         this.clientRepository = clientRepository;
         this.ingredientRepository = ingredientRepository;
@@ -57,6 +72,10 @@ public class ImportExportService {
         this.vaccinationRepository = vaccinationRepository;
         this.groupeReproductionRepository = groupeReproductionRepository;
         this.analyseReproductionLotRepository = analyseReproductionLotRepository;
+        this.clientService = clientService;
+        this.ingredientService = ingredientService;
+        this.lotPorcService = lotPorcService;
+        this.vaccinationService = vaccinationService;
     }
 
     // ================= HISTORIQUE =================
@@ -85,7 +104,7 @@ public class ImportExportService {
         switch (module) {
             case "CLIENTS":       return "nom;telephone;adresse";
             case "INGREDIENTS":   return "nom;unite;stock_actuel;seuil_alerte";
-            case "LOTS":          return "code;sexe;objectif;origine;race;effectif";
+            case "LOTS":          return "sexe;objectif;origine;race;prix_achat;effectif";
             case "VACCINATIONS":  return "code_lot;vaccin;date_vaccination;date_rappel;observation";
             default:              return null;
         }
@@ -95,7 +114,7 @@ public class ImportExportService {
         switch (module) {
             case "CLIENTS":       return "Rakoto Jean;0341234567;Lot II Antananarivo";
             case "INGREDIENTS":   return "Mais;kg;100;20";
-            case "LOTS":          return "LOT-M-010;MALE;ENGRAISSEMENT;ACHAT;Large White;12";
+            case "LOTS":          return "MALE;ENGRAISSEMENT;ACHAT;Large White;150000;12";
             case "VACCINATIONS":  return "LOT-M-001;Peste Porcine;2026-06-01;2026-12-01;RAS";
             default:              return "";
         }
@@ -117,93 +136,143 @@ public class ImportExportService {
         String nom = file.getOriginalFilename();
         try {
             List<String[]> lignes = lireCsv(file);
-            int n;
+            String resultat;
             switch (module) {
-                case "CLIENTS":      n = importerClients(lignes);       break;
-                case "INGREDIENTS":  n = importerIngredients(lignes);   break;
-                case "LOTS":         n = importerLots(lignes);          break;
-                case "VACCINATIONS": n = importerVaccinations(lignes);  break;
+                case "CLIENTS":      resultat = importerClients(lignes);       break;
+                case "INGREDIENTS":  resultat = importerIngredients(lignes);   break;
+                case "LOTS":         resultat = importerLots(lignes);          break;
+                case "VACCINATIONS": resultat = importerVaccinations(lignes);  break;
                 default:
                     tracer("IMPORT", "EXCEL", module, nom, "ECHEC", "Import non supporte pour ce module.");
                     return "Import non supporte pour le module " + module + ".";
             }
-            String msg = n + " ligne(s) importee(s).";
-            tracer("IMPORT", "EXCEL", module, nom, "SUCCES", msg);
-            return msg;
+            tracer("IMPORT", "EXCEL", module, nom, "SUCCES", resultat);
+            return resultat;
         } catch (Exception e) {
             tracer("IMPORT", "EXCEL", module, nom, "ECHEC", e.getMessage());
             return "Erreur d'import : " + e.getMessage();
         }
     }
 
-    private int importerClients(List<String[]> lignes) {
-        int n = 0;
-        for (String[] c : lignes) {
-            Client client = new Client();
-            client.setNom(valeur(c, 0));
-            client.setTelephone(valeur(c, 1));
-            client.setAdresse(valeur(c, 2));
-            clientRepository.save(client);
-            n++;
+    private String importerClients(List<String[]> lignes) {
+        int ok = 0;
+        List<String> erreurs = new ArrayList<>();
+        for (int i = 0; i < lignes.size(); i++) {
+            String[] c = lignes.get(i);
+            try {
+                ClientDTO dto = new ClientDTO();
+                dto.setNom(valeur(c, 0));
+                dto.setTelephone(valeur(c, 1));
+                dto.setAdresse(valeur(c, 2));
+                String err = clientService.valider(dto);
+                if (err != null) {
+                    erreurs.add(ligneErreur(i, err));
+                } else {
+                    clientService.creer(dto);
+                    ok++;
+                }
+            } catch (Exception e) {
+                erreurs.add(ligneErreur(i, messageErreur(e)));
+            }
         }
-        return n;
+        return rapport(ok, erreurs);
     }
 
-    private int importerIngredients(List<String[]> lignes) {
-        int n = 0;
-        for (String[] c : lignes) {
-            Ingredient i = new Ingredient();
-            i.setNom(valeur(c, 0));
-            i.setUnite(valeur(c, 1));
-            i.setStockActuel(nombre(valeur(c, 2)));
-            i.setSeuilAlerte(nombre(valeur(c, 3)));
-            i.setCreatedAt(LocalDateTime.now());
-            i.setUpdatedAt(LocalDateTime.now());
-            ingredientRepository.save(i);
-            n++;
+    private String importerIngredients(List<String[]> lignes) {
+        int ok = 0;
+        List<String> erreurs = new ArrayList<>();
+        for (int i = 0; i < lignes.size(); i++) {
+            String[] c = lignes.get(i);
+            try {
+                IngredientDTO dto = new IngredientDTO();
+                dto.setNom(valeur(c, 0));
+                dto.setUnite(valeur(c, 1));
+                dto.setStockActuel(nombre(valeur(c, 2)));
+                dto.setSeuilAlerte(nombre(valeur(c, 3)));
+                String res = ingredientService.creerIngredient(dto);
+                if ("Ingredient created successfully".equals(res)) {
+                    ok++;
+                } else {
+                    erreurs.add(ligneErreur(i, res));
+                }
+            } catch (Exception e) {
+                erreurs.add(ligneErreur(i, messageErreur(e)));
+            }
         }
-        return n;
+        return rapport(ok, erreurs);
     }
 
-    private int importerLots(List<String[]> lignes) {
-        int n = 0;
-        for (String[] c : lignes) {
-            LotPorc l = new LotPorc();
-            l.setCodeLot(valeur(c, 0));
-            l.setSexe(valeur(c, 1));
-            l.setObjectif(valeur(c, 2));
-            String origine = valeur(c, 3);
-            l.setOrigine(origine.isBlank() ? "ACHAT" : origine);
-            trouverRace(valeur(c, 4)).ifPresent(l::setRace);
-            int effectif = entier(valeur(c, 5));
-            l.setEffectifInitial(effectif);
-            l.setEffectifActuel(effectif);
-            l.setStatut("ACTIF");
-            l.setDateCreation(LocalDate.now());
-            l.setCreatedAt(LocalDateTime.now());
-            lotPorcRepository.save(l);
-            n++;
+    private String importerLots(List<String[]> lignes) {
+        int ok = 0;
+        List<String> erreurs = new ArrayList<>();
+        for (int i = 0; i < lignes.size(); i++) {
+            String[] c = lignes.get(i);
+            try {
+                LotPorcDTO dto = new LotPorcDTO();
+                dto.setSexe(valeur(c, 0));
+                dto.setObjectif(valeur(c, 1));
+                String origine = valeur(c, 2);
+                dto.setOrigine(origine.isBlank() ? "ACHAT" : origine);
+                trouverRace(valeur(c, 3)).ifPresent(r -> dto.setRaceId(r.getId()));
+                dto.setPrixAchat(nombre(valeur(c, 4)));
+                dto.setEffectifInitial(entier(valeur(c, 5)));
+                // creerLot génère le code, crée la dépense d'achat, le mouvement
+                // initial et la répartition reproductive (comme au formulaire).
+                String err = lotPorcService.creerLot(dto);
+                if (err == null) {
+                    ok++;
+                } else {
+                    erreurs.add(ligneErreur(i, err));
+                }
+            } catch (Exception e) {
+                erreurs.add(ligneErreur(i, messageErreur(e)));
+            }
         }
-        return n;
+        return rapport(ok, erreurs);
     }
 
-    private int importerVaccinations(List<String[]> lignes) {
-        int n = 0;
-        for (String[] c : lignes) {
-            LotPorc lot = lotPorcRepository.findByCodeLot(valeur(c, 0)).orElse(null);
-            Vaccin vaccin = trouverVaccin(valeur(c, 1)).orElse(null);
-            // lot et vaccin sont obligatoires : on ignore les lignes introuvables
-            if (lot == null || vaccin == null) continue;
-            Vaccination v = new Vaccination();
-            v.setLot(lot);
-            v.setVaccin(vaccin);
-            v.setDateVaccination(date(valeur(c, 2)));
-            v.setDateRappel(dateOuNull(valeur(c, 3)));
-            v.setObservation(valeur(c, 4));
-            vaccinationRepository.save(v);
-            n++;
+    private String importerVaccinations(List<String[]> lignes) {
+        int ok = 0;
+        List<String> erreurs = new ArrayList<>();
+        for (int i = 0; i < lignes.size(); i++) {
+            String[] c = lignes.get(i);
+            try {
+                VaccinationDTO dto = new VaccinationDTO();
+                lotPorcRepository.findByCodeLot(valeur(c, 0)).ifPresent(lot -> dto.setLotId(lot.getId()));
+                trouverVaccin(valeur(c, 1)).ifPresent(v -> dto.setVaccinId(v.getId()));
+                dto.setDateVaccination(dateOuNull(valeur(c, 2)));
+                dto.setDateRappel(dateOuNull(valeur(c, 3)));
+                dto.setObservation(valeur(c, 4));
+                String err = vaccinationService.enregistrer(dto);
+                if (err == null) {
+                    ok++;
+                } else {
+                    erreurs.add(ligneErreur(i, err));
+                }
+            } catch (Exception e) {
+                erreurs.add(ligneErreur(i, messageErreur(e)));
+            }
         }
-        return n;
+        return rapport(ok, erreurs);
+    }
+
+    // Rapport d'import : lignes créées + détail des lignes ignorées (avec raison).
+    private String rapport(int ok, List<String> erreurs) {
+        StringBuilder sb = new StringBuilder(ok + " ligne(s) importée(s)");
+        if (!erreurs.isEmpty()) {
+            sb.append(", ").append(erreurs.size()).append(" ignorée(s) : ");
+            sb.append(String.join(" | ", erreurs));
+        }
+        return sb.append(".").toString();
+    }
+
+    // L'en-tête est déjà retiré, donc la ligne i de données = ligne i+2 du fichier.
+    private String ligneErreur(int i, String message) {
+        return "ligne " + (i + 2) + " : " + message;
+    }
+
+    private String messageErreur(Exception e) {
+        return e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
     }
 
     // ================= EXPORT EXCEL (CSV) =================

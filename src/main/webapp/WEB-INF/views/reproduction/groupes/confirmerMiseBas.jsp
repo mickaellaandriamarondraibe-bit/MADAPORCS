@@ -6,7 +6,7 @@
 <c:set var="g" value="${detail}" />
 
 <c:set var="pageTitle" value="Confirmer la mise bas" />
-<c:set var="crumbs" value="Reproduction / Groupes / ${g.codeGroupe} / Mise bas" />
+<c:set var="crumbs" value="Reproduction / Groupes / ${g.codeGroupe} / <b>Mise bas</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
@@ -50,21 +50,9 @@
                 </div>
 
                 <div class="field">
-                    <label>Femelles non gestantes <span class="req">*</span></label>
-                    <form:input class="input" type="number" min="0" path="nbFemellesNonGestantes" />
-                    <form:errors path="nbFemellesNonGestantes" cssClass="error" />
-                </div>
-
-                <div class="field">
                     <label>Femelles ayant mis bas <span class="req">*</span></label>
                     <form:input class="input" type="number" min="0" path="nbFemellesMiseBas" />
                     <form:errors path="nbFemellesMiseBas" cssClass="error" />
-                </div>
-
-                <div class="field">
-                    <label>Porcelets nés <span class="req">*</span></label>
-                    <form:input class="input" type="number" min="0" path="nbPorceletsNes" />
-                    <form:errors path="nbPorceletsNes" cssClass="error" />
                 </div>
 
                 <div class="field">
@@ -81,19 +69,14 @@
 
                 <div class="field span-2" style="border-top:1px solid #e1e0d9; padding-top:12px; margin-top:4px">
                     <strong>Création du / des lot(s) naissance</strong>
-                    <span class="hint">Les porcelets vivants deviennent automatiquement un lot femelle et/ou un lot mâle.</span>
+                    <span class="hint">Indiquez combien de porcelets vivants sont des femelles. Le reste (vivants − femelles) devient automatiquement le lot mâle.</span>
                 </div>
 
                 <div class="field">
                     <label>Porcelets femelles vivants</label>
                     <form:input class="input" type="number" min="0" path="nbFemelles" />
                     <form:errors path="nbFemelles" cssClass="error" />
-                </div>
-
-                <div class="field">
-                    <label>Porcelets mâles vivants</label>
-                    <form:input class="input" type="number" min="0" path="nbMales" />
-                    <form:errors path="nbMales" cssClass="error" />
+                    <span class="hint">Doit être ≤ porcelets vivants.</span>
                 </div>
 
                 <div class="field span-2">

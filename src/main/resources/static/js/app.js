@@ -39,6 +39,22 @@
     }
   }
 
+  /* ---- Menu lateral repliable (accordeon) ---- */
+  function setupNavGroups() {
+    var groups = document.querySelectorAll(".nav__group");
+    groups.forEach(function (group) {
+      var title = group.querySelector("[data-nav-group]");
+      if (!title) return;
+      title.addEventListener("click", function () {
+        group.classList.toggle("is-open");
+      });
+      // Ouvre automatiquement le groupe contenant la page courante.
+      if (group.querySelector(".nav__link.is-active")) {
+        group.classList.add("is-open");
+      }
+    });
+  }
+
   /* ---- Confirmation avant action destructrice (data-confirm) ---- */
   function setupConfirms() {
     document.addEventListener("submit", function (e) {
@@ -59,12 +75,19 @@
       var sel = input.getAttribute("data-filter-input");
       var table = document.querySelector(sel);
       if (!table) return;
-      input.addEventListener("input", function () {
+      function apply() {
         var q = input.value.toLowerCase().trim();
         table.querySelectorAll("tbody tr").forEach(function (tr) {
           tr.style.display = tr.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none";
         });
-      });
+      }
+      input.addEventListener("input", apply);
+      // Bouton "Rechercher" optionnel, dans la même barre d'outils.
+      var container = input.closest(".toolbar");
+      var btn = container ? container.querySelector("[data-filter-btn]") : null;
+      if (btn) {
+        btn.addEventListener("click", function (e) { e.preventDefault(); apply(); });
+      }
     });
   }
 
@@ -155,109 +178,11 @@
       // Pas de fallback silencieux.
     }
   }
-  // resources/js/notifications.js
-(function () {
-    const badge = document.getElementById('notifBadge');
-    const dropdown = document.getElementById('notifDropdown');
-    const list = document.getElementById('notifList');
-    const btn = document.getElementById('notifBtn');
-
-    let count = 0;
-    let notifications = [];
-
-    // Toggle dropdown au clic sur la cloche
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        if (dropdown.style.display === 'block') {
-            count = 0;
-            badge.style.display = 'none';
-        }
-    });
-
-    // Fermer le dropdown si on clique ailleurs
-    document.addEventListener('click', function () {
-        dropdown.style.display = 'none';
-    });
-    dropdown.addEventListener('click', function (e) {
-        e.stopPropagation();
-    });
-
-    function renderList() {
-        if (notifications.length === 0) {
-            list.innerHTML = '<li style="padding:12px; color:#888; text-align:center;">Aucune notification</li>';
-            return;
-        }
-        list.innerHTML = notifications.map(n => `
-            <li style="padding:10px 12px; border-bottom:1px solid #f0f0f0; font-size:14px;">
-                ${n}
-            </li>
-        `).join('');
-    }
-
-    function connect() {
-        const source = new EventSource(
-            (window.contextPath || '') + '/notifications/stream'
-        );
-
-        source.addEventListener('notification', function (event) {
-            notifications.unshift(event.data);
-            if (notifications.length > 20) notifications.pop(); // limite
-
-            count++;
-            badge.textContent = count;
-            badge.style.display = 'inline-block';
-
-          renderList();
-          afficherToast(event.data);
-        });
-
-        source.onerror = function () {
-            source.close();
-            // Reconnexion automatique après 5 secondes (SSE peut se couper)
-            setTimeout(connect, 5000);
-        };
-    }
-
-    connect();
-  })();
-  function afficherToast(message) {
-    const container = document.getElementById('toastContainer');
-
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = `
-        background: #333;
-        color: white;
-        padding: 12px 18px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        font-size: 14px;
-        opacity: 0;
-        transform: translateX(20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    `;
-
-    container.appendChild(toast);
-
-    // Petit délai pour déclencher l'animation d'entrée
-    requestAnimationFrame(() => {
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateX(0)';
-    });
-
-    // Disparition après 5 secondes
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(20px)';
-        // On enlève l'élément du DOM après la fin de l'animation de sortie
-        setTimeout(() => toast.remove(), 300);
-    }, 5000);
-}
 
   document.addEventListener("DOMContentLoaded", function () {
     setupMenu();
     setupActiveNav();
+    setupNavGroups();
     setupConfirms();
     setupTableFilter();
     setupAutoTotal();

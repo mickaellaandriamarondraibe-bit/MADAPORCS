@@ -35,3 +35,7 @@ Partie 2 :
 2.2-quand je declar des mort dans un lot ca n'affiche pas dans calendrier 
 le calendrier ne marche plus , que ce soit lors de creation vente ou creation mouvement dece et tout 
 3.il devrai y avoir un condition que un groupe ne peu se resaillire que apres la difference entre la nouvelle date  saillit dans le formulaire et le date de mise bas nest pas superieru a 60 jours 
+
+
+
+quand je fait confirmation de mis bae j'ai fait genre 5 viviant dont 3 femelle et jai enregistrer et ca a reussi mais seul le lot femelle a ete creer donc ou sont passer les 2 reste 

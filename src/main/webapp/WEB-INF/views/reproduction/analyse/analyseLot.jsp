@@ -5,7 +5,7 @@
 <c:set var="a" value="${analyse}" />
 
 <c:set var="pageTitle" value="Analyse reproductive" />
-<c:set var="crumbs" value="Reproduction / Analyse — ${a.lotPorc}" />
+<c:set var="crumbs" value="Reproduction / <b>Analyse — ${a.lotPorc}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

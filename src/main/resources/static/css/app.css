@@ -142,6 +142,57 @@ a {
   font-weight: 600;
 }
 
+/* En-tete de section repliable (accordeon du menu). */
+.nav__group-title {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--marine-400);
+  font-weight: 600;
+  margin: 14px 0 4px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  transition: background .15s, color .15s;
+}
+
+.nav__group-title:hover {
+  background: rgba(125, 179, 221, .12);
+  color: #fff;
+}
+
+/* Chevron CSS (pas de dependance a une police d'icones). */
+.nav__group-title::after {
+  content: "";
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform .15s;
+  opacity: .7;
+}
+
+.nav__group.is-open > .nav__group-title::after {
+  transform: rotate(45deg);
+}
+
+/* Liens du groupe : masques par defaut, visibles quand le groupe est ouvert. */
+.nav__group-items {
+  display: none;
+}
+
+.nav__group.is-open > .nav__group-items {
+  display: block;
+}
+
 .nav__link {
   display: flex;
   align-items: center;
@@ -161,15 +212,13 @@ a {
 }
 
 .nav__link:hover {
-  background: rgba(125, 179, 221, .12);
   color: #fff;
 }
 
 .nav__link.is-active {
-  background: var(--marine-600);
+  background: rgba(255, 255, 255, .09);
   color: #fff;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--marine-400);
 }
 
 .nav__badge {
@@ -709,6 +758,20 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
   transform: translateY(-50%);
   color: var(--gris-400);
   font-size: 13px;
+}
+
+/* Barre d'outils alignée à droite (champ de recherche collé au bouton). */
+.toolbar--end {
+  justify-content: flex-end;
+}
+
+.search--auto {
+  flex: 0 1 320px;
+}
+
+/* L'input remplit son conteneur, sinon un vide apparait avant le bouton. */
+.toolbar--end .search--auto .input {
+  width: 100%;
 }
 
 /* Alerts / messages */
@@ -1645,9 +1708,8 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 .empty--sm { padding: 26px 20px; }
 .empty--sm .ico { font-size: 26px; color: var(--gris-400); }
 
-/* ---------- Sidebar (actif / hover plus nets) ---------- */
-.nav__link:hover { background: rgba(255, 255, 255, .09); }
-.nav__link.is-active { box-shadow: inset 4px 0 0 var(--or-500); font-weight: 600; }
+/* ---------- Sidebar (actif plus net) ---------- */
+.nav__link.is-active { font-weight: 600; }
 .nav__section { color: #77a4c8; }
 
 /* ---------- Responsive ---------- */

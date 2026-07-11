@@ -3,7 +3,7 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="pageTitle" value="Pesées — ${lot.codeLot}" />
-<c:set var="crumbs" value="Cheptel / Lots / ${lot.codeLot} / Pesées" />
+<c:set var="crumbs" value="Cheptel / Lots / ${lot.codeLot} / <b>Pesées</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

@@ -122,6 +122,23 @@ public class DepenseService {
         return depenseRepository.save(depense);
     }
 
+    // Met a jour le montant de la depense d'achat d'un lot (identifiee par sa
+    // description "Achat du lot <code>"), ou la cree si elle n'existe pas encore.
+    // Appelee lors de la modification du prix d'achat d'un lot.
+    public void mettreAJourOuCreerAchatLot(String codeLot, BigDecimal montant, LocalDate dateDepense) {
+        if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
+        String description = "Achat du lot " + codeLot;
+        Depense existante = depenseRepository.findFirstByDescription(description).orElse(null);
+        if (existante != null) {
+            existante.setMontant(montant);
+            depenseRepository.save(existante);
+        } else {
+            creerDepense(montant, description, dateDepense, "ACHAT ANIMAUX");
+        }
+    }
+
     // Retrouve une categorie par son nom, la cree si elle n'existe pas encore.
     private CategorieDepense trouverOuCreerCategorie(String nom) {
         if (nom == null || nom.trim().isEmpty()) {

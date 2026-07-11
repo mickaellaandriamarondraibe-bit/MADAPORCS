@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="edition" value="${not empty vaccination.id}" />
 <c:set var="pageTitle" value="${edition ? 'Modifier la vaccination' : 'Nouvelle vaccination'}" />
-<c:set var="crumbs" value="Santé / Vaccinations / ${edition ? 'Édition' : 'Création'}" />
+<c:set var="crumbs" value="Santé / Vaccinations / <b>${edition ? 'Édition' : 'Création'}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

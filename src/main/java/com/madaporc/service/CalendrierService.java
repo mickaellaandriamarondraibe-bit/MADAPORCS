@@ -47,7 +47,8 @@ public class CalendrierService {
                 events.add(new EvenementCalendrier(
                         "Mise bas " + g.getCodeGroupe(),
                         g.getDatePrevueMiseBas().toString(),
-                        "misebas", "#e0a800"));
+                        "misebas", "#e0a800",
+                        "/reproduction/groupes/" + g.getId()));
             }
         }
 
@@ -57,17 +58,19 @@ public class CalendrierService {
                 events.add(new EvenementCalendrier(
                         "Dépense : " + d.getMontant() + " Ar",
                         d.getDateDepense().toString(),
-                        "depense", "#e34948"));
+                        "depense", "#e34948",
+                        "/depenses/form?id=" + d.getId()));
             }
         }
 
-        // Ventes
+        // Ventes (uniquement les ventes validées)
         for (Vente v : venteRepo.findAll()) {
-            if (v.getDateVente() != null) {
+            if (v.getDateVente() != null && "VALIDEE".equalsIgnoreCase(v.getStatut())) {
                 events.add(new EvenementCalendrier(
                         "Vente : " + v.getMontantTotal() + " Ar",
                         v.getDateVente().toString(),
-                        "vente", "#1baf7a"));
+                        "vente", "#1baf7a",
+                        "/ventes/" + v.getId()));
             }
         }
 
@@ -75,10 +78,11 @@ public class CalendrierService {
         for (MouvementLotPorc m : mouvementRepo.findAll()) {
             if ("DECES".equals(m.getTypeMouvement()) && m.getDateMouvement() != null) {
                 String lot = m.getLot() != null ? m.getLot().getCodeLot() : "";
+                String urlMort = m.getLot() != null ? "/lots/" + m.getLot().getId() + "/mouvements" : null;
                 events.add(new EvenementCalendrier(
                         "Mort : " + m.getQuantite() + " (" + lot + ")",
                         m.getDateMouvement().toString(),
-                        "mort", "#6b7480"));
+                        "mort", "#6b7480", urlMort));
             }
         }
 

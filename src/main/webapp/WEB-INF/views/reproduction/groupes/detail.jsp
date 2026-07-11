@@ -5,7 +5,7 @@
 <c:set var="g" value="${detail}" />
 
 <c:set var="pageTitle" value="Groupe ${g.codeGroupe}" />
-<c:set var="crumbs" value="Reproduction / Groupes / ${g.codeGroupe}" />
+<c:set var="crumbs" value="Reproduction / Groupes / <b>${g.codeGroupe}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

@@ -5,7 +5,7 @@
 <c:set var="l" value="${lot}" />
 
 <c:set var="pageTitle" value="Lot ${l.codeLot}" />
-<c:set var="crumbs" value="Cheptel / Lots / ${l.codeLot}" />
+<c:set var="crumbs" value="Cheptel / Lots / <b>${l.codeLot}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

@@ -7,7 +7,7 @@
   Usage dans une vue :
     <c:set var="pageTitle" value="Tableau de bord" />
     <c:set var="activeNav"  value="dashboard" />
-    <c:set var="crumbs"     value="Accueil / Tableau de bord" />
+    <c:set var="crumbs"     value="Accueil / <b>Tableau de bord</b>" />
     <%@ include file="/WEB-INF/views/layout/header.jsp" %>
         ... contenu ...
     <%@ include file="/WEB-INF/views/layout/footer.jsp" %>
@@ -21,7 +21,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${empty pageTitle ? 'MADAPORC' : pageTitle} · MADAPORC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <%-- Police chargée de façon non bloquante : la page s'affiche tout de suite
+       (police de repli), Nunito s'applique dès qu'elle est disponible. Évite
+       la latence réseau à chaque changement de page. --%>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"></noscript>
   <link rel="stylesheet" href="${ctx}/css/app.css">
 </head>
 <body>
@@ -54,7 +59,6 @@
         </div>
       </div>
     </header>
-<script src="${pageContext.request.contextPath}/resources/js/notifications.js"></script>
     <main class="content">
       <%-- Messages flash standardisés --%>
       <c:if test="${not empty success}"><div class="alert alert--ok"> <span>${success}</span></div></c:if>

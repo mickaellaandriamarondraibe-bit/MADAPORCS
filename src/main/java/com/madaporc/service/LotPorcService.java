@@ -98,6 +98,7 @@ public class LotPorcService {
             dto.setAgeMois(lot.getAgeMois());
             dto.setEffectifInitial(lot.getEffectifInitial());
             dto.setEffectifActuel(lot.getEffectifActuel());
+            dto.setPrixAchat(lot.getPrixAchat());
             dto.setStatut(lot.getStatut());
             dto.setDescription(lot.getDescription());
 
@@ -146,6 +147,8 @@ public class LotPorcService {
         lot.setEffectifInitial(dto.getEffectifInitial());
 
         lot.setEffectifActuel(dto.getEffectifInitial());
+
+        lot.setPrixAchat(dto.getPrixAchat());
 
         lot.setStatut("ACTIF");
 
@@ -263,6 +266,18 @@ public class LotPorcService {
             return "L'objectif du lot est obligatoire.";
         }
 
+        if (dto.getEffectifInitial() == null || dto.getEffectifInitial() <= 0) {
+            return "L'effectif initial doit être supérieur à 0.";
+        }
+
+        // Prix d'achat obligatoire pour un lot acheté (il pilote la dépense d'achat).
+        boolean estAchat = "ACHAT".equalsIgnoreCase(
+                dto.getOrigine() != null ? dto.getOrigine() : lot.getOrigine());
+        if (estAchat && (dto.getPrixAchat() == null
+                || dto.getPrixAchat().compareTo(java.math.BigDecimal.ZERO) <= 0)) {
+            return "Le prix d'achat est obligatoire et doit être supérieur à 0 pour un lot acheté.";
+        }
+
         lot.setCodeLot(nouveauCode);
         lot.setDateCreation(dto.getDateCreation() != null ? dto.getDateCreation() : lot.getDateCreation());
         lot.setSexe(dto.getSexe().toUpperCase());
@@ -270,14 +285,22 @@ public class LotPorcService {
         lot.setOrigine(dto.getOrigine() != null ? dto.getOrigine().toUpperCase() : lot.getOrigine());
         lot.setDescription(dto.getDescription());
 
+        // Mise à jour de l'effectif (quantité). L'effectif actuel n'est réécrit
+        // que s'il est renseigné, sinon on conserve la valeur suivie du lot.
+        lot.setEffectifInitial(dto.getEffectifInitial());
+        if (dto.getEffectifActuel() != null) {
+            lot.setEffectifActuel(dto.getEffectifActuel());
+        }
+
         // Le statut (ACTIF / ARCHIVE) est modifiable depuis le formulaire.
         if (dto.getStatut() != null && !dto.getStatut().isBlank()) {
             lot.setStatut(dto.getStatut().toUpperCase());
         }
 
-        // On met à jour l'âge seulement pour un lot acheté.
+        // On met à jour l'âge et le prix d'achat seulement pour un lot acheté.
         if ("ACHAT".equalsIgnoreCase(lot.getOrigine())) {
             lot.setAgeMois(dto.getAgeMois());
+            lot.setPrixAchat(dto.getPrixAchat());
         }
 
         if (dto.getRaceId() != null) {
@@ -287,6 +310,13 @@ public class LotPorcService {
         }
 
         lotPorcRepository.save(lot);
+
+        // Synchronise la dépense d'achat liée au lot avec le nouveau prix.
+        if ("ACHAT".equalsIgnoreCase(lot.getOrigine()) && dto.getPrixAchat() != null) {
+            java.math.BigDecimal montant = dto.getPrixAchat()
+                    .multiply(new java.math.BigDecimal(lot.getEffectifInitial()));
+            depenseService.mettreAJourOuCreerAchatLot(lot.getCodeLot(), montant, lot.getDateCreation());
+        }
 
         // Après modification (âge, date, race...), on recalcule la répartition
         // pour que la page "Analyse reproductive" reflète tout de suite le changement.
@@ -388,6 +418,15 @@ public class LotPorcService {
 
         if (dto.getEffectifInitial() == null || dto.getEffectifInitial() <= 0) {
             return "L'effectif initial doit être supérieur à 0.";
+        }
+
+        // Prix d'achat obligatoire pour un lot acheté : il est ensuite multiplié
+        // par l'effectif pour créer la dépense d'achat. Origine vide = ACHAT.
+        boolean estAchat = dto.getOrigine() == null || dto.getOrigine().isBlank()
+                || "ACHAT".equalsIgnoreCase(dto.getOrigine());
+        if (estAchat && (dto.getPrixAchat() == null
+                || dto.getPrixAchat().compareTo(java.math.BigDecimal.ZERO) <= 0)) {
+            return "Le prix d'achat est obligatoire et doit être supérieur à 0 pour un lot acheté.";
         }
 
         return null;

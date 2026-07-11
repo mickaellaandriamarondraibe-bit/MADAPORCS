@@ -35,6 +35,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const el = document.getElementById('calendar');
   const active = new Set(['misebas', 'depense', 'vente', 'mort']);
+  const isAdmin = ${sessionScope.roleNom == 'ADMIN'};
   let tous = [];
 
   const calendar = new FullCalendar.Calendar(el, {
@@ -56,7 +57,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   fetch('${ctx}/calendrier/events')
     .then(function (r) { return r.json(); })
-    .then(function (data) { tous = data; refresh(); });
+    .then(function (data) {
+      tous = data.map(function (e) {
+        if (isAdmin && e.url) { e.url = '${ctx}' + e.url; }
+        else { delete e.url; }
+        return e;
+      });
+      refresh();
+    });
 
   document.querySelectorAll('.cal-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {

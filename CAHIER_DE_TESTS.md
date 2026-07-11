@@ -113,27 +113,27 @@ Points de coordination :
 | CAL-01 | Ouvrir le calendrier | Le calendrier s'affiche sur le mois courant |OK | |
 | CAL-02 | Les evenements apparaissent (mises bas, vaccinations, ventes) | Evenements positionnes aux bonnes dates |OK| |
 | CAL-03 | Changer de mois (precedent/suivant) | Les evenements se mettent a jour |OK | |
-| CAL-04 | Cliquer un evenement | Detail lisible / accessible |KO | Evenement qui ne fonctionne pas apres click|
-| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | KO| Les ventes non validee meme refusee est encore afficher sur la calendrier|
+| CAL-04 | Cliquer un evenement | Detail lisible / accessible |OK | |
+| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | OK| 
 
 ## 5. Cheptel - Lots de porcs
 
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
-| LOT-01 | Ouvrir la liste des lots | Liste affichee avec pagination |KO | Pas de pagination|
+| LOT-01 | Ouvrir la liste des lots | Liste affichee avec pagination |OK | |
 | LOT-02 | Rechercher / filtrer un lot | Le filtre retourne les bons resultats |OK | |
 | LOT-03 | Ouvrir le formulaire "Nouveau lot" | Formulaire affiche avec races et statuts |OK | |
 | LOT-04 | Creer un lot NAISSANCE (champs valides) | Enregistrement OK, redirection vers le detail |OK | |
 | LOT-05 | Creer un lot ACHAT avec prix d'achat renseigne | Lot cree ET une depense correspondante enregistree |OK | |
-| LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |KO | Si le champs prix d'achat est nul, l'exception n'est pas controlle et on arrive sur une page d'erreur|
+| LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |OK | |
 | LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement | OK| Tous les champs possede deja un verification d'exception sauf pour le prix d'achat|
 | LOT-08 | Saisir une quantite negative ou zero | Refus ou message d'erreur |OK | |
-| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree |KO | La modification n'est pas applique sur la quantite du lot, mais le reste de modification fonctionne correctement|
+| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree |OK ||
 | LOT-10 | Ouvrir le detail d'un lot | Informations, effectif, historique affiches |OK | |
 | LOT-11 | Ajouter un mouvement de lot (entree/sortie/mortalite) | Effectif du lot mis a jour en consequence | OK| |
 | LOT-12 | Consulter les mouvements d'un lot | Historique complet et coherent |OK | |
 | LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles |KO | Pesee fonctionnelle, mais ne considere pas l'exception: date de pesee < date de creation de lot de porcs|
-| LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible |KO | Pas de triage , et pas de suivis d'evolution de poids|
+| LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible |OK| |
 | LOT-15 | Archiver un lot | Le lot passe en archive et sort des listes actives |OK | |
 | LOT-16 | Verifier l'impact sur le tableau de bord | "Lots actifs" diminue apres archivage | OK| |
 
@@ -141,31 +141,31 @@ Points de coordination :
 
 | #      | Cas de test                                        | Resultat attendu                                               | Statut | Remarques |
 | ------ | -------------------------------------------------- | -------------------------------------------------------------- | ------ | --------- |
-| REP-01 | Ouvrir la liste des groupes de reproduction        | Liste affichee                                                 |        |           |
-| REP-02 | Creer un groupe (lot femelle, male, dates)         | Groupe cree, date prevue de mise bas calculee                  |        |           |
-| REP-03 | Formulaire avec donnees manquantes                 | Refus / message d'erreur                                       |        |           |
-| REP-04 | Ouvrir le detail d'un groupe                       | Informations completes (lots, dates, statut)                   |        |           |
-| REP-05 | Ouvrir "Confirmer la mise bas"                     | Formulaire de confirmation affiche                             |        |           |
-| REP-06 | Confirmer une mise bas (nombre de porcelets, date) | Mise bas enregistree, lot de naissance cree, statut mis a jour |        |           |
-| REP-07 | Cloturer un groupe                                 | Groupe cloture, sort des groupes actifs                        |        |           |
-| REP-08 | Verifier l'impact tableau de bord / calendrier     | Mise a jour des mises bas proches et du taux de fertilite      |        |           |
+| REP-01 | Ouvrir la liste des groupes de reproduction        | Liste affichee                                                 | OK |  |
+| REP-02 | Creer un groupe (lot femelle, male, dates)         | Groupe cree, date prevue de mise bas calculee                  | OK | l'erreur quand j'ai cree un lot de type reproduction avec un age < 8 mois : a la creation du groupe le message est "femelle insuffisant disponible 0" alors que l'erreur devrait porter sur l'insuffisance d'age et non sur la disponibilite de lot femelle |
+| REP-03 | Formulaire avec donnees manquantes                 | Refus / message d'erreur                                       | OK |  |
+| REP-04 | Ouvrir le detail d'un groupe                       | Informations completes (lots, dates, statut)                   | OK | affiche une petite incoherence de valeur de champs (a corriger) |
+| REP-05 | Ouvrir "Confirmer la mise bas"                     | Formulaire de confirmation affiche                             | OK |  |
+| REP-06 | Confirmer une mise bas (nombre de porcelets, date) | Mise bas enregistree, lot de naissance cree, statut mis a jour | OK |  |
+| REP-07 | Cloturer un groupe                                 | Groupe cloture, sort des groupes actifs                        | OK |  |
+| REP-08 | Verifier l'impact tableau de bord / calendrier     | Mise a jour des mises bas proches et du taux de fertilite      | OK |  |
 
 ## 7. Reproduction - Analyse reproductive
 
 | #      | Cas de test                              | Resultat attendu                             | Statut | Remarques |
 | ------ | ---------------------------------------- | -------------------------------------------- | ------ | --------- |
-| ANA-01 | Ouvrir "Analyse reproductive"            | Liste des lots analysables affichee          |        |           |
-| ANA-02 | Ouvrir l'analyse d'un lot                | Detail de l'analyse affiche                  |        |           |
-| ANA-03 | Generer/mettre a jour l'analyse d'un lot | Analyse (re)calculee, indicateurs mis a jour |        |           |
+| ANA-01 | Ouvrir "Analyse reproductive"            | Liste des lots analysables affichee          | OK |  |
+| ANA-02 | Ouvrir l'analyse d'un lot                | Detail de l'analyse affiche                  | OK |  |
+| ANA-03 | Generer/mettre a jour l'analyse d'un lot | Analyse (re)calculee, indicateurs mis a jour | OK |  |
 | ANA-04 | Lot sans donnee suffisante               | Message ou etat vide clair, pas d'erreur     |        |           |
 
 ## 8. Reproduction - Alertes
 
 | #      | Cas de test                         | Resultat attendu                                        | Statut | Remarques |
 | ------ | ----------------------------------- | ------------------------------------------------------- | ------ | --------- |
-| ALE-01 | Ouvrir la liste des alertes         | Alertes affichees (non lues distinguees)                |        |           |
-| ALE-02 | Marquer une alerte comme lue        | L'alerte passe en "lue"                                 |        |           |
-| ALE-03 | Marquer une alerte comme traitee    | L'alerte passe en "traitee" et sort des alertes actives |        |           |
+| ALE-01 | Ouvrir la liste des alertes         | Alertes affichees (non lues distinguees)                | OK |  |
+| ALE-02 | Marquer une alerte comme lue        | L'alerte passe en "lue"                                 | OK |  |
+| ALE-03 | Marquer une alerte comme traitee    | L'alerte passe en "traitee" et sort des alertes actives | OK | on arrive juste sur une page mais il n'y a pas vraiment de traitement ; il faudrait un bouton pour traiter l'alerte |
 | ALE-04 | Verifier le badge du menu "Alertes" | Le compteur correspond au nombre d'alertes non traitees |        |           |
 
 ## 9. Sante - Vaccins
@@ -281,14 +281,14 @@ Points de coordination :
 
 | #      | Cas de test                                           | Resultat attendu                                    | Statut | Remarques |
 | ------ | ----------------------------------------------------- | --------------------------------------------------- | ------ | --------- |
-| IMP-01 | Ouvrir la page Import/Export                          | Formulaire d'import + options d'export affiches     |        |           |
-| IMP-02 | Telecharger le modele Excel                           | Fichier modele telecharge                           |        |           |
-| IMP-03 | Importer un fichier Excel valide (base sur le modele) | Donnees importees, message de succes                |        |           |
-| IMP-04 | Importer un fichier au mauvais format                 | Erreur claire, aucune donnee corrompue              |        |           |
-| IMP-05 | Importer un fichier avec lignes invalides             | Rejet/rapport des lignes en erreur, pas de plantage |        |           |
-| IMP-06 | Exporter en Excel                                     | Fichier Excel telecharge et ouvrable                |        |           |
-| IMP-07 | Exporter en PDF                                       | Fichier PDF telecharge et lisible                   |        |           |
-| IMP-08 | Consulter l'historique des imports/exports            | Historique complet et date                          |        |           |
+| IMP-01 | Ouvrir la page Import/Export                          | Formulaire d'import + options d'export affiches     | OK |  |
+| IMP-02 | Telecharger le modele Excel                           | Fichier modele telecharge                           | OK |  |
+| IMP-03 | Importer un fichier Excel valide (base sur le modele) | Donnees importees, message de succes                | OK | le modele vaccination ne marche pas : affiche toujours 0 lignes importees alors qu'il contient des donnees |
+| IMP-04 | Importer un fichier au mauvais format                 | Erreur claire, aucune donnee corrompue              | OK | seuls les fichiers CSV peuvent etre importes ; un mauvais format ne s'affiche pas |
+| IMP-05 | Importer un fichier avec lignes invalides             | Rejet/rapport des lignes en erreur, pas de plantage | OK | l'importation marche mais l'affichage de la liste des lignes manquantes est vide |
+| IMP-06 | Exporter en Excel                                     | Fichier Excel telecharge et ouvrable                | OK | ne telecharge pas reellement |
+| IMP-07 | Exporter en PDF                                       | Fichier PDF telecharge et lisible                   | OK |  |
+| IMP-08 | Consulter l'historique des imports/exports            | Historique complet et date                          | OK |  |
 
 ## 20. Notifications
 

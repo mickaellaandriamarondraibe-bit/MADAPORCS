@@ -3,6 +3,7 @@ package com.madaporc.repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,9 @@ public interface DepenseRepository extends JpaRepository<Depense, Long> {
     List<Depense> findAllByOrderByDateDepenseDesc();
 
     List<Depense> findByDateDepenseBetween(LocalDate debut, LocalDate fin);
+
+    // Retrouve la depense d'achat d'un lot (identifiee par sa description).
+    Optional<Depense> findFirstByDescription(String description);
     
       @Query("SELECT COALESCE(SUM(d.montant), 0) FROM Depense d")
     BigDecimal totalDepenses();
