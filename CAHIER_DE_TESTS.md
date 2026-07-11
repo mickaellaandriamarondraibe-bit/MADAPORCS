@@ -60,22 +60,22 @@ Points de coordination :
 
 ## 1. Authentification et controle d'acces
 
-| #       | Cas de test                                                                  | Resultat attendu                                                                       | Statut | Remarques |
-| ------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------ | --------- |
-| AUTH-01 | Se connecter avec email + mot de passe ADMIN valides                         | Redirection vers le tableau de bord, nom affiche en haut a droite                      |        |           |
-| AUTH-02 | Se connecter avec un mot de passe incorrect                                  | Message "Email ou mot de passe incorrect, ou compte desactive", reste sur login        |        |           |
-| AUTH-03 | Se connecter avec un email inconnu                                           | Meme message d'erreur, pas d'acces                                                     |        |           |
-| AUTH-04 | Se connecter avec un compte desactive                                        | Message d'erreur, connexion refusee                                                    |        |           |
-| AUTH-05 | Champ email ou mot de passe vide puis valider                                | Connexion refusee (pas de plantage)                                                    |        |           |
-| AUTH-06 | Acceder a une URL interne (ex: /dashboard) sans etre connecte                | Redirection automatique vers la page de login                                          |        |           |
-| AUTH-07 | Se deconnecter (Deconnexion dans le menu)                                    | Retour a la page de login, session fermee                                              |        |           |
-| AUTH-08 | Apres deconnexion, cliquer "Precedent" du navigateur                         | Ne redonne pas acces aux pages internes (redirige vers login)                          |        |           |
-| AUTH-09 | Connecte en GESTIONNAIRE, ouvrir /utilisateurs                               | Acces refuse (erreur 403 "Acces reserve a l'administrateur")                           |        |           |
-| AUTH-10 | Connecte en GESTIONNAIRE, ouvrir /depenses                                   | Acces refuse (403)                                                                     |        |           |
-| AUTH-11 | Connecte en GESTIONNAIRE, ouvrir /imports (Import/Export)                    | Acces refuse (403)                                                                     |        |           |
-| AUTH-12 | Connecte en GESTIONNAIRE, lancer un export Excel/PDF (/exports)              | Acces refuse (403)                                                                     |        |           |
-| AUTH-13 | Connecte en ADMIN, ouvrir Utilisateurs, Depenses, Import/Export              | Acces autorise a tous les modules                                                      |        |           |
-| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| AUTH-01 | Se connecter avec email + mot de passe ADMIN valides | Redirection vers le tableau de bord, nom affiche en haut a droite | OK | |
+| AUTH-02 | Se connecter avec un mot de passe incorrect | Message "Email ou mot de passe incorrect, ou compte desactive", reste sur login |OK | |
+| AUTH-03 | Se connecter avec un email inconnu | Meme message d'erreur, pas d'acces |OK | |
+| AUTH-04 | Se connecter avec un compte desactive | Message d'erreur, connexion refusee | OK | |
+| AUTH-05 | Champ email ou mot de passe vide puis valider | Connexion refusee (pas de plantage) | OK | |
+| AUTH-06 | Acceder a une URL interne (ex: /dashboard) sans etre connecte | Redirection automatique vers la page de login | OK | |
+| AUTH-07 | Se deconnecter (Deconnexion dans le menu) | Retour a la page de login, session fermee |OK | |
+| AUTH-08 | Apres deconnexion, cliquer "Precedent" du navigateur | Ne redonne pas acces aux pages internes (redirige vers login) | OK | |
+| AUTH-09 | Connecte en GESTIONNAIRE, ouvrir /utilisateurs | Acces refuse (erreur 403 "Acces reserve a l'administrateur") | OK |  |
+| AUTH-10 | Connecte en GESTIONNAIRE, ouvrir /depenses | Acces refuse (403) | OK | |
+| AUTH-11 | Connecte en GESTIONNAIRE, ouvrir /imports (Import/Export) | Acces refuse (403) | OK |  |
+| AUTH-12 | Connecte en GESTIONNAIRE, lancer un export Excel/PDF (/exports) | Acces refuse (403) | OK | |
+| AUTH-13 | Connecte en ADMIN, ouvrir Utilisateurs, Depenses, Import/Export | Acces autorise a tous les modules | OK | |
+| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE | KO | Mbola mipotra ilay menu fa misy erreur raha compte GESTIONNAIRE no miditra ao |
 
 ## 2. Navigation et interface generale
 
@@ -343,13 +343,13 @@ Points de coordination :
 
 ## 24. Securite et session
 
-| #      | Cas de test                                                                                    | Resultat attendu                                                       | Statut | Remarques |
-| ------ | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------ | --------- |
-| SEC-01 | Deux onglets ouverts, se deconnecter dans l'un                                                 | L'autre onglet perd l'acces aux pages protegees                        |        |           |
-| SEC-02 | Reutiliser une page interne apres deconnexion (bouton Precedent)                               | Acces refuse, redirection login                                        |        |           |
-| SEC-03 | Saisir du code dans un champ texte (ex: balise script)                                         | La valeur est affichee telle quelle, aucun script execute (pas de XSS) |        |           |
-| SEC-04 | Saisir une apostrophe / point-virgule (ex: nom "O'Brien")                                      | Sauvegarde correcte, aucune erreur SQL                                 |        |           |
-| SEC-05 | Appeler une action ADMIN par URL directe en GESTIONNAIRE (ex: POST /utilisateurs/desactiver/1) | Refuse (403), aucune execution                                         |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| SEC-01 | Deux onglets ouverts, se deconnecter dans l'un | L'autre onglet perd l'acces aux pages protegees | OK | Mila actualisena |
+| SEC-02 | Reutiliser une page interne apres deconnexion (bouton Precedent) | Acces refuse, redirection login | OK | |
+| SEC-03 | Saisir du code dans un champ texte (ex: balise script) | La valeur est affichee telle quelle, aucun script execute (pas de XSS) | OK | |
+| SEC-04 | Saisir une apostrophe / point-virgule (ex: nom "O'Brien") | Sauvegarde correcte, aucune erreur SQL |OK | |
+| SEC-05 | Appeler une action ADMIN par URL directe en GESTIONNAIRE (ex: POST /utilisateurs/desactiver/1) | Refuse (403), aucune execution | OK | |
 
 Note technique : la protection CSRF est desactivee au niveau Spring Security ; la securite repose sur la session applicative (interceptor). A signaler comme choix de configuration.
 
