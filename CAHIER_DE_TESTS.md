@@ -14,12 +14,12 @@ Chaque ligne est un cas de test : effectuez l'action, comparez au resultat atten
 
 ## Prerequis et demarrage
 
-| Element              | Valeur                                                      |
-| -------------------- | ----------------------------------------------------------- |
-| Base de donnees      | PostgreSQL, base `madaporc` (voir `application.properties`) |
-| Lancement            | `mvn spring-boot:run` (ou depuis l'IDE)                     |
-| URL                  | http://localhost:8082/                                      |
-| Navigateurs a tester | Chrome/Brave + Firefox (au moins un des deux)               |
+| Element              | Valeur                                                         |
+| -------------------- | -------------------------------------------------------------- |
+| Base de donnees      | PostgreSQL, base`madaporc` (voir `application.properties`) |
+| Lancement            | `mvn spring-boot:run` (ou depuis l'IDE)                      |
+| URL                  | http://localhost:8082/                                         |
+| Navigateurs a tester | Chrome/Brave + Firefox (au moins un des deux)                  |
 
 ## Comptes de test
 
@@ -36,20 +36,21 @@ Note : le compte GESTIONNAIRE doit etre cree par l'ADMIN (section 18) avant de p
 
 Repartition par module fonctionnel (chaque membre teste des domaines complets et coherents). Noms deduits des auteurs Git : ajustez si besoin.
 
-| Membre         | Perimetre (modules)                                              | Sections       | Tests                                          | Nb  |
-| -------------- | ---------------------------------------------------------------- | -------------- | ---------------------------------------------- | --- |
-| Miaro          | Authentification & acces, Securite & session                     | 1, 24          | AUTH-01..14, SEC-01..05                        | 19  |
-| Sarobidy       | Navigation & interface, Interactions JS cote client              | 2, 22          | NAV-01..06, JS-01..14                          | 20  |
-| Noah           | Tableau de bord, Notifications, Temps reel & e-mail              | 3, 20, 23      | DASH-01..13, NOT-01..03, NTF-01..06            | 22  |
-| Fanilo         | Lots de porcs, Calendrier                                        | 5, 4           | LOT-01..16, CAL-01..05                         | 21  |
-| Micka - Tsanta | Reproduction (Groupes, Analyse, Alertes), Import/Export          | 6, 7, 8, 19    | REP-01..08, ANA-01..04, ALE-01..04, IMP-01..08 | 24  |
-| Davida         | Sante (Vaccins, Vaccinations, Suivis), Rapports                  | 9, 10, 11, 17  | VAC-01..04, VCN-01..04, SUI-01..04, RAP-01..09 | 21  |
-| Manoa          | Commerce (Clients, Ventes), Utilisateurs                         | 12, 13, 18     | CLI-01..06, VEN-01..11, USR-01..06             | 23  |
-| Mandresy       | Stocks & Finance (Ingredients, Mouvements, Depenses), Robustesse | 14, 15, 16, 21 | ING-01..05, MVS-01..05, DEP-01..05, ROB-01..08 | 23  |
+| Membre         | Perimetre (modules)                                              | Sections       | Tests                                          | Nb |
+| -------------- | ---------------------------------------------------------------- | -------------- | ---------------------------------------------- | -- |
+| Miaro          | Authentification & acces, Securite & session                     | 1, 24          | AUTH-01..14, SEC-01..05                        | 19 |
+| Sarobidy       | Navigation & interface, Interactions JS cote client              | 2, 22          | NAV-01..06, JS-01..14                          | 20 |
+| Noah           | Tableau de bord, Notifications, Temps reel & e-mail              | 3, 20, 23      | DASH-01..13, NOT-01..03, NTF-01..06            | 22 |
+| Fanilo         | Lots de porcs, Calendrier                                        | 5, 4           | LOT-01..16, CAL-01..05                         | 21 |
+| Micka - Tsanta | Reproduction (Groupes, Analyse, Alertes), Import/Export          | 6, 7, 8, 19    | REP-01..08, ANA-01..04, ALE-01..04, IMP-01..08 | 24 |
+| Davida         | Sante (Vaccins, Vaccinations, Suivis), Rapports                  | 9, 10, 11, 17  | VAC-01..04, VCN-01..04, SUI-01..04, RAP-01..09 | 21 |
+| Manoa          | Commerce (Clients, Ventes), Utilisateurs                         | 12, 13, 18     | CLI-01..06, VEN-01..11, USR-01..06             | 23 |
+| Mandresy       | Stocks & Finance (Ingredients, Mouvements, Depenses), Robustesse | 14, 15, 16, 21 | ING-01..05, MVS-01..05, DEP-01..05, ROB-01..08 | 23 |
 
 Total : 173 tests.
 
 Points de coordination :
+
 - Comptes ADMIN requis : Mandresy (Depenses), Miaro (Import/Export), Manoa (Utilisateurs) doivent disposer d'un compte ADMIN.
 - Mika (controle d'acces) a besoin des deux comptes : un ADMIN et un GESTIONNAIRE.
 - Manoa cree d'abord un compte GESTIONNAIRE (USR-02) : il sert aussi a Mika pour la section 1.
@@ -196,30 +197,30 @@ Points de coordination :
 
 ## 12. Commerce - Clients
 
-| #      | Cas de test                                           | Resultat attendu                                            | Statut | Remarques |
-| ------ | ----------------------------------------------------- | ----------------------------------------------------------- | ------ | --------- |
-| CLI-01 | Ouvrir la liste des clients                           | Liste affichee avec pagination                              |        |           |
-| CLI-02 | Creer un client                                       | Enregistrement OK                                           |        |           |
-| CLI-03 | Modifier un client                                    | Modifications enregistrees                                  |        |           |
-| CLI-04 | Ouvrir le detail d'un client                          | Informations + historique d'achats affiches                 |        |           |
-| CLI-05 | Champs obligatoires vides                             | Refus / message d'erreur                                    |        |           |
-| CLI-06 | Donnee en double (ex: meme telephone/email si unique) | Comportement attendu verifie (refus ou accepte selon regle) |        |           |
+| #      | Cas de test                                           | Resultat attendu                                            | Statut | Remarques                                                            |
+| ------ | ----------------------------------------------------- | ----------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
+| CLI-01 | Ouvrir la liste des clients                           | Liste affichee avec pagination                              | KO     | bouton "rechercher" manquant                                         |
+| CLI-02 | Creer un client                                       | Enregistrement OK                                           | KO     | num_telephone: regle de gestion manquante (num seulement en chiffre) |
+| CLI-03 | Modifier un client                                    | Modifications enregistrees                                  | OK     |                                                                      |
+| CLI-04 | Ouvrir le detail d'un client                          | Informations + historique d'achats affiches                 | KO     | pas d'historique d'achat                                             |
+| CLI-05 | Champs obligatoires vides                             | Refus / message d'erreur                                    | OK     | mieux avec message d'erreur personnalise                             |
+| CLI-06 | Donnee en double (ex: meme telephone/email si unique) | Comportement attendu verifie (refus ou accepte selon regle) | KO     | meme num_telephone en double                                         |
 
 ## 13. Commerce - Ventes
 
-| #      | Cas de test                                             | Resultat attendu                                                                      | Statut | Remarques |
-| ------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------ | --------- |
-| VEN-01 | Ouvrir la liste des ventes                              | Liste avec statuts (BROUILLON / VALIDEE / ANNULEE)                                    |        |           |
-| VEN-02 | Creer une vente (client, lots, quantites, prix)         | Vente creee en BROUILLON, redirection vers le detail                                  |        |           |
-| VEN-03 | Ajouter plusieurs lignes de vente                       | Total recalcule correctement                                                          |        |           |
-| VEN-04 | Saisir un prix unitaire a 0                             | Comportement a verifier (voir vigilance F-07 : prix 0 accepte)                        |        |           |
-| VEN-05 | Quantite superieure au stock du lot                     | Refus ou controle attendu                                                             |        |           |
-| VEN-06 | Valider une vente                                       | Statut passe VALIDEE, effectif du lot decremente                                      |        |           |
-| VEN-07 | Verifier l'impact sur le chiffre d'affaires (dashboard) | CA du mois augmente du montant de la vente validee                                    |        |           |
-| VEN-08 | Annuler une vente validee                               | Statut ANNULEE, effectif reintegre (voir vigilance F-04 sur l'etiquette du mouvement) |        |           |
-| VEN-09 | Telecharger le recu PDF d'une vente                     | PDF genere et lisible                                                                 |        |           |
-| VEN-10 | Modifier une vente existante                            | ATTENTION : verifier qu'aucun doublon n'est cree (voir vigilance F-01)                |        |           |
-| VEN-11 | Recu PDF d'une vente inexistante (id invalide)          | Erreur 404 propre, pas de plantage                                                    |        |           |
+| #      | Cas de test                                             | Resultat attendu                                                                      | Statut | Remarques                                                                                                                       |
+| ------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| VEN-01 | Ouvrir la liste des ventes                              | Liste avec statuts (BROUILLON / VALIDEE / ANNULEE)                                    | OK     | bouton "rechercher" manquant                                                                                                    |
+| VEN-02 | Creer une vente (client, lots, quantites, prix)         | Vente creee en BROUILLON, redirection vers le detail                                  | OK     | - mettre en js les input de lot<br />- montant total calculé automatiquement apres chaque changement de quantite ou prix lot |
+| VEN-03 | Ajouter plusieurs lignes de vente                       | Total recalcule correctement                                                          | KO     | - formulaire d'insertion, montant non mis à jour                                                                               |
+| VEN-04 | Saisir un prix unitaire a 0                             | Comportement a verifier (voir vigilance F-07 : prix 0 accepte)                        | KO     | - montant 0 accepté                                                                                                            |
+| VEN-05 | Quantite superieure au stock du lot                     | Refus ou controle attendu                                                             | KO     | page blanche obtenue et non message d'erreur                                                                                    |
+| VEN-06 | Valider une vente                                       | Statut passe VALIDEE, effectif du lot decremente                                      | OK     |                                                                                                                                 |
+| VEN-07 | Verifier l'impact sur le chiffre d'affaires (dashboard) | CA du mois augmente du montant de la vente validee                                    | OK     |                                                                                                                                 |
+| VEN-08 | Annuler une vente validee                               | Statut ANNULEE, effectif reintegre (voir vigilance F-04 sur l'etiquette du mouvement) | OK     |                                                                                                                                 |
+| VEN-09 | Telecharger le recu PDF d'une vente                     | PDF genere et lisible                                                                 | OK     |                                                                                                                                 |
+| VEN-10 | Modifier une vente existante                            | ATTENTION : verifier qu'aucun doublon n'est cree (voir vigilance F-01)                | nean   |                                                                                                                                 |
+| VEN-11 | Recu PDF d'une vente inexistante (id invalide)          | Erreur 404 propre, pas de plantage                                                    | OK     |                                                                                                                                 |
 
 ## 14. Stocks et Finance - Ingredients
 
@@ -383,4 +384,3 @@ Elles sont susceptibles de faire echouer certains tests ci-dessus (references F-
 | Testeur(s)            |        |
 
 Conclusion / decision de livraison :
-
