@@ -1,0 +1,2 @@
+# Copiez ce fichier vers application-local.properties, puis ajoutez votre secret local.
+app.mail.mot-de-passe=VOTRE_MOT_DE_PASSE_APPLICATION_GOOGLE

@@ -60,33 +60,33 @@ Points de coordination :
 
 ## 1. Authentification et controle d'acces
 
-| #       | Cas de test                                                                  | Resultat attendu                                                                       | Statut | Remarques |
-| ------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------ | --------- |
-| AUTH-01 | Se connecter avec email + mot de passe ADMIN valides                         | Redirection vers le tableau de bord, nom affiche en haut a droite                      |        |           |
-| AUTH-02 | Se connecter avec un mot de passe incorrect                                  | Message "Email ou mot de passe incorrect, ou compte desactive", reste sur login        |        |           |
-| AUTH-03 | Se connecter avec un email inconnu                                           | Meme message d'erreur, pas d'acces                                                     |        |           |
-| AUTH-04 | Se connecter avec un compte desactive                                        | Message d'erreur, connexion refusee                                                    |        |           |
-| AUTH-05 | Champ email ou mot de passe vide puis valider                                | Connexion refusee (pas de plantage)                                                    |        |           |
-| AUTH-06 | Acceder a une URL interne (ex: /dashboard) sans etre connecte                | Redirection automatique vers la page de login                                          |        |           |
-| AUTH-07 | Se deconnecter (Deconnexion dans le menu)                                    | Retour a la page de login, session fermee                                              |        |           |
-| AUTH-08 | Apres deconnexion, cliquer "Precedent" du navigateur                         | Ne redonne pas acces aux pages internes (redirige vers login)                          |        |           |
-| AUTH-09 | Connecte en GESTIONNAIRE, ouvrir /utilisateurs                               | Acces refuse (erreur 403 "Acces reserve a l'administrateur")                           |        |           |
-| AUTH-10 | Connecte en GESTIONNAIRE, ouvrir /depenses                                   | Acces refuse (403)                                                                     |        |           |
-| AUTH-11 | Connecte en GESTIONNAIRE, ouvrir /imports (Import/Export)                    | Acces refuse (403)                                                                     |        |           |
-| AUTH-12 | Connecte en GESTIONNAIRE, lancer un export Excel/PDF (/exports)              | Acces refuse (403)                                                                     |        |           |
-| AUTH-13 | Connecte en ADMIN, ouvrir Utilisateurs, Depenses, Import/Export              | Acces autorise a tous les modules                                                      |        |           |
-| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| AUTH-01 | Se connecter avec email + mot de passe ADMIN valides | Redirection vers le tableau de bord, nom affiche en haut a droite | OK | |
+| AUTH-02 | Se connecter avec un mot de passe incorrect | Message "Email ou mot de passe incorrect, ou compte desactive", reste sur login |OK | |
+| AUTH-03 | Se connecter avec un email inconnu | Meme message d'erreur, pas d'acces |OK | |
+| AUTH-04 | Se connecter avec un compte desactive | Message d'erreur, connexion refusee | OK | |
+| AUTH-05 | Champ email ou mot de passe vide puis valider | Connexion refusee (pas de plantage) | OK | |
+| AUTH-06 | Acceder a une URL interne (ex: /dashboard) sans etre connecte | Redirection automatique vers la page de login | OK | |
+| AUTH-07 | Se deconnecter (Deconnexion dans le menu) | Retour a la page de login, session fermee |OK | |
+| AUTH-08 | Apres deconnexion, cliquer "Precedent" du navigateur | Ne redonne pas acces aux pages internes (redirige vers login) | OK | |
+| AUTH-09 | Connecte en GESTIONNAIRE, ouvrir /utilisateurs | Acces refuse (erreur 403 "Acces reserve a l'administrateur") | OK |  |
+| AUTH-10 | Connecte en GESTIONNAIRE, ouvrir /depenses | Acces refuse (403) | OK | |
+| AUTH-11 | Connecte en GESTIONNAIRE, ouvrir /imports (Import/Export) | Acces refuse (403) | OK |  |
+| AUTH-12 | Connecte en GESTIONNAIRE, lancer un export Excel/PDF (/exports) | Acces refuse (403) | OK | |
+| AUTH-13 | Connecte en ADMIN, ouvrir Utilisateurs, Depenses, Import/Export | Acces autorise a tous les modules | OK | |
+| AUTH-14 | Menu lateral masque-t-il Utilisateurs/Depenses/Import pour un GESTIONNAIRE ? | A verifier : les entrees reservees ne doivent pas etre utilisables par le GESTIONNAIRE | KO | Mbola mipotra ilay menu fa misy erreur raha compte GESTIONNAIRE no miditra ao |
 
 ## 2. Navigation et interface generale
 
-| #      | Cas de test                                    | Resultat attendu                                                  | Statut | Remarques |
-| ------ | ---------------------------------------------- | ----------------------------------------------------------------- | ------ | --------- |
-| NAV-01 | Cliquer chaque entree du menu lateral          | Chaque lien ouvre la bonne page sans erreur                       |        |           |
-| NAV-02 | Verifier la surbrillance du menu               | L'entree de la page courante est mise en evidence (etat actif)    |        |           |
-| NAV-03 | Verifier le fil d'Ariane en haut               | Correspond a la page affichee                                     |        |           |
-| NAV-04 | Reduire la fenetre / mobile : bouton menu      | Le menu s'ouvre et se ferme correctement                          |        |           |
-| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages                               |        |           |
-| NAV-06 | Titre de page non duplique                     | Le titre n'apparait qu'une fois (pas de doublon topbar + contenu) |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| NAV-01 | Cliquer chaque entree du menu lateral | Chaque lien ouvre la bonne page sans erreur |OK|R à S|
+| NAV-02 | Verifier la surbrillance du menu | L'entree de la page courante est mise en evidence (etat actif) |Pas en marche|L'entree de la page n'est pas mise en évidence dans le sidebar|
+| NAV-03 | Verifier le fil d'Ariane en haut | Correspond a la page affichee |OK|La representation n'est pas totalement homogène sur tout les pages ex: Reproduction (light) / Groupes (gras) alors que Reproduction (light) / Analyse reproductive (light)|
+| NAV-04 | Reduire la fenetre / mobile : bouton menu | Le menu s'ouvre et se ferme correctement |Pas en marche|Le bouton pour étaler le menu lateral ne fonctionne pas encore et le contenu de certaine tableau sur version mobile n'est pas correctement affiché (problème de responsive design)|
+| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages |OK|Le Bouton Générer un rapport pourrait être changé pour être conforme aux autres boutons|
+| NAV-06 | Titre de page non duplique | Le titre n'apparait qu'une fois (pas de doublon topbar + contenu) |OK|R à S|
 
 ## 3. Tableau de bord
 
@@ -108,34 +108,34 @@ Points de coordination :
 
 ## 4. Calendrier
 
-| #      | Cas de test                                                   | Resultat attendu                                                                          | Statut | Remarques |
-| ------ | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------ | --------- |
-| CAL-01 | Ouvrir le calendrier                                          | Le calendrier s'affiche sur le mois courant                                               |        |           |
-| CAL-02 | Les evenements apparaissent (mises bas, vaccinations, ventes) | Evenements positionnes aux bonnes dates                                                   |        |           |
-| CAL-03 | Changer de mois (precedent/suivant)                           | Les evenements se mettent a jour                                                          |        |           |
-| CAL-04 | Cliquer un evenement                                          | Detail lisible / accessible                                                               |        |           |
-| CAL-05 | Verifier la coherence des recettes affichees                  | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| CAL-01 | Ouvrir le calendrier | Le calendrier s'affiche sur le mois courant |OK | |
+| CAL-02 | Les evenements apparaissent (mises bas, vaccinations, ventes) | Evenements positionnes aux bonnes dates |OK| |
+| CAL-03 | Changer de mois (precedent/suivant) | Les evenements se mettent a jour |OK | |
+| CAL-04 | Cliquer un evenement | Detail lisible / accessible |KO | Evenement qui ne fonctionne pas apres click|
+| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | KO| Les ventes non validee meme refusee est encore afficher sur la calendrier|
 
 ## 5. Cheptel - Lots de porcs
 
-| #      | Cas de test                                            | Resultat attendu                                                           | Statut | Remarques |
-| ------ | ------------------------------------------------------ | -------------------------------------------------------------------------- | ------ | --------- |
-| LOT-01 | Ouvrir la liste des lots                               | Liste affichee avec pagination                                             |        |           |
-| LOT-02 | Rechercher / filtrer un lot                            | Le filtre retourne les bons resultats                                      |        |           |
-| LOT-03 | Ouvrir le formulaire "Nouveau lot"                     | Formulaire affiche avec races et statuts                                   |        |           |
-| LOT-04 | Creer un lot NAISSANCE (champs valides)                | Enregistrement OK, redirection vers le detail                              |        |           |
-| LOT-05 | Creer un lot ACHAT avec prix d'achat renseigne         | Lot cree ET une depense correspondante enregistree                         |        |           |
-| LOT-06 | Creer un lot ACHAT sans prix d'achat                   | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |        |           |
-| LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement                             |        |           |
-| LOT-08 | Saisir une quantite negative ou zero                   | Refus ou message d'erreur                                                  |        |           |
-| LOT-09 | Modifier un lot existant                               | Modifications enregistrees, pas de doublon cree                            |        |           |
-| LOT-10 | Ouvrir le detail d'un lot                              | Informations, effectif, historique affiches                                |        |           |
-| LOT-11 | Ajouter un mouvement de lot (entree/sortie/mortalite)  | Effectif du lot mis a jour en consequence                                  |        |           |
-| LOT-12 | Consulter les mouvements d'un lot                      | Historique complet et coherent                                             |        |           |
-| LOT-13 | Ajouter une pesee                                      | Pesee enregistree, poids/date visibles                                     |        |           |
-| LOT-14 | Consulter l'historique des pesees                      | Liste triee, evolution du poids visible                                    |        |           |
-| LOT-15 | Archiver un lot                                        | Le lot passe en archive et sort des listes actives                         |        |           |
-| LOT-16 | Verifier l'impact sur le tableau de bord               | "Lots actifs" diminue apres archivage                                      |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| LOT-01 | Ouvrir la liste des lots | Liste affichee avec pagination |KO | Pas de pagination|
+| LOT-02 | Rechercher / filtrer un lot | Le filtre retourne les bons resultats |OK | |
+| LOT-03 | Ouvrir le formulaire "Nouveau lot" | Formulaire affiche avec races et statuts |OK | |
+| LOT-04 | Creer un lot NAISSANCE (champs valides) | Enregistrement OK, redirection vers le detail |OK | |
+| LOT-05 | Creer un lot ACHAT avec prix d'achat renseigne | Lot cree ET une depense correspondante enregistree |OK | |
+| LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |KO | Si le champs prix d'achat est nul, l'exception n'est pas controlle et on arrive sur une page d'erreur|
+| LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement | OK| Tous les champs possede deja un verification d'exception sauf pour le prix d'achat|
+| LOT-08 | Saisir une quantite negative ou zero | Refus ou message d'erreur |OK | |
+| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree |KO | La modification n'est pas applique sur la quantite du lot, mais le reste de modification fonctionne correctement|
+| LOT-10 | Ouvrir le detail d'un lot | Informations, effectif, historique affiches |OK | |
+| LOT-11 | Ajouter un mouvement de lot (entree/sortie/mortalite) | Effectif du lot mis a jour en consequence | OK| |
+| LOT-12 | Consulter les mouvements d'un lot | Historique complet et coherent |OK | |
+| LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles |KO | Pesee fonctionnelle, mais ne considere pas l'exception: date de pesee < date de creation de lot de porcs|
+| LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible |KO | Pas de triage , et pas de suivis d'evolution de poids|
+| LOT-15 | Archiver un lot | Le lot passe en archive et sort des listes actives |OK | |
+| LOT-16 | Verifier l'impact sur le tableau de bord | "Lots actifs" diminue apres archivage | OK| |
 
 ## 6. Reproduction - Groupes
 
@@ -172,28 +172,28 @@ Points de coordination :
 
 | #      | Cas de test                 | Resultat attendu                          | Statut | Remarques |
 | ------ | --------------------------- | ----------------------------------------- | ------ | --------- |
-| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |        |           |
-| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |        |           |
-| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        |           |
-| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        |           |
+| VAC-01 | Ouvrir la liste des vaccins | Liste affichee                            |    ok    |           |
+| VAC-02 | Creer un vaccin             | Enregistrement OK, apparait dans la liste |      ok  |           |
+| VAC-03 | Modifier un vaccin          | Modifications enregistrees                |        ok|           |
+| VAC-04 | Champs obligatoires vides   | Refus / message d'erreur                  |        ok|           |
 
 ## 10. Sante - Vaccinations
 
 | #      | Cas de test                                     | Resultat attendu                                              | Statut | Remarques |
 | ------ | ----------------------------------------------- | ------------------------------------------------------------- | ------ | --------- |
-| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |        |           |
-| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |        |           |
-| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |        |           |
-| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |        |           |
+| VCN-01 | Ouvrir la liste des vaccinations                | Liste affichee                                                |    ok    |           |
+| VCN-02 | Enregistrer une vaccination (lot, vaccin, date) | Vaccination enregistree                                       |     ok   |           |
+| VCN-03 | Vaccination avec rappel/date future             | Apparait dans les vaccinations a venir (dashboard/calendrier) |      ok  |           |
+| VCN-04 | Champs manquants                                | Refus / message d'erreur                                      |       ok |           |
 
 ## 11. Sante - Suivis sanitaires
 
 | #      | Cas de test                                        | Resultat attendu                                        | Statut | Remarques |
 | ------ | -------------------------------------------------- | ------------------------------------------------------- | ------ | --------- |
-| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |        |           |
-| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |        |           |
-| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |        |           |
-| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |        |           |
+| SUI-01 | Ouvrir la liste des suivis sanitaires              | Liste affichee                                          |   ok     |           |
+| SUI-02 | Creer un suivi (lot, maladie, traitement, date)    | Suivi enregistre                                        |     ok   |           |
+| SUI-03 | Champs manquants                                   | Refus / message d'erreur                                |      ok  |           |
+| SUI-04 | Verifier l'apparition dans les rapports sanitaires | Le suivi remonte dans le rapport sanitaire (section 17) |       ok |           |
 
 ## 12. Commerce - Clients
 
@@ -224,47 +224,47 @@ Points de coordination :
 
 ## 14. Stocks et Finance - Ingredients
 
-| #      | Cas de test                                        | Resultat attendu                              | Statut | Remarques |
-| ------ | -------------------------------------------------- | --------------------------------------------- | ------ | --------- |
-| ING-01 | Ouvrir la liste des ingredients                    | Liste affichee                                |        |           |
-| ING-02 | Creer un ingredient (unite, seuil d'alerte, stock) | Enregistrement OK                             |        |           |
-| ING-03 | Modifier un ingredient                             | Modifications enregistrees                    |        |           |
-| ING-04 | Ingredient sous le seuil d'alerte                  | Signale en "stock faible" (liste + dashboard) |        |           |
-| ING-05 | Champs obligatoires vides / valeurs negatives      | Refus / message d'erreur                      |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| ING-01 | Ouvrir la liste des ingredients | Liste affichee | OK | |
+| ING-02 | Creer un ingredient (unite, seuil d'alerte, stock) | Enregistrement OK | OK | |
+| ING-03 | Modifier un ingredient | Modifications enregistrees | OK | |
+| ING-04 | Ingredient sous le seuil d'alerte | Signale en "stock faible" (liste + dashboard) | OK | |
+| ING-05 | Champs obligatoires vides / valeurs negatives | Refus / message d'erreur | KO | La barre de recherche ne fonctionne pas. |
 
 ## 15. Stocks et Finance - Mouvements de stock
 
-| #      | Cas de test                             | Resultat attendu               | Statut | Remarques |
-| ------ | --------------------------------------- | ------------------------------ | ------ | --------- |
-| MVS-01 | Ouvrir la liste des mouvements de stock | Liste affichee                 |        |           |
-| MVS-02 | Enregistrer une ENTREE de stock         | Stock de l'ingredient augmente |        |           |
-| MVS-03 | Enregistrer une SORTIE de stock         | Stock de l'ingredient diminue  |        |           |
-| MVS-04 | Sortie superieure au stock disponible   | Refus ou controle attendu      |        |           |
-| MVS-05 | Mouvement faisant passer sous le seuil  | Alerte stock faible declenchee |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| MVS-01 | Ouvrir la liste des mouvements de stock | Liste affichee | OK | |
+| MVS-02 | Enregistrer une ENTREE de stock | Stock de l'ingredient augmente | OK | |
+| MVS-03 | Enregistrer une SORTIE de stock | Stock de l'ingredient diminue | OK | |
+| MVS-04 | Sortie superieure au stock disponible | Refus ou controle attendu | OK  | Test effectué : stock = 50 kg, sortie demandée = 100 kg. La sortie est refusée. |
+| MVS-05 | Mouvement faisant passer sous le seuil | Alerte stock faible declenchee | OK | Test effectué : stock initial = 150 kg, seuil = 100 kg, sortie = 80 kg. Stock final = 70 kg et alerte créée. |
 
 ## 16. Finance - Depenses (ADMIN uniquement)
 
-| #      | Cas de test                                          | Resultat attendu                                               | Statut | Remarques |
-| ------ | ---------------------------------------------------- | -------------------------------------------------------------- | ------ | --------- |
-| DEP-01 | Ouvrir la liste des depenses                         | Liste affichee, total correct                                  |        |           |
-| DEP-02 | Creer une depense (categorie, montant, date)         | Enregistrement OK                                              |        |           |
-| DEP-03 | Montant a 0 ou negatif                               | Refus / message d'erreur                                       |        |           |
-| DEP-04 | Depense sans categorie                               | Verifier le comportement reel vs message (voir vigilance F-06) |        |           |
-| DEP-05 | Impact sur le total des depenses du mois (dashboard) | Depenses du mois mises a jour                                  |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| DEP-01 | Ouvrir la liste des depenses | Liste affichee, total correct | OK | |
+| DEP-02 | Creer une depense (categorie, montant, date) | Enregistrement OK | OK | |
+| DEP-03 | Montant a 0 ou negatif | Refus / message d'erreur | KO | Le message affiché est général : "La catégorie, le montant et la date sont obligatoires" au lieu d'indiquer précisément que le montant est invalide ou négatif. |
+| DEP-04 | Depense sans categorie | Verifier le comportement reel vs message (voir vigilance F-06) | KO | Message affiché indiquant que la catégorie est obligatoire alors que le problème concerne uniquement la catégorie absente. |
+| DEP-05 | Impact sur le total des depenses du mois (dashboard) | Depenses du mois mises a jour | OK | |
 
 ## 17. Rapports
 
 | #      | Cas de test                                 | Resultat attendu                                    | Statut | Remarques |
 | ------ | ------------------------------------------- | --------------------------------------------------- | ------ | --------- |
-| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |        |           |
-| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |        |           |
-| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |        |           |
-| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |        |           |
-| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |        |           |
-| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |        |           |
-| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        |           |
-| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |           |
+| RAP-01 | Ouvrir la page Rapports                     | Formulaire de dates + cartes de rapports affiches   |    ok    |           |
+| RAP-02 | Calculer le bilan financier sur une periode | Total ventes, total depenses, benefice net corrects |     ok   |           |
+| RAP-03 | Periode sans donnee                         | Resultats a 0, pas d'erreur                         |      ok  |           |
+| RAP-04 | Date debut posterieure a date fin           | Comportement gere (message ou resultat vide)        |      ok  |           |
+| RAP-05 | Generer le PDF Sanitaire                    | PDF telecharge, contenu coherent                    |      ok  |           |
+| RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |       ok |           |
+| RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        ok|           |
+| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |ok           |
 
 ## 18. Administration - Utilisateurs (ADMIN uniquement)
 
@@ -300,35 +300,35 @@ Points de coordination :
 
 ## 21. Robustesse et non-fonctionnel
 
-| #      | Cas de test                                         | Resultat attendu                                           | Statut | Remarques |
-| ------ | --------------------------------------------------- | ---------------------------------------------------------- | ------ | --------- |
-| ROB-01 | Pagination sur toutes les grandes listes            | Navigation entre pages correcte                            |        |           |
-| ROB-02 | Etats vides (liste sans donnee)                     | Message clair "aucun resultat", pas d'erreur               |        |           |
-| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche |        |           |
-| ROB-04 | Rafraichir une page apres un POST (F5)              | Pas de re-soumission accidentelle / doublon                |        |           |
-| ROB-05 | Redemarrer l'application                            | Les donnees saisies sont toujours presentes (persistance)  |        |           |
-| ROB-06 | Caracteres speciaux / accents dans les formulaires  | Sauvegarde et affichage corrects (encodage UTF-8)          |        |           |
-| ROB-07 | Champs numeriques avec du texte                     | Refus / message d'erreur                                   |        |           |
-| ROB-08 | Affichage sur petit ecran (responsive)              | Mise en page lisible, menu accessible                      |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| ROB-01 | Pagination sur toutes les grandes listes | Navigation entre pages correcte | OK | |
+| ROB-02 | Etats vides (liste sans donnee) | Message clair "aucun resultat", pas d'erreur | OK | |
+| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche | KO | Aucune page 404 affichée mais aucune erreur bloquante non plus. |
+| ROB-04 | Rafraichir une page apres un POST (F5) | Pas de re-soumission accidentelle / doublon | OK | |
+| ROB-05 | Redemarrer l'application | Les donnees saisies sont toujours presentes (persistance) | OK | |
+| ROB-06 | Caracteres speciaux / accents dans les formulaires | Sauvegarde et affichage corrects (encodage UTF-8) | OK | |
+| ROB-07 | Champs numeriques avec du texte | Refus / message d'erreur | KO | En modifiant le type du champ en "text" via l'inspecteur navigateur et en envoyant une valeur texte (ex: montant = abc), une erreur 404 apparaît au lieu d'une validation propre. |
+| ROB-08 | Affichage sur petit ecran (responsive) | Mise en page lisible, menu accessible | KO | La sidebar ne fonctionne pas correctement sur mobile. |
 
 ## 22. Comportements interactifs cote client (JavaScript)
 
-| #     | Cas de test                                                                                                                             | Resultat attendu                                                        | Statut | Remarques |
-| ----- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------ | --------- |
-| JS-01 | Taper dans le champ de recherche d'une liste                                                                                            | Les lignes du tableau se filtrent en temps reel, sans recharger la page |        |           |
-| JS-02 | Vider le champ de filtre                                                                                                                | Toutes les lignes reapparaissent                                        |        |           |
-| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement                                        |        |           |
-| JS-04 | Confirmation "Valider cette vente ?" puis Annuler                                                                                       | Aucune action, la vente reste en BROUILLON                              |        |           |
-| JS-05 | Confirmation "Valider cette vente ?" puis OK                                                                                            | La vente est validee                                                    |        |           |
-| JS-06 | Confirmation "Annuler cette vente ?" (Annuler puis OK)                                                                                  | Annuler = aucune action ; OK = vente annulee                            |        |           |
-| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK)                                                                                      | Annuler = aucune action ; OK = lot archive                              |        |           |
-| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK)                                                                                   | Annuler = aucune action ; OK = groupe cloture                           |        |           |
-| JS-09 | Confirmation "Desactiver X ?" (Annuler puis OK)                                                                                         | Annuler = aucune action ; OK = utilisateur desactive                    |        |           |
-| JS-10 | Formulaire de vente : total d'une ligne                                                                                                 | Le total de ligne se recalcule en direct (quantite x prix unitaire)     |        |           |
-| JS-11 | Formulaire de vente : total general                                                                                                     | Le total general se met a jour en direct a chaque modification          |        |           |
-| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes                                                                    | Un avertissement s'affiche ET le bouton d'enregistrement est desactive  |        |           |
-| JS-13 | Confirmer mise bas avec (vivants + morts) inferieur ou egal aux nes                                                                     | Pas d'avertissement, bouton actif                                       |        |           |
-| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond                                                | Ouverture et fermeture correctes dans les trois cas                     |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| JS-01 | Taper dans le champ de recherche d'une liste | Les lignes du tableau se filtrent en temps reel, sans recharger la page |Pas en marche|Pages à revoir: Groupes de reproduction, vaccins, Suivi Sanitaire, Clients, Ventes, Ingredients, Utilisateurs|
+| JS-02 | Vider le champ de filtre | Toutes les lignes reapparaissent |Pas en marche|Besoin de la correction de JS-01|
+| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement |À revoir|Pas de filtre mais juste un champs de recherche avec les pages concernées mais seulement avec Lots de porcs, Dépense et rapport. Le filtre de recherche n'est pas encore fonctionnel (JS-01)|
+| JS-04 | Confirmation "Valider cette vente ?" puis Annuler | Aucune action, la vente reste en BROUILLON |OK|R à S|
+| JS-05 | Confirmation "Valider cette vente ?" puis OK | La vente est validee |OK|R à S|
+| JS-06 | Confirmation "Annuler cette vente ?" (Annuler puis OK) | Annuler = aucune action ; OK = vente annulee |OK|R à S|
+| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK) | Annuler = aucune action ; OK = lot archive |À revoir|Pas de confirmation mais directement Archivé|
+| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK) | Annuler = aucune action ; OK = groupe cloture |À revoir|Pas de confirmation mais directement Cloturé|
+| JS-09 | Confirmation "Desactiver X ?" (Annuler puis OK) | Annuler = aucune action ; OK = utilisateur desactive |OK|R à S|
+| JS-10 | Formulaire de vente : total d'une ligne | Le total de ligne se recalcule en direct (quantite x prix unitaire) |Pas en marche|Les calculs ne se font pas encore directement|
+| JS-11 | Formulaire de vente : total general | Le total general se met a jour en direct a chaque modification |Pas en marche|Les calculs ne se font pas encore directement|
+| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes | Un avertissement s'affiche ET le bouton d'enregistrement est desactive |À revoir|Le bouton reste toujours actif mais le message d'erreur s'affiche bien. Message d'erreur doit être en rouge|
+| JS-13 | Confirmer mise bas avec (vivants + morts) inferieur ou egal aux nes | Pas d'avertissement, bouton actif |OK|R à S|
+| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond | Ouverture et fermeture correctes dans les trois cas |À revoir|Même cas que NAV-04|
 
 ## 23. Notifications temps reel et e-mail
 
@@ -343,13 +343,13 @@ Points de coordination :
 
 ## 24. Securite et session
 
-| #      | Cas de test                                                                                    | Resultat attendu                                                       | Statut | Remarques |
-| ------ | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------ | --------- |
-| SEC-01 | Deux onglets ouverts, se deconnecter dans l'un                                                 | L'autre onglet perd l'acces aux pages protegees                        |        |           |
-| SEC-02 | Reutiliser une page interne apres deconnexion (bouton Precedent)                               | Acces refuse, redirection login                                        |        |           |
-| SEC-03 | Saisir du code dans un champ texte (ex: balise script)                                         | La valeur est affichee telle quelle, aucun script execute (pas de XSS) |        |           |
-| SEC-04 | Saisir une apostrophe / point-virgule (ex: nom "O'Brien")                                      | Sauvegarde correcte, aucune erreur SQL                                 |        |           |
-| SEC-05 | Appeler une action ADMIN par URL directe en GESTIONNAIRE (ex: POST /utilisateurs/desactiver/1) | Refuse (403), aucune execution                                         |        |           |
+| # | Cas de test | Resultat attendu | Statut | Remarques |
+|---|---|---|---|---|
+| SEC-01 | Deux onglets ouverts, se deconnecter dans l'un | L'autre onglet perd l'acces aux pages protegees | OK | Mila actualisena |
+| SEC-02 | Reutiliser une page interne apres deconnexion (bouton Precedent) | Acces refuse, redirection login | OK | |
+| SEC-03 | Saisir du code dans un champ texte (ex: balise script) | La valeur est affichee telle quelle, aucun script execute (pas de XSS) | OK | |
+| SEC-04 | Saisir une apostrophe / point-virgule (ex: nom "O'Brien") | Sauvegarde correcte, aucune erreur SQL |OK | |
+| SEC-05 | Appeler une action ADMIN par URL directe en GESTIONNAIRE (ex: POST /utilisateurs/desactiver/1) | Refuse (403), aucune execution | OK | |
 
 Note technique : la protection CSRF est desactivee au niveau Spring Security ; la securite repose sur la session applicative (interceptor). A signaler comme choix de configuration.
 

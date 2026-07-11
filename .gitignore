@@ -13,5 +13,4 @@ target/
 .~lock.*#
 
 # Secrets / config locale (ne jamais committer de mots de passe)
-application-local.properties
 *.env
