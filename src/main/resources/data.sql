@@ -271,3 +271,46 @@ SELECT
 WHERE NOT EXISTS (
 SELECT 1 FROM ingredients WHERE nom = 'Tourteau'
 );
+
+-- =====================================================
+-- 11. LOTS DE PORCS (jeu de depart commun - recette)
+-- Prerequis pour les tests Reproduction, Ventes, Sante,
+-- Mouvements et Pesees. Idempotent via code_lot (UNIQUE).
+-- Baseline attendue : 4 lots actifs, 29 porcs actifs.
+-- =====================================================
+
+INSERT INTO lots_porcs(
+code_lot, race_id, sexe, objectif, origine,
+age_mois, effectif_initial, effectif_actuel, statut, description
+)
+VALUES
+('LOT-F01', (SELECT id FROM race WHERE nom = 'Large White'),
+ 'FEMELLE', 'REPRODUCTION', 'ACHAT', 12, 5, 5, 'ACTIF',
+ 'Lot femelle de reproduction (donnees de test).'),
+('LOT-E01', (SELECT id FROM race WHERE nom = 'Duroc'),
+ 'MALE', 'ENGRAISSEMENT', 'ACHAT', 4, 10, 10, 'ACTIF',
+ 'Lot engraissement (donnees de test).'),
+('LOT-C01', (SELECT id FROM race WHERE nom = 'Landrace'),
+ 'FEMELLE', 'CROISSANCE', 'NAISSANCE', 3, 8, 8, 'ACTIF',
+ 'Lot croissance (donnees de test).'),
+('LOT-V01', (SELECT id FROM race WHERE nom = 'Pietrain'),
+ 'MALE', 'VENTE', 'ACHAT', 6, 6, 6, 'ACTIF',
+ 'Lot destine a la vente / archivage (donnees de test).')
+ON CONFLICT (code_lot) DO NOTHING;
+
+-- =====================================================
+-- 12. CLIENTS (jeu de depart commun - recette)
+-- Prerequis pour les tests Ventes. Idempotent via nom.
+-- =====================================================
+
+INSERT INTO clients(nom, telephone, adresse)
+SELECT 'Boucherie Centrale', '0341234567', 'Antananarivo'
+WHERE NOT EXISTS (
+SELECT 1 FROM clients WHERE nom = 'Boucherie Centrale'
+);
+
+INSERT INTO clients(nom, telephone, adresse)
+SELECT 'Marche Ambohipo', '0329876543', 'Ambohipo'
+WHERE NOT EXISTS (
+SELECT 1 FROM clients WHERE nom = 'Marche Ambohipo'
+);
