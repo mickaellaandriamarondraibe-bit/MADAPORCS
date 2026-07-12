@@ -529,6 +529,15 @@ a {
   overflow-x: auto;
 }
 
+/* Responsive : sur petit écran, toute table .tbl défile horizontalement
+   (même si elle n'est pas encapsulée dans .table-wrap). */
+@media (max-width: 760px) {
+  table.tbl {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 table.tbl {
   width: 100%;
   border-collapse: collapse;
@@ -828,6 +837,17 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 
 .progress--gold>span {
   background: linear-gradient(90deg, var(--or-500), #d8b53a);
+}
+
+/* Couleur progressive selon l'urgence (jours restants avant mise bas). */
+.progress--ok>span {
+  background: linear-gradient(90deg, var(--vert-500), var(--vert-400));
+}
+.progress--warn>span {
+  background: linear-gradient(90deg, var(--ambre-600), #d97706);
+}
+.progress--danger>span {
+  background: linear-gradient(90deg, var(--rouge-600), #dc2626);
 }
 
 /* Definition list (détails) */

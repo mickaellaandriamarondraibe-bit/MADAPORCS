@@ -33,9 +33,6 @@ public class VaccinService {
         return dto;
     }
 
-    /**
-     * Retourne null si OK, sinon message erreur.
-     */
     public String enregistrer(VaccinDTO dto) {
         if (dto == null) return "Données invalides.";
         if (dto.getNom() == null || dto.getNom().trim().isEmpty()) return "Nom du vaccin obligatoire.";

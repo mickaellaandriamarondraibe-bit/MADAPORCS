@@ -34,14 +34,16 @@ public class UtilisateurController {
 
         if (id != null) {
             Utilisateur utilisateur = utilisateurService.findById(id);
-            if (utilisateur != null) {
-                dto.setId(utilisateur.getId());
-                dto.setNom(utilisateur.getNom());
-                dto.setPrenom(utilisateur.getPrenom());
-                dto.setEmail(utilisateur.getEmail());
-                dto.setRoleId(utilisateur.getRole().getId());
-                dto.setActif(utilisateur.getActif());
+            if (utilisateur == null) {
+                // Id inexistant : ne pas transformer silencieusement en creation.
+                return "redirect:/utilisateurs";
             }
+            dto.setId(utilisateur.getId());
+            dto.setNom(utilisateur.getNom());
+            dto.setPrenom(utilisateur.getPrenom());
+            dto.setEmail(utilisateur.getEmail());
+            dto.setRoleId(utilisateur.getRole().getId());
+            dto.setActif(utilisateur.getActif());
         }
 
         List<Role> roles = roleRepository.findAll();
@@ -60,11 +62,11 @@ public class UtilisateurController {
             result = utilisateurService.creer(dto);
         }
 
-        if ("error".equals(result)) {
+        if (result == null || !result.startsWith("redirect:")) {
             List<Role> roles = roleRepository.findAll();
             model.addAttribute("utilisateurDTO", dto);
             model.addAttribute("roles", roles);
-            model.addAttribute("error", "Cet email est déjà utilisé ou une erreur est survenue");
+            model.addAttribute("error", result);
             return "utilisateurs/form";
         }
 

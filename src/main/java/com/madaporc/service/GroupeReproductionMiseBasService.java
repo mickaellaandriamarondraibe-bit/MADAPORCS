@@ -19,12 +19,15 @@ public class GroupeReproductionMiseBasService {
 
     private final GroupeReproductionRepository groupeRepository;
     private final RepartitionReproductiveService repartitionReproductiveService;
+    private final LotNaissanceService lotNaissanceService;
 
     public GroupeReproductionMiseBasService(
             GroupeReproductionRepository groupeRepository,
-            RepartitionReproductiveService repartitionReproductiveService) {
+            RepartitionReproductiveService repartitionReproductiveService,
+            LotNaissanceService lotNaissanceService) {
         this.groupeRepository = groupeRepository;
         this.repartitionReproductiveService = repartitionReproductiveService;
+        this.lotNaissanceService = lotNaissanceService;
     }
 
     // Fonction pour afficher tout les details d'un groupe
@@ -109,8 +112,11 @@ public class GroupeReproductionMiseBasService {
                 groupe.getLotFemelle().getId(),
                 groupe.getNbFemellesMiseBas(),
                 groupe.getNombreFemellesConcernees());
-        //id null      → INSERT
-        //id existe    → UPDATE
+
+        // Création des lot(s) naissance dans la MÊME transaction : si elle échoue,
+        // la confirmation de mise bas est annulée aussi (plus d'état incohérent).
+        lotNaissanceService.creerLotsNaissance(groupeId, dto);
+
         return getDetailGroupe(groupeId);
     }
 

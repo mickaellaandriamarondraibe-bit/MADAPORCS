@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="edition" value="${not empty vente.id}" />
 <c:set var="pageTitle" value="${edition ? 'Modifier la vente' : 'Nouvelle vente'}" />
 <c:set var="crumbs"    value="Commerce / Ventes / <b>${edition ? 'Édition' : 'Création'}</b>" />
@@ -30,8 +31,22 @@
         <table class="tbl">
           <thead><tr><th>Lot</th><th class="num">Quantité</th><th class="num">Prix unitaire (Ar)</th><th class="num">Total ligne</th></tr></thead>
           <tbody>
-            <%-- 3 lignes par défaut ; le contrôleur peut en pré-remplir davantage --%>
-            <c:forEach var="i" begin="0" end="2">
+            <%-- Lignes existantes (pre-remplies a l'edition ; 3 lignes vides en creation) --%>
+            <c:forEach var="ligne" items="${vente.lignes}" varStatus="st">
+              <tr data-line>
+                <td>
+                  <select class="select" name="lignes[${st.index}].lotId">
+                    <option value="">—</option>
+                    <c:forEach var="l" items="${lots}"><option value="${l.id}" ${ligne.lotId == l.id ? 'selected' : ''}>${l.codeLot} (${l.effectifActuel})</option></c:forEach>
+                  </select>
+                </td>
+                <td class="num"><input class="input" type="number" min="0" name="lignes[${st.index}].quantite" data-qty value="${ligne.quantite}" style="text-align:right"></td>
+                <td class="num"><input class="input" type="number" min="0" name="lignes[${st.index}].prixUnitaire" data-price value="${ligne.prixUnitaire}" style="text-align:right"></td>
+                <td class="num"><b data-line-total>0</b></td>
+              </tr>
+            </c:forEach>
+            <%-- Deux lignes vides supplementaires pour en ajouter --%>
+            <c:forEach var="i" begin="${fn:length(vente.lignes)}" end="${fn:length(vente.lignes) + 1}">
               <tr data-line>
                 <td>
                   <select class="select" name="lignes[${i}].lotId">

@@ -1,6 +1,5 @@
 package com.madaporc.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,8 +31,11 @@ public class NotificationService {
                 client.send(SseEmitter.event()
                     .name("notification")
                     .data(message));
-            } catch (IOException e) {
-                clients.remove(client); // client déconnecté
+            } catch (Exception e) {
+                // On attrape TOUTE erreur (client deconnecte : IOException, ou emitter
+                // deja termine : IllegalStateException) pour ne jamais casser l'appelant
+                // (ex. la tache planifiee d'alertes).
+                clients.remove(client);
             }
         }
     }

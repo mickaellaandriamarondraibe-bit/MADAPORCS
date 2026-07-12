@@ -16,6 +16,9 @@ import com.madaporc.model.Vente;
 @Repository
 public interface VenteRepository extends JpaRepository<Vente, Long> {
 
+    // Historique d'achats d'un client (fiche client).
+    java.util.List<Vente> findByClientIdOrderByDateVenteDesc(Long clientId);
+
   @Override
   @EntityGraph(attributePaths = {"client"})
   List<Vente> findAll();

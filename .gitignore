@@ -14,3 +14,11 @@ target/
 
 # Secrets / config locale (ne jamais committer de mots de passe)
 *.env
+application-local.properties
+
+# Crash JVM / dumps
+hs_err_pid*.log
+replay_pid*.log
+
+# Documents (deplaces dans docs/) - garder le suivi si souhaite, sinon decommenter
+# docs/

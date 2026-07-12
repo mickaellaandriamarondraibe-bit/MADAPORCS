@@ -70,15 +70,4 @@ public class LotPorcController {
 
         return "redirect:/lots";
     }
-    
-    @GetMapping("/lots/archive/{id}")
-    public String archiverGet(@PathVariable Long id) {
-        String error = lotPorcService.archiverLot(id);
-
-        if (error != null) {
-            return "redirect:/lots?error=" + error;
-        }
-
-        return "redirect:/lots";
-    }
 }

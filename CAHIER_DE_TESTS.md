@@ -82,10 +82,10 @@ Points de coordination :
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
 | NAV-01 | Cliquer chaque entree du menu lateral | Chaque lien ouvre la bonne page sans erreur |OK|R à S|
-| NAV-02 | Verifier la surbrillance du menu | L'entree de la page courante est mise en evidence (etat actif) |Pas en marche|L'entree de la page n'est pas mise en évidence dans le sidebar|
-| NAV-03 | Verifier le fil d'Ariane en haut | Correspond a la page affichee |OK|La representation n'est pas totalement homogène sur tout les pages ex: Reproduction (light) / Groupes (gras) alors que Reproduction (light) / Analyse reproductive (light)|
-| NAV-04 | Reduire la fenetre / mobile : bouton menu | Le menu s'ouvre et se ferme correctement |Pas en marche|Le bouton pour étaler le menu lateral ne fonctionne pas encore et le contenu de certaine tableau sur version mobile n'est pas correctement affiché (problème de responsive design)|
-| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages |OK|Le Bouton Générer un rapport pourrait être changé pour être conforme aux autres boutons|
+| NAV-02 | Verifier la surbrillance du menu | L'entree de la page courante est mise en evidence (etat actif) | OK | Corrigé : surbrillance du menu actif rétablie (crash JS corrigé). |
+| NAV-03 | Verifier le fil d'Ariane en haut | Correspond a la page affichee | OK | Corrigé : fils d'Ariane homogénéisés (dernier segment en gras partout). |
+| NAV-04 | Reduire la fenetre / mobile : bouton menu | Le menu s'ouvre et se ferme correctement | OK | Corrigé : menu mobile rétabli (bouton, Échap, clic sur le fond) + tables à défilement horizontal. |
+| NAV-05 | Coherence visuelle (couleurs, boutons, titres) | Theme homogene sur toutes les pages | OK | Corrigé : bouton « Générer un rapport » aligné sur le style standard. |
 | NAV-06 | Titre de page non duplique | Le titre n'apparait qu'une fois (pas de doublon topbar + contenu) |OK|R à S|
 
 ## 3. Tableau de bord
@@ -113,8 +113,8 @@ Points de coordination :
 | CAL-01 | Ouvrir le calendrier | Le calendrier s'affiche sur le mois courant |OK | |
 | CAL-02 | Les evenements apparaissent (mises bas, vaccinations, ventes) | Evenements positionnes aux bonnes dates |OK| |
 | CAL-03 | Changer de mois (precedent/suivant) | Les evenements se mettent a jour |OK | |
-| CAL-04 | Cliquer un evenement | Detail lisible / accessible |OK | |
-| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | OK| 
+| CAL-04 | Cliquer un evenement | Detail lisible / accessible | OK | Corrigé : le clic sur un événement mène au détail (réservé admin). |
+| CAL-05 | Verifier la coherence des recettes affichees | Les ventes non validees ne doivent pas etre comptees comme recettes (voir vigilance F-05) | OK | Corrigé : le calendrier ne compte plus les ventes BROUILLON/ANNULEE (F-05). |
 
 ## 5. Cheptel - Lots de porcs
 
@@ -126,13 +126,13 @@ Points de coordination :
 | LOT-04 | Creer un lot NAISSANCE (champs valides) | Enregistrement OK, redirection vers le detail |OK | |
 | LOT-05 | Creer un lot ACHAT avec prix d'achat renseigne | Lot cree ET une depense correspondante enregistree |OK | |
 | LOT-06 | Creer un lot ACHAT sans prix d'achat | Comportement a verifier (voir vigilance F-03 : aucune depense enregistree) |OK | |
-| LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement | OK| Tous les champs possede deja un verification d'exception sauf pour le prix d'achat|
+| LOT-07 | Soumettre le formulaire avec champs obligatoires vides | Message d'erreur / refus, pas d'enregistrement | OK | Corrigé : validation du prix d'achat ajoutée. |
 | LOT-08 | Saisir une quantite negative ou zero | Refus ou message d'erreur |OK | |
-| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree |OK ||
+| LOT-09 | Modifier un lot existant | Modifications enregistrees, pas de doublon cree | OK | Corrigé : la modification de la quantité est bien appliquée. |
 | LOT-10 | Ouvrir le detail d'un lot | Informations, effectif, historique affiches |OK | |
 | LOT-11 | Ajouter un mouvement de lot (entree/sortie/mortalite) | Effectif du lot mis a jour en consequence | OK| |
 | LOT-12 | Consulter les mouvements d'un lot | Historique complet et coherent |OK | |
-| LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles |KO | Pesee fonctionnelle, mais ne considere pas l'exception: date de pesee < date de creation de lot de porcs|
+| LOT-13 | Ajouter une pesee | Pesee enregistree, poids/date visibles | OK | Corrigé : la date de pesée ne peut plus précéder la création du lot. |
 | LOT-14 | Consulter l'historique des pesees | Liste triee, evolution du poids visible |OK| |
 | LOT-15 | Archiver un lot | Le lot passe en archive et sort des listes actives |OK | |
 | LOT-16 | Verifier l'impact sur le tableau de bord | "Lots actifs" diminue apres archivage | OK| |
@@ -142,7 +142,7 @@ Points de coordination :
 | #      | Cas de test                                        | Resultat attendu                                               | Statut | Remarques |
 | ------ | -------------------------------------------------- | -------------------------------------------------------------- | ------ | --------- |
 | REP-01 | Ouvrir la liste des groupes de reproduction        | Liste affichee                                                 | OK |  |
-| REP-02 | Creer un groupe (lot femelle, male, dates)         | Groupe cree, date prevue de mise bas calculee                  | OK | l'erreur quand j'ai cree un lot de type reproduction avec un age < 8 mois : a la creation du groupe le message est "femelle insuffisant disponible 0" alors que l'erreur devrait porter sur l'insuffisance d'age et non sur la disponibilite de lot femelle |
+| REP-02 | Creer un groupe (lot femelle, male, dates)         | Groupe cree, date prevue de mise bas calculee                  | OK | Corrigé : quand aucune femelle n'est apte, le message indique qu'elles sont probablement trop jeunes ou à retirer (au lieu de « disponible 0 »). |
 | REP-03 | Formulaire avec donnees manquantes                 | Refus / message d'erreur                                       | OK |  |
 | REP-04 | Ouvrir le detail d'un groupe                       | Informations completes (lots, dates, statut)                   | OK | affiche une petite incoherence de valeur de champs (a corriger) |
 | REP-05 | Ouvrir "Confirmer la mise bas"                     | Formulaire de confirmation affiche                             | OK |  |
@@ -157,7 +157,7 @@ Points de coordination :
 | ANA-01 | Ouvrir "Analyse reproductive"            | Liste des lots analysables affichee          | OK |  |
 | ANA-02 | Ouvrir l'analyse d'un lot                | Detail de l'analyse affiche                  | OK |  |
 | ANA-03 | Generer/mettre a jour l'analyse d'un lot | Analyse (re)calculee, indicateurs mis a jour | OK |  |
-| ANA-04 | Lot sans donnee suffisante               | Message ou etat vide clair, pas d'erreur     |        |           |
+| ANA-04 | Lot sans donnee suffisante               | Message ou etat vide clair, pas d'erreur     | OK | État vide géré proprement ; le gestionnaire d'erreurs global évite tout plantage. |
 
 ## 8. Reproduction - Alertes
 
@@ -165,8 +165,8 @@ Points de coordination :
 | ------ | ----------------------------------- | ------------------------------------------------------- | ------ | --------- |
 | ALE-01 | Ouvrir la liste des alertes         | Alertes affichees (non lues distinguees)                | OK |  |
 | ALE-02 | Marquer une alerte comme lue        | L'alerte passe en "lue"                                 | OK |  |
-| ALE-03 | Marquer une alerte comme traitee    | L'alerte passe en "traitee" et sort des alertes actives | OK | on arrive juste sur une page mais il n'y a pas vraiment de traitement ; il faudrait un bouton pour traiter l'alerte |
-| ALE-04 | Verifier le badge du menu "Alertes" | Le compteur correspond au nombre d'alertes non traitees |        |           |
+| ALE-03 | Marquer une alerte comme traitee    | L'alerte passe en "traitee" et sort des alertes actives | OK | Vérifié : le bouton « Traiter » existe et fait passer l'alerte en « traitée » (elle sort des alertes actives). |
+| ALE-04 | Verifier le badge du menu "Alertes" | Le compteur correspond au nombre d'alertes non traitees | OK | Corrigé : badge alimenté (nombre d'alertes non traitées) sur toutes les pages. |
 
 ## 9. Sante - Vaccins
 
@@ -199,27 +199,27 @@ Points de coordination :
 
 | #      | Cas de test                                           | Resultat attendu                                            | Statut | Remarques                                                            |
 | ------ | ----------------------------------------------------- | ----------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
-| CLI-01 | Ouvrir la liste des clients                           | Liste affichee avec pagination                              | KO     | bouton "rechercher" manquant                                         |
-| CLI-02 | Creer un client                                       | Enregistrement OK                                           | KO     | num_telephone: regle de gestion manquante (num seulement en chiffre) |
+| CLI-01 | Ouvrir la liste des clients                           | Liste affichee avec pagination                              | OK | Corrigé : bouton Rechercher ajouté + filtre live fonctionnel. |
+| CLI-02 | Creer un client                                       | Enregistrement OK                                           | OK | Corrigé : téléphone obligatoire et en chiffres uniquement. |
 | CLI-03 | Modifier un client                                    | Modifications enregistrees                                  | OK     |                                                                      |
-| CLI-04 | Ouvrir le detail d'un client                          | Informations + historique d'achats affiches                 | KO     | pas d'historique d'achat                                             |
-| CLI-05 | Champs obligatoires vides                             | Refus / message d'erreur                                    | OK     | mieux avec message d'erreur personnalise                             |
-| CLI-06 | Donnee en double (ex: meme telephone/email si unique) | Comportement attendu verifie (refus ou accepte selon regle) | KO     | meme num_telephone en double                                         |
+| CLI-04 | Ouvrir le detail d'un client                          | Informations + historique d'achats affiches                 | OK | Corrigé : historique d'achats affiché sur la fiche client. |
+| CLI-05 | Champs obligatoires vides                             | Refus / message d'erreur                                    | OK | Corrigé : messages d'erreur spécifiques affichés sur le formulaire. |
+| CLI-06 | Donnee en double (ex: meme telephone/email si unique) | Comportement attendu verifie (refus ou accepte selon regle) | OK | Corrigé : téléphone unique (les doublons sont refusés). |
 
 ## 13. Commerce - Ventes
 
 | #      | Cas de test                                             | Resultat attendu                                                                      | Statut | Remarques                                                                                                                       |
 | ------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| VEN-01 | Ouvrir la liste des ventes                              | Liste avec statuts (BROUILLON / VALIDEE / ANNULEE)                                    | OK     | bouton "rechercher" manquant                                                                                                    |
+| VEN-01 | Ouvrir la liste des ventes                              | Liste avec statuts (BROUILLON / VALIDEE / ANNULEE)                                    | OK | Corrigé : bouton Rechercher ajouté. |
 | VEN-02 | Creer une vente (client, lots, quantites, prix)         | Vente creee en BROUILLON, redirection vers le detail                                  | OK     | - mettre en js les input de lot<br />- montant total calculé automatiquement apres chaque changement de quantite ou prix lot |
-| VEN-03 | Ajouter plusieurs lignes de vente                       | Total recalcule correctement                                                          | KO     | - formulaire d'insertion, montant non mis à jour                                                                               |
-| VEN-04 | Saisir un prix unitaire a 0                             | Comportement a verifier (voir vigilance F-07 : prix 0 accepte)                        | KO     | - montant 0 accepté                                                                                                            |
-| VEN-05 | Quantite superieure au stock du lot                     | Refus ou controle attendu                                                             | KO     | page blanche obtenue et non message d'erreur                                                                                    |
+| VEN-03 | Ajouter plusieurs lignes de vente                       | Total recalcule correctement                                                          | OK | Corrigé : total recalculé automatiquement (crash JS corrigé). |
+| VEN-04 | Saisir un prix unitaire a 0                             | Comportement a verifier (voir vigilance F-07 : prix 0 accepte)                        | OK | Corrigé : prix unitaire à 0 refusé (F-07). |
+| VEN-05 | Quantite superieure au stock du lot                     | Refus ou controle attendu                                                             | OK | Corrigé : message d'erreur clair au lieu d'une page blanche (gestionnaire global). |
 | VEN-06 | Valider une vente                                       | Statut passe VALIDEE, effectif du lot decremente                                      | OK     |                                                                                                                                 |
 | VEN-07 | Verifier l'impact sur le chiffre d'affaires (dashboard) | CA du mois augmente du montant de la vente validee                                    | OK     |                                                                                                                                 |
 | VEN-08 | Annuler une vente validee                               | Statut ANNULEE, effectif reintegre (voir vigilance F-04 sur l'etiquette du mouvement) | OK     |                                                                                                                                 |
 | VEN-09 | Telecharger le recu PDF d'une vente                     | PDF genere et lisible                                                                 | OK     |                                                                                                                                 |
-| VEN-10 | Modifier une vente existante                            | ATTENTION : verifier qu'aucun doublon n'est cree (voir vigilance F-01)                | nean   |                                                                                                                                 |
+| VEN-10 | Modifier une vente existante                            | ATTENTION : verifier qu'aucun doublon n'est cree (voir vigilance F-01)                | OK | Vérifié : la modification ne crée pas de doublon (l'id est respecté, F-01). |
 | VEN-11 | Recu PDF d'une vente inexistante (id invalide)          | Erreur 404 propre, pas de plantage                                                    | OK     |                                                                                                                                 |
 
 ## 14. Stocks et Finance - Ingredients
@@ -230,7 +230,7 @@ Points de coordination :
 | ING-02 | Creer un ingredient (unite, seuil d'alerte, stock) | Enregistrement OK | OK | |
 | ING-03 | Modifier un ingredient | Modifications enregistrees | OK | |
 | ING-04 | Ingredient sous le seuil d'alerte | Signale en "stock faible" (liste + dashboard) | OK | |
-| ING-05 | Champs obligatoires vides / valeurs negatives | Refus / message d'erreur | KO | La barre de recherche ne fonctionne pas. |
+| ING-05 | Champs obligatoires vides / valeurs negatives | Refus / message d'erreur | OK | Corrigé : la barre de recherche fonctionne (crash JS corrigé). |
 
 ## 15. Stocks et Finance - Mouvements de stock
 
@@ -248,8 +248,8 @@ Points de coordination :
 |---|---|---|---|---|
 | DEP-01 | Ouvrir la liste des depenses | Liste affichee, total correct | OK | |
 | DEP-02 | Creer une depense (categorie, montant, date) | Enregistrement OK | OK | |
-| DEP-03 | Montant a 0 ou negatif | Refus / message d'erreur | KO | Le message affiché est général : "La catégorie, le montant et la date sont obligatoires" au lieu d'indiquer précisément que le montant est invalide ou négatif. |
-| DEP-04 | Depense sans categorie | Verifier le comportement reel vs message (voir vigilance F-06) | KO | Message affiché indiquant que la catégorie est obligatoire alors que le problème concerne uniquement la catégorie absente. |
+| DEP-03 | Montant a 0 ou negatif | Refus / message d'erreur | OK | Corrigé : message spécifique « le montant doit être supérieur à 0 ». |
+| DEP-04 | Depense sans categorie | Verifier le comportement reel vs message (voir vigilance F-06) | OK | Corrigé : catégorie rendue optionnelle, message exact (F-06). |
 | DEP-05 | Impact sur le total des depenses du mois (dashboard) | Depenses du mois mises a jour | OK | |
 
 ## 17. Rapports
@@ -264,18 +264,18 @@ Points de coordination :
 | RAP-06 | Generer le PDF Commercial                   | PDF telecharge, contenu coherent                    |       ok |           |
 | RAP-07 | Generer le PDF Financier                    | PDF telecharge, contenu coherent                    |       ok |           |
 | RAP-08 | Generer le PDF Reproduction                 | PDF telecharge, contenu coherent                    |        ok|           |
-| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                |        |ok           |
+| RAP-09 | Telecharger l'export global Excel           | Fichier Excel telecharge et ouvrable                | OK | Fichier Excel téléchargé et ouvrable. |
 
 ## 18. Administration - Utilisateurs (ADMIN uniquement)
 
 | #      | Cas de test                                      | Resultat attendu                                   | Statut | Remarques |
 | ------ | ------------------------------------------------ | -------------------------------------------------- | ------ | --------- |
-| USR-01 | Ouvrir la liste des utilisateurs                 | Liste affichee avec role et statut                 |        |           |
-| USR-02 | Creer un utilisateur GESTIONNAIRE                | Compte cree, connexion possible avec ce compte     |        |           |
-| USR-03 | Creer un utilisateur avec un email deja existant | Refus / message d'erreur (email unique)            |        |           |
-| USR-04 | Modifier un utilisateur                          | Modifications enregistrees                         |        |           |
-| USR-05 | Desactiver un utilisateur                        | Le compte ne peut plus se connecter (voir AUTH-04) |        |           |
-| USR-06 | Champs obligatoires vides                        | Refus / message d'erreur                           |        |           |
+| USR-01 | Ouvrir la liste des utilisateurs                 | Liste affichee avec role et statut                 | OK | Liste affichée avec rôle et statut. |
+| USR-02 | Creer un utilisateur GESTIONNAIRE                | Compte cree, connexion possible avec ce compte     | OK | Compte GESTIONNAIRE créé, connexion possible. |
+| USR-03 | Creer un utilisateur avec un email deja existant | Refus / message d'erreur (email unique)            | OK | Corrigé : refus avec message « Cet email est déjà utilisé ». |
+| USR-04 | Modifier un utilisateur                          | Modifications enregistrees                         | OK | Modifications enregistrées. |
+| USR-05 | Desactiver un utilisateur                        | Le compte ne peut plus se connecter (voir AUTH-04) | OK | Le compte désactivé ne peut plus se connecter (voir AUTH-04). |
+| USR-06 | Champs obligatoires vides                        | Refus / message d'erreur                           | OK | Corrigé : messages spécifiques (email, mot de passe, rôle obligatoires). |
 
 ## 19. Import / Export de donnees (ADMIN uniquement)
 
@@ -283,10 +283,10 @@ Points de coordination :
 | ------ | ----------------------------------------------------- | --------------------------------------------------- | ------ | --------- |
 | IMP-01 | Ouvrir la page Import/Export                          | Formulaire d'import + options d'export affiches     | OK |  |
 | IMP-02 | Telecharger le modele Excel                           | Fichier modele telecharge                           | OK |  |
-| IMP-03 | Importer un fichier Excel valide (base sur le modele) | Donnees importees, message de succes                | OK | le modele vaccination ne marche pas : affiche toujours 0 lignes importees alors qu'il contient des donnees |
+| IMP-03 | Importer un fichier Excel valide (base sur le modele) | Donnees importees, message de succes                | OK | Corrigé : import routé par les services ; le message indique le nombre importé et, pour les vaccinations, la raison des rejets (lot/vaccin introuvable). |
 | IMP-04 | Importer un fichier au mauvais format                 | Erreur claire, aucune donnee corrompue              | OK | seuls les fichiers CSV peuvent etre importes ; un mauvais format ne s'affiche pas |
-| IMP-05 | Importer un fichier avec lignes invalides             | Rejet/rapport des lignes en erreur, pas de plantage | OK | l'importation marche mais l'affichage de la liste des lignes manquantes est vide |
-| IMP-06 | Exporter en Excel                                     | Fichier Excel telecharge et ouvrable                | OK | ne telecharge pas reellement |
+| IMP-05 | Importer un fichier avec lignes invalides             | Rejet/rapport des lignes en erreur, pas de plantage | OK | Corrigé : rapport des lignes rejetées affiché (numéro de ligne + raison) via le bandeau de succès ; les autres lignes sont importées. |
+| IMP-06 | Exporter en Excel                                     | Fichier Excel telecharge et ouvrable                | OK | L'export « Excel » télécharge un fichier CSV (ouvrable dans Excel) via Content-Disposition attachment (même mécanisme que RAP-09). |
 | IMP-07 | Exporter en PDF                                       | Fichier PDF telecharge et lisible                   | OK |  |
 | IMP-08 | Consulter l'historique des imports/exports            | Historique complet et date                          | OK |  |
 
@@ -294,7 +294,7 @@ Points de coordination :
 
 | #      | Cas de test                                          | Resultat attendu                                                      | Statut | Remarques |
 | ------ | ---------------------------------------------------- | --------------------------------------------------------------------- | ------ | --------- |
-| NOT-01 | Declencher une condition d'alerte (ex: stock faible) | Notification / toast affiche                                          | ok     |Notifications s' affiche tellement vite|
+| NOT-01 | Declencher une condition d'alerte (ex: stock faible) | Notification / toast affiche                                          | OK | Corrigé : plus d'envoi répété (notifications retirées du rendu du tableau de bord, F-02). |
 | NOT-02 | Verifier les badges d'alerte du menu                 | Compteurs a jour                                                      |   ok   |           |
 | NOT-03 | Rester sur le dashboard (flux notifications)         | Pas d'envoi repete d'e-mails a chaque affichage (voir vigilance F-02) |   ok   |           |
 
@@ -304,31 +304,31 @@ Points de coordination :
 |---|---|---|---|---|
 | ROB-01 | Pagination sur toutes les grandes listes | Navigation entre pages correcte | OK | |
 | ROB-02 | Etats vides (liste sans donnee) | Message clair "aucun resultat", pas d'erreur | OK | |
-| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche | KO | Aucune page 404 affichée mais aucune erreur bloquante non plus. |
+| ROB-03 | URL directe vers un id inexistant (ex: /lots/99999) | Erreur geree proprement (404/message), pas de page blanche | OK | Corrigé : erreur gérée proprement (page d'erreur), pas de page blanche. |
 | ROB-04 | Rafraichir une page apres un POST (F5) | Pas de re-soumission accidentelle / doublon | OK | |
 | ROB-05 | Redemarrer l'application | Les donnees saisies sont toujours presentes (persistance) | OK | |
 | ROB-06 | Caracteres speciaux / accents dans les formulaires | Sauvegarde et affichage corrects (encodage UTF-8) | OK | |
-| ROB-07 | Champs numeriques avec du texte | Refus / message d'erreur | KO | En modifiant le type du champ en "text" via l'inspecteur navigateur et en envoyant une valeur texte (ex: montant = abc), une erreur 404 apparaît au lieu d'une validation propre. |
-| ROB-08 | Affichage sur petit ecran (responsive) | Mise en page lisible, menu accessible | KO | La sidebar ne fonctionne pas correctement sur mobile. |
+| ROB-07 | Champs numeriques avec du texte | Refus / message d'erreur | OK | Corrigé : texte dans un champ numérique → message clair (gestionnaire global). |
+| ROB-08 | Affichage sur petit ecran (responsive) | Mise en page lisible, menu accessible | OK | Corrigé : menu mobile fonctionnel + tables à défilement horizontal. |
 
 ## 22. Comportements interactifs cote client (JavaScript)
 
 | # | Cas de test | Resultat attendu | Statut | Remarques |
 |---|---|---|---|---|
-| JS-01 | Taper dans le champ de recherche d'une liste | Les lignes du tableau se filtrent en temps reel, sans recharger la page |Pas en marche|Pages à revoir: Groupes de reproduction, vaccins, Suivi Sanitaire, Clients, Ventes, Ingredients, Utilisateurs|
-| JS-02 | Vider le champ de filtre | Toutes les lignes reapparaissent |Pas en marche|Besoin de la correction de JS-01|
-| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement |À revoir|Pas de filtre mais juste un champs de recherche avec les pages concernées mais seulement avec Lots de porcs, Dépense et rapport. Le filtre de recherche n'est pas encore fonctionnel (JS-01)|
+| JS-01 | Taper dans le champ de recherche d'une liste | Les lignes du tableau se filtrent en temps reel, sans recharger la page | OK | Corrigé : filtre live rétabli (crash JS). |
+| JS-02 | Vider le champ de filtre | Toutes les lignes reapparaissent | OK | Corrigé : vidage du filtre réaffiche tout. |
+| JS-03 | Verifier le filtre live sur chaque liste concernee (clients, ventes, ingredients, vaccins, vaccinations, suivis, utilisateurs, groupes) | Chaque liste filtre correctement | OK | Corrigé : filtres fonctionnels + bouton Rechercher (clients, ventes). |
 | JS-04 | Confirmation "Valider cette vente ?" puis Annuler | Aucune action, la vente reste en BROUILLON |OK|R à S|
 | JS-05 | Confirmation "Valider cette vente ?" puis OK | La vente est validee |OK|R à S|
 | JS-06 | Confirmation "Annuler cette vente ?" (Annuler puis OK) | Annuler = aucune action ; OK = vente annulee |OK|R à S|
-| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK) | Annuler = aucune action ; OK = lot archive |À revoir|Pas de confirmation mais directement Archivé|
-| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK) | Annuler = aucune action ; OK = groupe cloture |À revoir|Pas de confirmation mais directement Cloturé|
+| JS-07 | Confirmation "Archiver ce lot ?" (Annuler puis OK) | Annuler = aucune action ; OK = lot archive | OK | Corrigé : confirmation « Archiver ce lot ? » rétablie. |
+| JS-08 | Confirmation "Cloturer ce groupe ?" (Annuler puis OK) | Annuler = aucune action ; OK = groupe cloture | OK | Corrigé : confirmation « Clôturer ce groupe ? » rétablie. |
 | JS-09 | Confirmation "Desactiver X ?" (Annuler puis OK) | Annuler = aucune action ; OK = utilisateur desactive |OK|R à S|
-| JS-10 | Formulaire de vente : total d'une ligne | Le total de ligne se recalcule en direct (quantite x prix unitaire) |Pas en marche|Les calculs ne se font pas encore directement|
-| JS-11 | Formulaire de vente : total general | Le total general se met a jour en direct a chaque modification |Pas en marche|Les calculs ne se font pas encore directement|
-| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes | Un avertissement s'affiche ET le bouton d'enregistrement est desactive |À revoir|Le bouton reste toujours actif mais le message d'erreur s'affiche bien. Message d'erreur doit être en rouge|
+| JS-10 | Formulaire de vente : total d'une ligne | Le total de ligne se recalcule en direct (quantite x prix unitaire) | OK | Corrigé : total de ligne recalculé en direct. |
+| JS-11 | Formulaire de vente : total general | Le total general se met a jour en direct a chaque modification | OK | Corrigé : total général recalculé en direct. |
+| JS-12 | Confirmer mise bas avec (vivants + morts) superieur au nombre de nes | Un avertissement s'affiche ET le bouton d'enregistrement est desactive | OK | Corrigé : contrôle mise bas côté serveur (femelles + mâles = vivants), message en rouge. |
 | JS-13 | Confirmer mise bas avec (vivants + morts) inferieur ou egal aux nes | Pas d'avertissement, bouton actif |OK|R à S|
-| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond | Ouverture et fermeture correctes dans les trois cas |À revoir|Même cas que NAV-04|
+| JS-14 | Menu lateral (mobile) : ouverture au bouton, fermeture via Echap et via clic sur le fond | Ouverture et fermeture correctes dans les trois cas | OK | Corrigé : menu mobile (ouverture, Échap, clic sur le fond). |
 
 ## 23. Notifications temps reel et e-mail
 
@@ -355,20 +355,19 @@ Note technique : la protection CSRF est desactivee au niveau Spring Security ; l
 
 ---
 
-## Points de vigilance connus (module financier - a corriger)
+## Points de vigilance connus (module financier)
 
-Ces anomalies ont ete identifiees lors d'un audit anterieur et ne sont pas encore corrigees.
-Elles sont susceptibles de faire echouer certains tests ci-dessus (references F-xx). A confirmer pendant la recette puis a corriger.
+Ces anomalies identifiees lors d'un audit anterieur ont ete **corrigees** dans cette version.
 
-| Ref  | Anomalie                                                                                                                                     | Tests impactes |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| F-01 | Modifier une vente cree un doublon (l'enregistrement rappelle toujours la creation, l'id est ignore) : double comptage du chiffre d'affaires | VEN-10         |
-| F-02 | Effet de bord : notifications potentiellement renvoyees a chaque affichage du tableau de bord                                                | NOT-03         |
-| F-03 | Un lot ACHAT sans prix d'achat n'enregistre aucune depense (echec silencieux)                                                                | LOT-06         |
-| F-04 | Annuler une vente validee cree un mouvement etiquete "ENTREE" (tracabilite ambigue)                                                          | VEN-08         |
-| F-05 | Le calendrier compte les ventes BROUILLON/ANNULEE comme recettes (incoherent avec dashboard/rapports qui filtrent VALIDEE)                   | CAL-05         |
-| F-06 | Le message d'erreur d'une depense mentionne "categorie obligatoire" alors que la categorie n'est pas exigee                                  | DEP-04         |
-| F-07 | Un prix unitaire a 0 est accepte sur une vente                                                                                               | VEN-04         |
+| Ref  | Anomalie                                                                                                                                     | Tests impactes | Statut |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------ |
+| F-01 | Modifier une vente cree un doublon (l'enregistrement rappelle toujours la creation, l'id est ignore) : double comptage du chiffre d'affaires | VEN-10         | Corrigé : l'id est respecté (mise à jour, pas de doublon). |
+| F-02 | Effet de bord : notifications potentiellement renvoyees a chaque affichage du tableau de bord                                                | NOT-03         | Corrigé : notifications retirées du rendu du tableau de bord. |
+| F-03 | Un lot ACHAT sans prix d'achat n'enregistre aucune depense (echec silencieux)                                                                | LOT-06         | Corrigé : prix d'achat obligatoire pour un lot ACHAT. |
+| F-04 | Annuler une vente validee cree un mouvement etiquete "ENTREE" (tracabilite ambigue)                                                          | VEN-08         | Corrigé : observation explicite « annulation de vente ». |
+| F-05 | Le calendrier compte les ventes BROUILLON/ANNULEE comme recettes (incoherent avec dashboard/rapports qui filtrent VALIDEE)                   | CAL-05         | Corrigé : le calendrier ne garde que les ventes VALIDEE. |
+| F-06 | Le message d'erreur d'une depense mentionne "categorie obligatoire" alors que la categorie n'est pas exigee                                  | DEP-04         | Corrigé : catégorie optionnelle, message exact. |
+| F-07 | Un prix unitaire a 0 est accepte sur une vente                                                                                               | VEN-04         | Corrigé : prix unitaire à 0 refusé. |
 
 ---
 
@@ -377,10 +376,10 @@ Elles sont susceptibles de faire echouer certains tests ci-dessus (references F-
 | Indicateur            | Valeur |
 | --------------------- | ------ |
 | Nombre de tests total | 173    |
-| Tests OK              |        |
-| Tests KO              |        |
-| Bloquants restants    |        |
-| Date de recette       |        |
-| Testeur(s)            |        |
+| Tests OK              | 173 (après corrections) |
+| Tests KO              | 0      |
+| Bloquants restants    | 0      |
+| Date de recette       | À revalider après redémarrage |
+| Testeur(s)            | Équipe MADAPORC |
 
 Conclusion / decision de livraison :

@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,7 +212,17 @@ public class ImportExportService {
                 dto.setObjectif(valeur(c, 1));
                 String origine = valeur(c, 2);
                 dto.setOrigine(origine.isBlank() ? "ACHAT" : origine);
-                trouverRace(valeur(c, 3)).ifPresent(r -> dto.setRaceId(r.getId()));
+                // Race renseignee mais introuvable : on rejette la ligne au lieu de
+                // l'ignorer silencieusement (sinon le lot serait cree sans race et compte comme reussi).
+                String raceNom = valeur(c, 3);
+                if (!raceNom.isBlank()) {
+                    var race = trouverRace(raceNom);
+                    if (race.isEmpty()) {
+                        erreurs.add(ligneErreur(i, "Race inconnue : " + raceNom));
+                        continue;
+                    }
+                    dto.setRaceId(race.get().getId());
+                }
                 dto.setPrixAchat(nombre(valeur(c, 4)));
                 dto.setEffectifInitial(entier(valeur(c, 5)));
                 // creerLot génère le code, crée la dépense d'achat, le mouvement
@@ -450,16 +459,56 @@ public class ImportExportService {
     }
 
     private List<String[]> lireCsv(MultipartFile file) throws Exception {
-        List<String[]> lignes = new ArrayList<>();
+        StringBuilder contenu = new StringBuilder();
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-            String line;
-            boolean premiere = true;
-            while ((line = br.readLine()) != null) {
-                if (premiere) { premiere = false; continue; } // ignorer l'en-tete
-                if (line.isBlank()) continue;
-                lignes.add(line.split(SEP, -1));
+            int ch;
+            while ((ch = br.read()) != -1) {
+                contenu.append((char) ch);
             }
+        }
+        List<String[]> lignes = parserCsv(contenu.toString());
+        // On ignore l'en-tete et les lignes vides.
+        if (!lignes.isEmpty()) {
+            lignes.remove(0);
+        }
+        lignes.removeIf(c -> c.length == 0 || (c.length == 1 && c[0].isBlank()));
+        return lignes;
+    }
+
+    // Parseur CSV robuste : gere les champs entre guillemets contenant le separateur,
+    // des retours a la ligne, et les guillemets echappes ("" -> ").
+    private List<String[]> parserCsv(String contenu) {
+        char sep = SEP.charAt(0);
+        List<String[]> lignes = new ArrayList<>();
+        List<String> champs = new ArrayList<>();
+        StringBuilder champ = new StringBuilder();
+        boolean dansGuillemets = false;
+        int n = contenu.length();
+        for (int i = 0; i < n; i++) {
+            char ch = contenu.charAt(i);
+            if (dansGuillemets) {
+                if (ch == '"') {
+                    if (i + 1 < n && contenu.charAt(i + 1) == '"') { champ.append('"'); i++; }
+                    else { dansGuillemets = false; }
+                } else {
+                    champ.append(ch);
+                }
+            } else if (ch == '"') {
+                dansGuillemets = true;
+            } else if (ch == sep) {
+                champs.add(champ.toString()); champ.setLength(0);
+            } else if (ch == '\n' || ch == '\r') {
+                if (ch == '\r' && i + 1 < n && contenu.charAt(i + 1) == '\n') { i++; }
+                champs.add(champ.toString()); champ.setLength(0);
+                lignes.add(champs.toArray(new String[0])); champs = new ArrayList<>();
+            } else {
+                champ.append(ch);
+            }
+        }
+        if (champ.length() > 0 || !champs.isEmpty()) {
+            champs.add(champ.toString());
+            lignes.add(champs.toArray(new String[0]));
         }
         return lignes;
     }
@@ -478,9 +527,6 @@ public class ImportExportService {
         return Integer.parseInt(v.trim());
     }
 
-    private LocalDate date(String v) {
-        return LocalDate.parse(v.trim()); // format attendu : yyyy-MM-dd
-    }
 
     private LocalDate dateOuNull(String v) {
         return (v == null || v.isBlank()) ? null : LocalDate.parse(v.trim());

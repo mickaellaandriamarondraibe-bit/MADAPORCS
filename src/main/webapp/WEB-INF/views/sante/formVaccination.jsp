@@ -76,7 +76,6 @@
           <span class="hint">Doit être supérieure ou égale à la date de vaccination.</span>
         </div>
 
-        <c:if test="${not edition}">
           <div class="field">
             <label>Coût (Ar)</label>
             <input class="input"
@@ -86,9 +85,8 @@
                    name="cout"
                    value="${vaccination.cout}"
                    placeholder="Ex: 20000" />
-            <span class="hint">Enregistré comme dépense (santé).</span>
+            <span class="hint">Enregistré comme dépense (santé). Laissez vide pour aucune dépense.</span>
           </div>
-        </c:if>
 
         <div class="field span-2">
           <label>Observation</label>

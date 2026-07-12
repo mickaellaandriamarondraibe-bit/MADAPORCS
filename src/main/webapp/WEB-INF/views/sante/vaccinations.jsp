@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="today" value="<%= java.time.LocalDate.now() %>" />
 <c:set var="pageTitle" value="Vaccinations" />
 <c:set var="crumbs" value="Santé / <b>Vaccinations</b>" />
 
@@ -61,9 +62,11 @@
                 </td>
 
                 <td>
-                  <span class="badge ${empty v.dateRappel ? 'badge--green' : 'badge--amber'}">
-                    ${empty v.dateRappel ? 'Réalisée' : 'Rappel prévu'}
-                  </span>
+                  <c:choose>
+                    <c:when test="${empty v.dateRappel}"><span class="badge badge--green">Réalisée</span></c:when>
+                    <c:when test="${v.dateRappel lt today}"><span class="badge badge--red">Rappel en retard</span></c:when>
+                    <c:otherwise><span class="badge badge--amber">Rappel prévu</span></c:otherwise>
+                  </c:choose>
                 </td>
 
                 <td class="actions">

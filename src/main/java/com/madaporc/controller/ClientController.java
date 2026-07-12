@@ -16,6 +16,9 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private com.madaporc.repository.VenteRepository venteRepository;
+
     @GetMapping("/clients")
     public String listClients(Model model) {
         List<Client> clients = clientService.findAll();
@@ -40,9 +43,9 @@ public class ClientController {
             result = clientService.creer(dto);
         }
 
-        if ("error".equals(result)) {
+        if (result == null || !result.startsWith("redirect:")) {
             model.addAttribute("clientDTO", dto);
-            model.addAttribute("error", "Le nom est obligatoire");
+            model.addAttribute("error", result);
             return "commerce/formClient";
         }
 
@@ -52,7 +55,12 @@ public class ClientController {
     @GetMapping("/clients/{id}")
     public String detailClient( @PathVariable Long id , Model model){
         Client c = clientService.findById(id);
+        if (c == null) {
+            // Sans cette garde, model.addAttribute(null) leve une exception a message technique.
+            throw new IllegalArgumentException("Client introuvable.");
+        }
         model.addAttribute(c);
+        model.addAttribute("achats", venteRepository.findByClientIdOrderByDateVenteDesc(id));
         return "commerce/detail";
     }
 }

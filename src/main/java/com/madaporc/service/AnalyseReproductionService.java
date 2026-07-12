@@ -181,22 +181,30 @@ public class AnalyseReproductionService {
     public String genererDecision(AnalyseReproductionLotDTO analyse) {
         BigDecimal tauxRecommande = BigDecimal.valueOf(valeurZeroDouble(analyse.getTauxRecommande()));
         BigDecimal tauxFertilite = BigDecimal.valueOf(valeurZeroDouble(analyse.getTauxFertiliteObserve()));
-        Integer lot = service.calculerAgeReel(lotPorcRepository.findByCodeLot(analyse.getLotPorc())
+        Integer age = service.calculerAgeReel(lotPorcRepository.findByCodeLot(analyse.getLotPorc())
                 .orElseThrow(() -> new RuntimeException("Lot non trouvé: " + analyse.getLotPorc())));
 
+        // Un lot trop jeune n'est pas evaluable (et evite un NPE si l'age est null).
+        if (age != null && age < 8) {
+            return "Lot trop jeune pour être évalué (âge : " + age + " mois)";
+        }
+
+        boolean jamaisSaillie = tauxFertilite.compareTo(BigDecimal.ZERO) == 0;
+
+        // Apte : bonne aptitude ET bonne fertilite observee.
         if (tauxRecommande.compareTo(BigDecimal.valueOf(80)) >= 0
                 && tauxFertilite.compareTo(BigDecimal.valueOf(80)) >= 0) {
-
             return "APTE A LA REPRODUCTION";
         }
+        // Jamais saillie mais aptitude suffisante : a mettre en reproduction, PAS a reformer
+        // (sinon une femelle apte jamais testee tombe a tort en 'reforme' a cause d'une fertilite a 0).
+        if (jamaisSaillie && tauxRecommande.compareTo(BigDecimal.valueOf(50)) >= 0) {
+            return "APTE (à mettre en reproduction)";
+        }
+        // A surveiller : aptitude correcte et fertilite moyenne.
         if (tauxRecommande.compareTo(BigDecimal.valueOf(50)) >= 0
                 && tauxFertilite.compareTo(BigDecimal.valueOf(60)) >= 0) {
-
-            return "A SURVEILLER , TAUX INFERIEUR A 50 % ";
-        }
-
-        if (lot.compareTo(Integer.valueOf(8)) < 0) {
-            return "Lot est trop jeune pour être évalué" + "(âge : " + lot + " mois)";
+            return "A SURVEILLER";
         }
 
         return "REFORME RECOMMANDEE";

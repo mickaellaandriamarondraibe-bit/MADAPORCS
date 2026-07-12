@@ -123,9 +123,6 @@
             <option value="DECES" ${mouvement.typeMouvement == 'DECES' ? 'selected' : ''}>
               Décès
             </option>
-            <option value="VENTE" ${mouvement.typeMouvement == 'VENTE' ? 'selected' : ''}>
-              Vente
-            </option>
             <option value="TRANSFERT_ENTREE" ${mouvement.typeMouvement == 'TRANSFERT_ENTREE' ? 'selected' : ''}>
               Transfert entrée
             </option>

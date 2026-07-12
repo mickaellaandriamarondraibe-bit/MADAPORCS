@@ -174,6 +174,11 @@ public class VenteService {
 				throw new IllegalArgumentException("La quantité doit être supérieure à zéro");
 			}
 
+			if (ligneDto.getPrixUnitaire() == null
+					|| ligneDto.getPrixUnitaire().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+				throw new IllegalArgumentException("Le prix unitaire doit être supérieur à zéro.");
+			}
+
 			quantitesParLot.merge(ligneDto.getLotId(), ligneDto.getQuantite(), Integer::sum);
 		}
 
@@ -267,7 +272,8 @@ public class VenteService {
 					throw new IllegalArgumentException("Une ligne de vente est incomplète.");
 				}
 
-				mouvementService.augmenterEffectif(detail.getLot().getId(), detail.getQuantite());
+				mouvementService.augmenterEffectif(detail.getLot().getId(), detail.getQuantite(),
+						"Réintégration suite à l'annulation de la vente " + vente.getReference());
 			}
 		}
 

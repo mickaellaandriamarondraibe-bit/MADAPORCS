@@ -311,11 +311,17 @@ public class LotPorcService {
 
         lotPorcRepository.save(lot);
 
-        // Synchronise la dépense d'achat liée au lot avec le nouveau prix.
-        if ("ACHAT".equalsIgnoreCase(lot.getOrigine()) && dto.getPrixAchat() != null) {
-            java.math.BigDecimal montant = dto.getPrixAchat()
-                    .multiply(new java.math.BigDecimal(lot.getEffectifInitial()));
-            depenseService.mettreAJourOuCreerAchatLot(lot.getCodeLot(), montant, lot.getDateCreation());
+        // Synchronise la dépense d'achat liée au lot.
+        if ("ACHAT".equalsIgnoreCase(lot.getOrigine())) {
+            if (dto.getPrixAchat() != null) {
+                java.math.BigDecimal montant = dto.getPrixAchat()
+                        .multiply(new java.math.BigDecimal(lot.getEffectifInitial()));
+                depenseService.mettreAJourOuCreerAchatLot(lot.getCodeLot(), montant, lot.getDateCreation());
+            }
+        } else {
+            // Le lot n'est plus un achat : on retire la dépense d'achat éventuelle
+            // (sinon elle resterait orpheline dans les dépenses).
+            depenseService.supprimerAchatLot(lot.getCodeLot());
         }
 
         // Après modification (âge, date, race...), on recalcule la répartition

@@ -10,7 +10,7 @@
   <a class="btn btn--primary" href="${ctx}/ventes/form"> Nouvelle vente</a>
 </div>
 
-<div class="toolbar"><div class="search"><input class="input" placeholder="Rechercher…" data-filter-input="#tbl-ventes"></div></div>
+<div class="toolbar toolbar--end"><div class="search search--auto"><input class="input" placeholder="Rechercher une vente…" data-filter-input="#tbl-ventes"></div><button type="button" class="btn btn--ghost" data-filter-btn>Rechercher</button></div>
 
 <div class="card">
   <div class="table-wrap">

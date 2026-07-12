@@ -36,7 +36,9 @@ public class ImportExportController {
     @PostMapping("/imports/excel")
     public String importerExcel(@ModelAttribute ImportExcelDTO dto, RedirectAttributes ra) {
         String resultat = service.importerCsv(dto.getFile(), dto.getModule());
-        ra.addFlashAttribute("message", resultat);
+        // "success" est affiché par le bandeau d'alerte standard (header),
+        // contrairement à "message" : le rapport d'import devient donc visible.
+        ra.addFlashAttribute("success", resultat);
         return "redirect:/imports-exports/historique";
     }
 

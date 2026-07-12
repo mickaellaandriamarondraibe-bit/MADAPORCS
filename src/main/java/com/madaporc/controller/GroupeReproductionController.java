@@ -114,15 +114,10 @@ public class GroupeReproductionController {
         }
 
         try {
-            // 1. On enregistre la mise bas
+            // confirmerMiseBas enregistre la mise bas ET crée le(s) lot(s) naissance,
+            // de façon atomique (une seule transaction).
             miseBasService.confirmerMiseBas(id, dto);
-            // 2. On cree automatiquement le(s) lot(s) naissance (femelle / male)
-            String resultatLots = lotNaissanceService.creerLotsNaissance(id, dto);
-            if ("SUCCESS".equals(resultatLots)) {
-                ra.addFlashAttribute("message", "Mise bas confirmée et lot(s) naissance créé(s).");
-            } else {
-                ra.addFlashAttribute("message", "Mise bas confirmée. " + resultatLots);
-            }
+            ra.addFlashAttribute("message", "Mise bas confirmée et lot(s) naissance créé(s).");
             return "redirect:/reproduction/groupes/" + id;
         } catch (IllegalArgumentException e) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));

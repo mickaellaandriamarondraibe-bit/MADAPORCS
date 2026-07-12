@@ -67,10 +67,10 @@ public class DepenseController {
             result = depenseService.enregistrerDepense(dto);
         }
 
-        if ("error".equals(result)) {
+        if (result == null || !result.startsWith("redirect:")) {
             model.addAttribute("depense", dto);
             model.addAttribute("categories", categorieDepenseRepository.findAllByOrderByNomAsc());
-            model.addAttribute("error", "La categorie, le montant et la date sont obligatoires");
+            model.addAttribute("error", result);
             return "finance/formDepense";
         }
 

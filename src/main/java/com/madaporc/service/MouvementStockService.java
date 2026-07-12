@@ -69,6 +69,11 @@ public class MouvementStockService {
                 || dto.getQuantite() == null || dto.getQuantite().compareTo(BigDecimal.ZERO) <= 0) {
             return "Veuillez remplir tous les champs correctement";
         }
+        // Sans cette verification, tout type different de "ENTREE" est traite comme une SORTIE.
+        String type = dto.getTypeMouvement().trim().toUpperCase();
+        if (!type.equals("ENTREE") && !type.equals("SORTIE")) {
+            return "Type de mouvement invalide : attendu ENTREE ou SORTIE.";
+        }
         return null;
     }
 

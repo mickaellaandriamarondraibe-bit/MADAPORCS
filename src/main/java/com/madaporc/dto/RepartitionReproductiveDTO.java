@@ -1,6 +1,5 @@
 package com.madaporc.dto;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 public class RepartitionReproductiveDTO {

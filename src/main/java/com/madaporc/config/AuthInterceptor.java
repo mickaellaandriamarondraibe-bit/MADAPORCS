@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.madaporc.model.Utilisateur;
+import com.madaporc.repository.UtilisateurRepository;
+
 /**
  * Exige une session utilisateur (attribut "userId" posé au login).
  * Si l'utilisateur n'est pas connecté, on le renvoie vers la page de login ("/").
@@ -21,13 +24,29 @@ public class AuthInterceptor implements HandlerInterceptor {
     private static final List<String> CHEMINS_ADMIN = List.of(
             "/utilisateurs", "/depenses", "/imports", "/imports-exports", "/exports");
 
+    private final UtilisateurRepository utilisateurRepository;
+
+    public AuthInterceptor(UtilisateurRepository utilisateurRepository) {
+        this.utilisateurRepository = utilisateurRepository;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
         HttpSession session = request.getSession(false);
+        Object userId = session != null ? session.getAttribute("userId") : null;
 
-        if (session == null || session.getAttribute("userId") == null) {
+        if (userId == null) {
+            response.sendRedirect(request.getContextPath() + "/");
+            return false;
+        }
+
+        // Re-verification en base : si le compte a ete desactive (ou supprime) pendant
+        // la session, on ferme la session immediatement (la desactivation prend effet tout de suite).
+        Utilisateur utilisateur = utilisateurRepository.findById((Long) userId).orElse(null);
+        if (utilisateur == null || utilisateur.getActif() == null || !utilisateur.getActif()) {
+            session.invalidate();
             response.sendRedirect(request.getContextPath() + "/");
             return false;
         }

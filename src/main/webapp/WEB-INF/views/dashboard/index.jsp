@@ -22,8 +22,8 @@
     <p>Vue globale de l'élevage au ${dateJour}</p>
   </div>
 
-  <a class="btn btn--report" href="${ctx}/rapports">
-     <i class="bi bi-file-earmark-bar-graph"></i> Générer un rapport
+  <a class="btn btn--primary" href="${ctx}/rapports">
+     Générer un rapport
   </a>
 </div>
 
@@ -113,7 +113,7 @@
     <div class="alert-strip__body">
       <div class="alert-strip__title">Mises bas proches</div>
       <div class="alert-strip__value"><c:out value="${d.misesBasProches}" default="0" /></div>
-      <div class="alert-strip__sub">Dans les 7 prochains jours</div>
+      <div class="alert-strip__sub">Dans les 5 prochains jours</div>
     </div>
     <span class="badge-soft ${d.misesBasProches > 0 ? 'badge-soft-warning' : 'badge-soft-success'}">
       ${d.misesBasProches > 0 ? 'Proche' : 'RAS'}

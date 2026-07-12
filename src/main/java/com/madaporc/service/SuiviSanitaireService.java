@@ -77,6 +77,11 @@ public class SuiviSanitaireService {
             return "La date de guérison doit être supérieure ou égale à la date de diagnostic.";
         }
 
+        if (dto.getDateGuerison() != null && dto.getDateTraitement() != null &&
+                dto.getDateGuerison().isBefore(dto.getDateTraitement())) {
+            return "La date de guérison doit être supérieure ou égale à la date de traitement.";
+        }
+
         SuiviSanitaire suivi;
 
         if (dto.getId() == null) {
