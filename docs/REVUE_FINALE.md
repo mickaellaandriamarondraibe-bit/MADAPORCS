@@ -239,3 +239,46 @@ Appli lancee sur port 8083 (instance 8082 de l'utilisateur non touchee), connexi
 
 # NOUVELLE FONCTIONNALITE
 - **Barre de progression du detail de groupe** : couleur progressive selon les jours restants avant mise bas (vert / orange <=15j / rouge <=5j). Verifie au runtime (progress--danger sur un groupe en retard).
+
+---
+
+# GROUPE D — taches transversales ajoutees (Excel "Transversal & Jury")
+
+Fonctionnalites de confort de liste ajoutees, moteur unifie dans app.js
+(filtre + tri + intervalle + pagination cooperent ; pagination.js supprime).
+
+- **#9 Tri croissant/decroissant** : clic sur l'en-tete de colonne, sur toutes
+  les tables `.tbl`. Colonnes `.num` triees en numerique, dates ISO en date.
+  Indicateur visuel de sens de tri.
+- **#6 Recherche par intervalle** (nombres & dates) :
+  - Ventes : intervalle Date + intervalle Montant.
+  - Depenses : intervalle Montant (date/categorie deja filtres cote serveur).
+  - Lots : intervalle Effectif.
+- **#5 Recherche multi-criteres** : filtre texte multi-colonnes sur les listes.
+- **#14 Scenario soutenance** : docs/SCENARIO_SOUTENANCE.md.
+
+Parseur de nombres robuste (versNombre) : gere les separateurs de milliers
+(espace, ".", ",") et la virgule/point decimal (fr comme en).
+
+## Tests
+- Parseur numerique : 11/11 (grouping fr/en, decimales, unites).
+- Moteur de liste (jsdom, DOM reel) : 9/9 — pagination, tri num asc/desc,
+  tri texte, filtre texte, intervalle montant, intervalle montant avec
+  separateur de milliers, intervalle date, retour a la pagination.
+- Rendu runtime : /lots, /ventes, /depenses -> HTTP 200, champs d'intervalle
+  presents, aucune page d'erreur.
+
+## Correctif filtre intervalle (effectif "courant / total")
+La colonne Effectif s'affiche "5 / 5" (courant / total). Le parseur numerique
+retirait le "/" et collait les chiffres (5 / 5 -> 55), donc l'intervalle [1,6]
+masquait toutes les lignes. Corrige : versNombre ne garde que le premier nombre
+avant le "/". Tests : parseur ratio OK, DOM effectif "5 / 5" 4/4, ventes 9/9.
+
+## Regroupement filtres & tri (panneau repliable)
+La barre de liste etait trop chargee. Nouveau design : la barre ne montre que
+la recherche + un bouton "Filtres" (avec pastille du nombre de filtres actifs).
+Au clic, un panneau s'ouvre avec tous les filtres (deroulants, intervalles) et
+le menu "Trier par" (colonne + sens), le tri par clic sur en-tete restant actif.
+Le panneau s'ouvre automatiquement si un filtre serveur est deja applique.
+Applique a Lots, Ventes, Depenses. Moteur generique dans app.js (setupFilterPanels
++ menu de tri deporte + bouton Effacer). Tests DOM (jsdom) : panneau 14/14.

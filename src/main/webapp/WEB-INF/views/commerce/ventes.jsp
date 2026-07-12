@@ -10,7 +10,39 @@
   <a class="btn btn--primary" href="${ctx}/ventes/form"> Nouvelle vente</a>
 </div>
 
-<div class="toolbar toolbar--end"><div class="search search--auto"><input class="input" placeholder="Rechercher une vente…" data-filter-input="#tbl-ventes"></div><button type="button" class="btn btn--ghost" data-filter-btn>Rechercher</button></div>
+<div class="listbar">
+  <div class="search search--auto"><input class="input" placeholder="Rechercher une vente…" data-filter-input="#tbl-ventes"></div>
+  <span class="spacer"></span>
+  <button type="button" class="btn btn--ghost filters-toggle" data-filters-toggle="#f-ventes" aria-expanded="false">
+    Filtres <span class="badge-count" data-filters-count hidden>0</span> <span class="chevron">▾</span>
+  </button>
+</div>
+
+<div class="filters-panel" id="f-ventes" hidden>
+  <div class="filters-row">
+    <label class="fld">Date
+      <span class="range-filter">
+        <input class="input input--sm" type="date" data-range="#tbl-ventes" data-range-col="2" data-range-kind="min">
+        <span class="range-sep">→</span>
+        <input class="input input--sm" type="date" data-range="#tbl-ventes" data-range-col="2" data-range-kind="max">
+      </span>
+    </label>
+    <label class="fld">Montant
+      <span class="range-filter">
+        <input class="input input--sm" type="number" min="0" placeholder="min" data-range="#tbl-ventes" data-range-col="3" data-range-kind="min">
+        <span class="range-sep">→</span>
+        <input class="input input--sm" type="number" min="0" placeholder="max" data-range="#tbl-ventes" data-range-col="3" data-range-kind="max">
+      </span>
+    </label>
+    <div class="filters-sort">
+      <span>Trier par</span>
+      <select class="select" data-sort-select="#tbl-ventes"></select>
+      <button type="button" class="btn btn--ghost btn--sm sort-dir" data-sort-dir="asc" title="Croissant">&#8593;</button>
+      <button type="button" class="btn btn--ghost btn--sm sort-dir" data-sort-dir="desc" title="Décroissant">&#8595;</button>
+    </div>
+    <button type="button" class="btn btn--ghost btn--sm" data-filters-reset="#tbl-ventes" style="margin-left:auto">Effacer</button>
+  </div>
+</div>
 
 <div class="card">
   <div class="table-wrap">

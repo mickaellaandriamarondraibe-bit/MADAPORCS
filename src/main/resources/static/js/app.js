@@ -39,19 +39,31 @@
     }
   }
 
-  /* ---- Menu lateral repliable (accordeon) ---- */
+  /* ---- Menu lateral repliable ----
+     L'etat ouvert/ferme de chaque groupe est memorise et conserve entre les pages :
+     un sous-menu ne se ferme (ou ne se rouvre) qu'au re-clic sur son titre. */
   function setupNavGroups() {
-    var groups = document.querySelectorAll(".nav__group");
-    groups.forEach(function (group) {
+    var CLE = "madaporc.nav";
+    var prefs = {};
+    try { prefs = JSON.parse(localStorage.getItem(CLE) || "{}"); } catch (e) { prefs = {}; }
+    function sauver() { try { localStorage.setItem(CLE, JSON.stringify(prefs)); } catch (e) {} }
+
+    document.querySelectorAll(".nav__group").forEach(function (group) {
       var title = group.querySelector("[data-nav-group]");
       if (!title) return;
+      var id = (title.getAttribute("data-nav-group") || title.textContent || "").trim();
+
+      // Etat initial : preference memorisee si elle existe, sinon ouvert si la page courante est dans ce groupe.
+      var actif = !!group.querySelector(".nav__link.is-active");
+      var ouvert = prefs.hasOwnProperty(id) ? !!prefs[id] : actif;
+      group.classList.toggle("is-open", ouvert);
+
       title.addEventListener("click", function () {
-        group.classList.toggle("is-open");
+        var v = !group.classList.contains("is-open");
+        group.classList.toggle("is-open", v);
+        prefs[id] = v;
+        sauver();
       });
-      // Ouvre automatiquement le groupe contenant la page courante.
-      if (group.querySelector(".nav__link.is-active")) {
-        group.classList.add("is-open");
-      }
     });
   }
 
@@ -69,26 +81,238 @@
     });
   }
 
-  /* ---- Filtre de tableau côté client (data-filter-input -> data-filter-table) ---- */
-  function setupTableFilter() {
-    document.querySelectorAll("[data-filter-input]").forEach(function (input) {
-      var sel = input.getAttribute("data-filter-input");
-      var table = document.querySelector(sel);
-      if (!table) return;
-      function apply() {
-        var q = input.value.toLowerCase().trim();
-        table.querySelectorAll("tbody tr").forEach(function (tr) {
-          tr.style.display = tr.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none";
+  /* ---- Outils de liste : filtre texte + filtre par intervalle + tri + pagination ----
+     Un seul moteur pour toute <table class="tbl"> (tri) et/ou [data-paginate] (pagination),
+     de sorte que le tri (qui réordonne le DOM) reste cohérent avec la pagination.
+     - Filtre texte    : <input data-filter-input="#idTable">  (+ bouton [data-filter-btn])
+     - Filtre intervalle: <input data-range="#idTable" data-range-col="N" data-range-kind="min|max">
+     - Tri              : clic sur un <th> (hors .actions). Colonnes .num en numérique, dates ISO en date. */
+  function setupTables() {
+    var tables = [];
+    document.querySelectorAll("table.tbl, table[data-paginate]").forEach(function (t) {
+      if (tables.indexOf(t) < 0) tables.push(t);
+    });
+    tables.forEach(initTable);
+
+    function btnNav(txt) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn--ghost btn--sm";
+      b.textContent = txt;
+      return b;
+    }
+
+    // Convertit un texte affiché en nombre, en gérant les séparateurs de milliers
+    // (espace, "." ou ",") et la virgule/point décimal (fr comme en). Ex : "1 250 000",
+    // "1,250,000", "50000.00", "1.250,50" -> nombres corrects.
+    function versNombre(txt) {
+      // Sur une valeur "courant / total" (ex. effectif "5 / 5"), on ne garde que
+      // le premier nombre ; sinon "5 / 5" serait lu comme 55.
+      var brut = (txt || "").split("/")[0];
+      var s = brut.replace(/\s/g, "").replace(/[^\d.,\-]/g, "");
+      if (s === "") return NaN;
+      var vir = s.lastIndexOf(","), pt = s.lastIndexOf(".");
+      if (vir > -1 && pt > -1) {
+        var decChar = vir > pt ? "," : ".";
+        var milleChar = decChar === "," ? "." : ",";
+        s = s.split(milleChar).join("").replace(decChar, ".");
+      } else if (vir > -1) {
+        s = (s.split(",").length === 2 && s.length - vir - 1 <= 2) ? s.replace(",", ".") : s.split(",").join("");
+      } else if (pt > -1) {
+        if (!(s.split(".").length === 2 && s.length - pt - 1 <= 2)) s = s.split(".").join("");
+      }
+      return parseFloat(s);
+    }
+
+    function initTable(table) {
+      var corps = table.tBodies[0];
+      if (!corps) return;
+      var toutes = Array.prototype.slice.call(corps.rows);
+      if (!toutes.length) return;
+
+      var triable = table.classList.contains("tbl");
+      var taillePage = parseInt(table.getAttribute("data-paginate"), 10) || 0;
+      var etat = { q: "", triCol: -1, asc: true, page: 1, ranges: [] };
+
+      // Type de chaque colonne (num / date / texte) pour trier et filtrer correctement.
+      var ths = (table.tHead && table.tHead.rows[0]) ? table.tHead.rows[0].cells : [];
+      var types = [];
+      Array.prototype.forEach.call(ths, function (th, i) {
+        if (th.classList.contains("num")) { types[i] = "num"; return; }
+        var ex = toutes[0].cells[i] ? toutes[0].cells[i].textContent.trim() : "";
+        types[i] = /^\d{4}-\d{2}-\d{2}/.test(ex) ? "date" : "texte";
+      });
+
+      function valeur(tr, col) {
+        var c = tr.cells[col];
+        var t = c ? c.textContent.trim() : "";
+        if (types[col] === "num") {
+          var n = versNombre(t);
+          return isNaN(n) ? -Infinity : n;
+        }
+        if (types[col] === "date") return t; // ISO -> comparaison lexicale correcte
+        return t.toLowerCase();
+      }
+
+      // Tri : en-tête cliquable ET menu de tri déporté (dans le panneau de filtres).
+      function refletMenuTri(col, asc) {
+        var sSel = null;
+        document.querySelectorAll("[data-sort-select]").forEach(function (s) {
+          if (document.querySelector(s.getAttribute("data-sort-select")) === table) sSel = s;
+        });
+        if (!sSel) return;
+        sSel.value = col < 0 ? "" : String(col);
+        var host = sSel.closest(".filters-sort");
+        if (host) {
+          host.setAttribute("data-dir", asc ? "asc" : "desc");
+          host.querySelectorAll("[data-sort-dir]").forEach(function (b) {
+            b.classList.toggle("is-active", b.getAttribute("data-sort-dir") === (asc ? "asc" : "desc"));
+          });
+        }
+      }
+      function trier(col, asc) {
+        etat.triCol = col; etat.asc = asc; etat.page = 1;
+        Array.prototype.forEach.call(ths, function (o) { o.removeAttribute("data-sort"); });
+        if (col >= 0 && ths[col]) ths[col].setAttribute("data-sort", asc ? "asc" : "desc");
+        refletMenuTri(col, asc);
+        rendre();
+      }
+      if (triable) {
+        Array.prototype.forEach.call(ths, function (th, i) {
+          if (th.classList.contains("actions") || th.textContent.trim() === "") return;
+          th.classList.add("th-sort");
+          th.addEventListener("click", function () {
+            trier(i, etat.triCol === i ? !etat.asc : true);
+          });
         });
       }
-      input.addEventListener("input", apply);
-      // Bouton "Rechercher" optionnel, dans la même barre d'outils.
-      var container = input.closest(".toolbar");
-      var btn = container ? container.querySelector("[data-filter-btn]") : null;
-      if (btn) {
-        btn.addEventListener("click", function (e) { e.preventDefault(); apply(); });
+      // Menu de tri : conteneur .filters-sort { <select data-sort-select="#t">, boutons [data-sort-dir] }.
+      document.querySelectorAll(".filters-sort").forEach(function (host) {
+        var sel = host.querySelector("[data-sort-select]");
+        if (!sel || document.querySelector(sel.getAttribute("data-sort-select")) !== table) return;
+        if (!sel.options.length) {
+          var vide = document.createElement("option"); vide.value = ""; vide.textContent = "—"; sel.appendChild(vide);
+          Array.prototype.forEach.call(ths, function (th, i) {
+            if (th.classList.contains("actions") || th.textContent.trim() === "") return;
+            var o = document.createElement("option"); o.value = String(i); o.textContent = th.textContent.trim(); sel.appendChild(o);
+          });
+        }
+        function appliquer() {
+          if (sel.value === "") { trier(-1, true); return; }
+          trier(parseInt(sel.value, 10), host.getAttribute("data-dir") !== "desc");
+        }
+        sel.addEventListener("change", appliquer);
+        host.querySelectorAll("[data-sort-dir]").forEach(function (b) {
+          b.addEventListener("click", function () { host.setAttribute("data-dir", b.getAttribute("data-sort-dir")); appliquer(); });
+        });
+      });
+      // Bouton "Effacer" : réinitialise les filtres client (intervalles + recherche) et le tri.
+      document.querySelectorAll("[data-filters-reset]").forEach(function (btn) {
+        if (document.querySelector(btn.getAttribute("data-filters-reset")) !== table) return;
+        btn.addEventListener("click", function () {
+          etat.ranges.forEach(function (rg) { if (rg.min) rg.min.value = ""; if (rg.max) rg.max.value = ""; });
+          document.querySelectorAll("[data-filter-input]").forEach(function (inp) {
+            if (document.querySelector(inp.getAttribute("data-filter-input")) === table) inp.value = "";
+          });
+          etat.q = "";
+          trier(-1, true);
+          var panel = btn.closest(".filters-panel");
+          if (panel) panel.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+      });
+
+      // Filtre texte.
+      document.querySelectorAll("[data-filter-input]").forEach(function (inp) {
+        if (document.querySelector(inp.getAttribute("data-filter-input")) !== table) return;
+        function go() { etat.q = inp.value.toLowerCase().trim(); etat.page = 1; rendre(); }
+        inp.addEventListener("input", go);
+        var barre = inp.closest(".toolbar");
+        var btn = barre ? barre.querySelector("[data-filter-btn]") : null;
+        if (btn) btn.addEventListener("click", function (e) { e.preventDefault(); go(); });
+      });
+
+      // Filtres par intervalle (min/max sur une colonne).
+      var parCol = {};
+      document.querySelectorAll("[data-range]").forEach(function (inp) {
+        if (document.querySelector(inp.getAttribute("data-range")) !== table) return;
+        var col = parseInt(inp.getAttribute("data-range-col"), 10);
+        if (isNaN(col)) return;
+        if (!parCol[col]) parCol[col] = { col: col, min: null, max: null };
+        if (inp.getAttribute("data-range-kind") === "max") parCol[col].max = inp;
+        else parCol[col].min = inp;
+        inp.addEventListener("input", function () { etat.page = 1; rendre(); });
+      });
+      etat.ranges = Object.keys(parCol).map(function (k) { return parCol[k]; });
+
+      function borne(inp, col) {
+        var v = inp ? inp.value.trim() : "";
+        if (v === "") return null;
+        if (types[col] !== "num") return v;
+        var n = versNombre(v);
+        return isNaN(n) ? null : n;
       }
-    });
+
+      // Barre de pagination.
+      var nav = null, info = null, prec = null, suiv = null;
+      if (taillePage > 0) {
+        nav = document.createElement("div"); nav.className = "pagination";
+        prec = btnNav("‹ Precedent");
+        info = document.createElement("span"); info.className = "pagination__info";
+        suiv = btnNav("Suivant ›");
+        nav.appendChild(prec); nav.appendChild(info); nav.appendChild(suiv);
+        table.parentNode.insertBefore(nav, table.nextSibling);
+        prec.addEventListener("click", function () { etat.page--; rendre(); });
+        suiv.addEventListener("click", function () { etat.page++; rendre(); });
+      }
+
+      function rendre() {
+        // 1) filtrer (texte + intervalles)
+        var lignes = toutes.filter(function (tr) {
+          if (etat.q && tr.textContent.toLowerCase().indexOf(etat.q) < 0) return false;
+          for (var r = 0; r < etat.ranges.length; r++) {
+            var rg = etat.ranges[r];
+            var lo = borne(rg.min, rg.col), hi = borne(rg.max, rg.col);
+            if (lo === null && hi === null) continue;
+            var v = valeur(tr, rg.col);
+            if (lo !== null && v < lo) return false;
+            if (hi !== null && v > hi) return false;
+          }
+          return true;
+        });
+        // 2) trier
+        if (etat.triCol >= 0) {
+          lignes.sort(function (a, b) {
+            var x = valeur(a, etat.triCol), y = valeur(b, etat.triCol);
+            if (x < y) return etat.asc ? -1 : 1;
+            if (x > y) return etat.asc ? 1 : -1;
+            return 0;
+          });
+        }
+        // 3) réordonner le DOM, masquer les lignes exclues
+        toutes.forEach(function (tr) { tr.style.display = "none"; });
+        lignes.forEach(function (tr) { corps.appendChild(tr); });
+        // 4) paginer
+        if (taillePage > 0 && lignes.length > taillePage) {
+          var pages = Math.ceil(lignes.length / taillePage);
+          etat.page = Math.min(Math.max(1, etat.page), pages);
+          var debut = (etat.page - 1) * taillePage;
+          lignes.forEach(function (tr, i) {
+            tr.style.display = (i >= debut && i < debut + taillePage) ? "" : "none";
+          });
+          if (nav) {
+            nav.style.display = "";
+            info.textContent = "Page " + etat.page + " / " + pages;
+            prec.disabled = etat.page === 1;
+            suiv.disabled = etat.page === pages;
+          }
+        } else {
+          lignes.forEach(function (tr) { tr.style.display = ""; });
+          if (nav) nav.style.display = "none";
+        }
+      }
+
+      rendre();
+    }
   }
 
   /* ---- Calcul automatique de total (ventes/détails) ----
@@ -179,12 +403,57 @@
     }
   }
 
+  /* ---- Panneau de filtres repliable (bouton "Filtres" -> ouvre/masque le panneau) ---- */
+  function setupFilterPanels() {
+    document.querySelectorAll("[data-filters-toggle]").forEach(function (btn) {
+      var panel = document.querySelector(btn.getAttribute("data-filters-toggle"));
+      if (!panel) return;
+      var badge = btn.querySelector("[data-filters-count]");
+
+      function ouvrir(v) {
+        panel.hidden = !v;
+        btn.classList.toggle("is-open", v);
+        btn.setAttribute("aria-expanded", v ? "true" : "false");
+      }
+      // Nombre de filtres actifs (hors tri) : selects renseignés + intervalles renseignés.
+      function compter() {
+        var n = 0, vus = {};
+        panel.querySelectorAll("select").forEach(function (el) {
+          if (el.hasAttribute("data-sort-select")) return;
+          if ((el.value || "").trim() !== "") n++;
+        });
+        panel.querySelectorAll("input").forEach(function (el) {
+          if (el.type === "button" || el.type === "submit" || (el.value || "").trim() === "") return;
+          if (el.hasAttribute("data-range")) {
+            var k = el.getAttribute("data-range") + ":" + el.getAttribute("data-range-col");
+            if (vus[k]) return; vus[k] = true;
+          }
+          n++;
+        });
+        return n;
+      }
+      function rafraichir() {
+        if (!badge) return;
+        var n = compter();
+        badge.textContent = String(n);
+        badge.hidden = n === 0;
+      }
+
+      btn.addEventListener("click", function () { ouvrir(panel.hidden); });
+      panel.addEventListener("input", rafraichir);
+      panel.addEventListener("change", rafraichir);
+      rafraichir();
+      ouvrir(compter() > 0); // déjà ouvert si des filtres sont actifs au chargement
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     setupMenu();
     setupActiveNav();
     setupNavGroups();
     setupConfirms();
-    setupTableFilter();
+    setupTables();
+    setupFilterPanels();
     setupAutoTotal();
     setupMiseBasCheck();
     setupRealtimeNotifications();

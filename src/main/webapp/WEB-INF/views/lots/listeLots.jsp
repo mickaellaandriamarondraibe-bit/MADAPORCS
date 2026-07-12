@@ -17,51 +17,65 @@
   </a>
 </div>
 
-<form method="get" action="${ctx}/lots" class="toolbar">
-  <div class="search">
-    <input
-      class="input"
-      type="text"
-      name="codeLot"
-      value="${filtre.codeLot}"
-      placeholder="Code du lot…"
-    />
+<div class="listbar">
+  <div class="search search--auto">
+    <input class="input" type="text" placeholder="Rechercher un lot…" data-filter-input="#tbl-lots">
   </div>
-
-  <select class="select" name="sexe">
-    <option value="">Sexe (tous)</option>
-    <option value="MALE" ${filtre.sexe == 'MALE' ? 'selected' : ''}>Mâle</option>
-    <option value="FEMELLE" ${filtre.sexe == 'FEMELLE' ? 'selected' : ''}>Femelle</option>
-  </select>
-
-  <select class="select" name="objectif">
-    <option value="">Objectif (tous)</option>
-    <option value="REPRODUCTION" ${filtre.objectif == 'REPRODUCTION' ? 'selected' : ''}>
-      Reproduction
-    </option>
-    <option value="ENGRAISSEMENT" ${filtre.objectif == 'ENGRAISSEMENT' ? 'selected' : ''}>
-      Engraissement
-    </option>
-  </select>
-
-  <select class="select" name="statut">
-    <option value="">Statut (tous)</option>
-    <option value="ACTIF" ${filtre.statut == 'ACTIF' ? 'selected' : ''}>Actif</option>
-    <option value="ARCHIVE" ${filtre.statut == 'ARCHIVE' ? 'selected' : ''}>Archivé</option>
-  </select>
-
-  <button class="btn btn--ghost" type="submit">
-    Filtrer
+  <span class="spacer"></span>
+  <button type="button" class="btn btn--ghost filters-toggle" data-filters-toggle="#f-lots" aria-expanded="false">
+    Filtres <span class="badge-count" data-filters-count hidden>0</span> <span class="chevron">▾</span>
   </button>
+</div>
 
-  <a class="btn btn--ghost" href="${ctx}/lots">
-    Réinitialiser
-  </a>
-</form>
+<div class="filters-panel" id="f-lots" hidden>
+  <form method="get" action="${ctx}/lots" class="filters-row">
+    <label class="fld">Sexe
+      <select class="select" name="sexe">
+        <option value="">Tous</option>
+        <option value="MALE" ${filtre.sexe == 'MALE' ? 'selected' : ''}>Mâle</option>
+        <option value="FEMELLE" ${filtre.sexe == 'FEMELLE' ? 'selected' : ''}>Femelle</option>
+      </select>
+    </label>
+    <label class="fld">Objectif
+      <select class="select" name="objectif">
+        <option value="">Tous</option>
+        <option value="REPRODUCTION" ${filtre.objectif == 'REPRODUCTION' ? 'selected' : ''}>Reproduction</option>
+        <option value="ENGRAISSEMENT" ${filtre.objectif == 'ENGRAISSEMENT' ? 'selected' : ''}>Engraissement</option>
+      </select>
+    </label>
+    <label class="fld">Statut
+      <select class="select" name="statut">
+        <option value="">Tous</option>
+        <option value="ACTIF" ${filtre.statut == 'ACTIF' ? 'selected' : ''}>Actif</option>
+        <option value="ARCHIVE" ${filtre.statut == 'ARCHIVE' ? 'selected' : ''}>Archivé</option>
+      </select>
+    </label>
+    <div class="fld-actions">
+      <button class="btn btn--primary" type="submit">Filtrer</button>
+      <a class="btn btn--ghost" href="${ctx}/lots">Réinitialiser</a>
+    </div>
+  </form>
+
+  <div class="filters-row">
+    <label class="fld">Effectif
+      <span class="range-filter">
+        <input class="input input--sm" type="number" min="0" placeholder="min" data-range="#tbl-lots" data-range-col="4" data-range-kind="min">
+        <span class="range-sep">→</span>
+        <input class="input input--sm" type="number" min="0" placeholder="max" data-range="#tbl-lots" data-range-col="4" data-range-kind="max">
+      </span>
+    </label>
+    <div class="filters-sort">
+      <span>Trier par</span>
+      <select class="select" data-sort-select="#tbl-lots"></select>
+      <button type="button" class="btn btn--ghost btn--sm sort-dir" data-sort-dir="asc" title="Croissant">&#8593;</button>
+      <button type="button" class="btn btn--ghost btn--sm sort-dir" data-sort-dir="desc" title="Décroissant">&#8595;</button>
+    </div>
+  </div>
+</div>
 
 <div class="card">
   <div class="table-wrap">
-    <table class="tbl" data-paginate="10">
+    <table class="tbl" data-paginate="10" id="tbl-lots">
       <thead>
         <tr>
           <th>Code</th>
