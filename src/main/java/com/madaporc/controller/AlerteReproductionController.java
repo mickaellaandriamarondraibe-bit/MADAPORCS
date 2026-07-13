@@ -34,8 +34,12 @@ public class AlerteReproductionController {
 
     @PostMapping("/reproduction/alertes/{id}/traiter")
     public String traiter(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        alerteService.traiter(id);
-        redirectAttributes.addFlashAttribute("success", "Alerte traitee.");
-        return "redirect:/reproduction/alertes";
+        try {
+            Long groupeId = alerteService.getGroupeId(id);
+            return "redirect:/reproduction/groupes/" + groupeId + "/confirmer-mise-bas?alerteId=" + id;
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("erreur", e.getMessage());
+            return "redirect:/reproduction/alertes";
+        }
     }
 }

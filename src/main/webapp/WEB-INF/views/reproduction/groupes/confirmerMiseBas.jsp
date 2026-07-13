@@ -34,6 +34,10 @@
                    modelAttribute="dto"
                    action="${ctx}/reproduction/groupes/${g.id}/confirmer-mise-bas">
 
+            <c:if test="${not empty alerteId}">
+                <input type="hidden" name="alerteId" value="${alerteId}" />
+            </c:if>
+
             <div class="form-grid">
 
                 <div class="field span-2">

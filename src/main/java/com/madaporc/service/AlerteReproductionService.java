@@ -124,6 +124,31 @@ public class AlerteReproductionService {
         return "Alerte traitee.";
     }
 
+    @Transactional(readOnly = true)
+    public Long getGroupeId(Long id) {
+        AlerteReproduction alerte = alerteReproductionRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new IllegalArgumentException("Alerte introuvable."));
+
+        if (alerte.getGroupeReproduction() == null) {
+            throw new IllegalArgumentException("Cette alerte n'est liée à aucun groupe de reproduction.");
+        }
+        return alerte.getGroupeReproduction().getId();
+    }
+
+    @Transactional
+    public void traiterApresConfirmationMiseBas(Long alerteId, Long groupeId) {
+        AlerteReproduction alerte = alerteReproductionRepository.findById(Math.toIntExact(alerteId))
+                .orElseThrow(() -> new IllegalArgumentException("Alerte introuvable."));
+
+        if (alerte.getGroupeReproduction() == null
+                || !groupeId.equals(alerte.getGroupeReproduction().getId())) {
+            throw new IllegalArgumentException("L'alerte ne correspond pas au groupe de reproduction confirmé.");
+        }
+
+        alerte.setStatut(STATUT_TRAITEE);
+        alerteReproductionRepository.save(alerte);
+    }
+
     // private void genererAlerteStockFaible(List<String> messages) {
     //     List<Ingredient> ingredients = ingredientService.listerStocksFaibles();
 
@@ -139,8 +164,6 @@ public class AlerteReproductionService {
     // }
 
     private boolean alerteExiste(String typeAlerte, String message) {
-        // On teste tous les statuts (NON_LUE, LUE, TRAITEE) : sinon une alerte deja lue/traitee
-        // serait recreee a chaque execution planifiee (toutes les 60 s).
         return alerteReproductionRepository.findByTypeAlerte(typeAlerte)
                 .stream()
                 .anyMatch(alerte -> message.equals(alerte.getMessage()));

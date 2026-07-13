@@ -10,6 +10,7 @@ import com.madaporc.service.GroupeReproductionCreationService;
 import com.madaporc.service.GroupeReproductionQueryService;
 import com.madaporc.service.GroupeReproductionMiseBasService;
 import com.madaporc.service.LotNaissanceService;
+import com.madaporc.service.AlerteReproductionService;
 
 import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpSession;
@@ -29,18 +30,21 @@ public class GroupeReproductionController {
     private final GroupeReproductionCreationService creationService;
     private final LotNaissanceService lotNaissanceService;
     private final LotPorcRepository lotPorcRepository;
+    private final AlerteReproductionService alerteService;
 
     public GroupeReproductionController(
             GroupeReproductionMiseBasService miseBasService,
             GroupeReproductionQueryService queryService,
             GroupeReproductionCreationService creationService,
             LotNaissanceService lotNaissanceService,
-            LotPorcRepository lotPorcRepository) {
+            LotPorcRepository lotPorcRepository,
+            AlerteReproductionService alerteService) {
         this.miseBasService = miseBasService;
         this.queryService = queryService;
         this.creationService = creationService;
         this.lotNaissanceService = lotNaissanceService;
         this.lotPorcRepository = lotPorcRepository;
+        this.alerteService = alerteService;
     }
 
 
@@ -93,10 +97,14 @@ public class GroupeReproductionController {
     }
 
     @GetMapping("/reproduction/groupes/{id}/confirmer-mise-bas")
-    public String afficherFormulaireMiseBas(@PathVariable Long id, Model model) {
+    public String afficherFormulaireMiseBas(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long alerteId,
+            Model model) {
         GroupeReproductionDetailDTO detail = miseBasService.getDetailGroupe(id);
         model.addAttribute("detail", detail);
         model.addAttribute("dto", new ConfirmationMiseBasDTO());
+        model.addAttribute("alerteId", alerteId);
         return "reproduction/groupes/confirmerMiseBas";
     }
 
@@ -104,18 +112,26 @@ public class GroupeReproductionController {
     public String confirmerMiseBas(
             @PathVariable Long id,
             @Valid @ModelAttribute("dto") ConfirmationMiseBasDTO dto,
+            @RequestParam(required = false) Long alerteId,
             BindingResult result,
             Model model,
             RedirectAttributes ra
     ) {
         if (result.hasErrors()) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));
+            model.addAttribute("alerteId", alerteId);
             return "reproduction/groupes/confirmerMiseBas";
         }
 
         try {
+            if (alerteId != null && !id.equals(alerteService.getGroupeId(alerteId))) {
+                throw new IllegalArgumentException("L'alerte ne correspond pas au groupe de reproduction confirmé.");
+            }
             // 1. On enregistre la mise bas
             miseBasService.confirmerMiseBas(id, dto);
+            if (alerteId != null) {
+                alerteService.traiterApresConfirmationMiseBas(alerteId, id);
+            }
             // 2. On cree automatiquement le(s) lot(s) naissance (femelle / male)
             String resultatLots = lotNaissanceService.creerLotsNaissance(id, dto);
             if ("SUCCESS".equals(resultatLots)) {
@@ -126,6 +142,7 @@ public class GroupeReproductionController {
             return "redirect:/reproduction/groupes/" + id;
         } catch (IllegalArgumentException e) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));
+            model.addAttribute("alerteId", alerteId);
             model.addAttribute("erreur", e.getMessage());
             return "reproduction/groupes/confirmerMiseBas";
         }
