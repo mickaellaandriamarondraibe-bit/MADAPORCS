@@ -12,6 +12,7 @@
 
 <div class="card" style="max-width:760px">
   <div class="card__body">
+    <c:if test="${not empty error}"><div class="alert alert--err"><span>${error}</span></div></c:if>
     <%-- POST vers UtilisateurController @PostMapping("/utilisateurs/save"), bind UtilisateurDTO --%>
     <form method="post" action="${ctx}/utilisateurs/save">
       <input type="hidden" name="id" value="${utilisateurDTO.id}">
@@ -41,6 +42,7 @@
         </div>
         <div class="field span-2">
           <label class="flex items-center gap-8" style="font-weight:600">
+            <input type="hidden" name="_actif" value="on">
             <input type="checkbox" name="actif" value="true" ${empty utilisateurDTO.id or utilisateurDTO.actif ? 'checked' : ''}>
             Compte actif
           </label>

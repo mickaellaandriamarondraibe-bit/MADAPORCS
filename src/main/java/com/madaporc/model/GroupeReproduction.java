@@ -3,7 +3,6 @@ package com.madaporc.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.Generated;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

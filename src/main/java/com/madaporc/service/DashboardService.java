@@ -13,12 +13,14 @@ import com.madaporc.dto.DashboardDTO;
 import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.Ingredient;
 import com.madaporc.model.LotPorc;
+import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.model.Vaccination;
 import com.madaporc.repository.AnalyseReproductionLotRepository;
 import com.madaporc.repository.DepenseRepository;
 import com.madaporc.repository.GroupeReproductionRepository;
 import com.madaporc.repository.IngredientRepository;
 import com.madaporc.repository.LotPorcRepository;
+import com.madaporc.repository.MouvementLotPorcRepository;
 import com.madaporc.repository.VaccinationRepository;
 import com.madaporc.repository.VenteRepository;
 
@@ -35,7 +37,7 @@ public class DashboardService {
     private final IngredientRepository ingredientRepository;
     private final VaccinationRepository vaccinationRepository;
     private final AnalyseReproductionLotRepository analyseRepository;
-    private final NotificationService notificationService;
+    private final MouvementLotPorcRepository mouvementLotPorcRepository;
 
     public DashboardService(LotPorcRepository lotPorcRepository,
                             GroupeReproductionRepository groupeReproductionRepository,
@@ -44,7 +46,7 @@ public class DashboardService {
                             IngredientRepository ingredientRepository,
                             VaccinationRepository vaccinationRepository,
                             AnalyseReproductionLotRepository analyseRepository,
-                            NotificationService notificationService) {
+                            MouvementLotPorcRepository mouvementLotPorcRepository) {
         this.lotPorcRepository = lotPorcRepository;
         this.groupeReproductionRepository = groupeReproductionRepository;
         this.venteRepository = venteRepository;
@@ -52,7 +54,7 @@ public class DashboardService {
         this.ingredientRepository = ingredientRepository;
         this.vaccinationRepository = vaccinationRepository;
         this.analyseRepository = analyseRepository;
-        this.notificationService = notificationService;
+        this.mouvementLotPorcRepository = mouvementLotPorcRepository;
     }
 
     public DashboardDTO getDashboard() {
@@ -155,25 +157,14 @@ public class DashboardService {
     }
 
     public List<Ingredient> listerStocksFaibles() {
-        
-        if (ingredientRepository.findStocksFaibles() == null || ingredientRepository.findStocksFaibles().isEmpty()) {
-            return new ArrayList<>();
-        }
-        notificationService.envoyerNotification("Alerte : Stock faible détecté !");
-        return ingredientRepository.findStocksFaibles();
+        List<Ingredient> faibles = ingredientRepository.findStocksFaibles();
+        return faibles != null ? faibles : new ArrayList<>();
     }
 
     public List<Vaccination> listerVaccinationsAVenir(LocalDate dateLimite) {
-        if (vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite) == null
-                || vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite)
-                        .isEmpty()) {
-            return new ArrayList<>();
-        }
-        notificationService.envoyerNotification("Alerte : Vaccination à venir détectée !");
-        return vaccinationRepository.findByDateRappelBetweenOrderByDateRappelAsc(
-                LocalDate.now(),
-                dateLimite
-        );
+        List<Vaccination> vaccinations = vaccinationRepository
+                .findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite);
+        return vaccinations != null ? vaccinations : new ArrayList<>();
     }
 
     private BigDecimal convertirTaux(Double valeur) {
@@ -185,54 +176,90 @@ public class DashboardService {
     }
 
     private void remplirEvolutionCheptel(DashboardDTO dashboard, int annee) {
-    List<String> moisLabels = new ArrayList<>();
-    List<Integer> totalPorcsParMois = new ArrayList<>();
-    List<Long> lotsActifsParMois = new ArrayList<>();
-    List<Long> groupesActifsParMois = new ArrayList<>();
+        List<String> moisLabels = new ArrayList<>();
+        List<Integer> totalPorcsParMois = new ArrayList<>();
+        List<Long> lotsActifsParMois = new ArrayList<>();
+        List<Long> groupesActifsParMois = new ArrayList<>();
 
-    List<LotPorc> lotsActifs = lotPorcRepository.findByStatut("ACTIF");
-    List<GroupeReproduction> groupes = groupeReproductionRepository.findAll();
+        // Tous les lots (y compris archives) : ils existaient dans les mois passes.
+        List<LotPorc> lots = lotPorcRepository.findAll();
+        List<GroupeReproduction> groupes = groupeReproductionRepository.findAll();
+        List<MouvementLotPorc> mouvements = mouvementLotPorcRepository.findAll();
+        LocalDate aujourdHui = LocalDate.now();
 
-    for (int mois = 1; mois <= 12; mois++) {
-        LocalDate finMois = YearMonth.of(annee, mois).atEndOfMonth();
+        for (int mois = 1; mois <= 12; mois++) {
+            YearMonth ym = YearMonth.of(annee, mois);
+            moisLabels.add(nomMoisCourt(mois));
 
-        moisLabels.add(nomMoisCourt(mois));
+            // Un mois entierement dans le futur reste a zero.
+            if (ym.atDay(1).isAfter(aujourdHui)) {
+                totalPorcsParMois.add(0);
+                lotsActifsParMois.add(0L);
+                groupesActifsParMois.add(0L);
+                continue;
+            }
 
-        int totalPorcs = 0;
-        long nombreLotsActifs = 0;
-        long nombreGroupesActifs = 0;
+            // Date de reference : fin du mois, ou AUJOURD'HUI pour le mois en cours
+            // (sinon le mois courant serait considere comme "futur" et affiche a zero,
+            // masquant les lots crees ce mois-ci).
+            LocalDate asOf = ym.atEndOfMonth().isAfter(aujourdHui) ? aujourdHui : ym.atEndOfMonth();
 
-        for (LotPorc lot : lotsActifs) {
-            if (lot.getDateCreation() != null
-                    && !lot.getDateCreation().isAfter(finMois)) {
+            int totalPorcs = 0;
+            long nombreLotsActifs = 0;
 
-                nombreLotsActifs++;
-
-                if (lot.getEffectifActuel() != null) {
-                    totalPorcs += lot.getEffectifActuel();
+            for (LotPorc lot : lots) {
+                // Lot pas encore cree a cette date (date de creation inconnue => on l'inclut).
+                if (lot.getDateCreation() != null && lot.getDateCreation().isAfter(asOf)) {
+                    continue;
+                }
+                // Effectif historique = effectif actuel MOINS les mouvements survenus
+                // APRES "asOf" (calcul exact, independant du mouvement initial).
+                int effectif = lot.getEffectifActuel() != null ? lot.getEffectifActuel() : 0;
+                for (MouvementLotPorc m : mouvements) {
+                    if (m.getLot() != null && m.getLot().getId().equals(lot.getId())
+                            && m.getDateMouvement() != null && m.getDateMouvement().isAfter(asOf)) {
+                        effectif -= deltaSigneMouvement(m);
+                    }
+                }
+                if (effectif > 0) {
+                    nombreLotsActifs++;
+                    totalPorcs += effectif;
                 }
             }
-        }
 
-        for (GroupeReproduction groupe : groupes) {
-            if (groupe.getDateSaillie() != null
-                    && !groupe.getDateSaillie().isAfter(finMois)
-                    && STATUTS_GROUPES_ACTIFS.contains(groupe.getStatut())) {
-
-                nombreGroupesActifs++;
+            long nombreGroupesActifs = 0;
+            for (GroupeReproduction groupe : groupes) {
+                if (groupe.getDateSaillie() != null
+                        && !groupe.getDateSaillie().isAfter(asOf)
+                        && STATUTS_GROUPES_ACTIFS.contains(groupe.getStatut())) {
+                    nombreGroupesActifs++;
+                }
             }
+
+            totalPorcsParMois.add(totalPorcs);
+            lotsActifsParMois.add(nombreLotsActifs);
+            groupesActifsParMois.add(nombreGroupesActifs);
         }
 
-        totalPorcsParMois.add(totalPorcs);
-        lotsActifsParMois.add(nombreLotsActifs);
-        groupesActifsParMois.add(nombreGroupesActifs);
+        dashboard.setMoisLabels(moisLabels);
+        dashboard.setTotalPorcsParMois(totalPorcsParMois);
+        dashboard.setLotsActifsParMois(lotsActifsParMois);
+        dashboard.setGroupesActifsParMois(groupesActifsParMois);
     }
 
-    dashboard.setMoisLabels(moisLabels);
-    dashboard.setTotalPorcsParMois(totalPorcsParMois);
-    dashboard.setLotsActifsParMois(lotsActifsParMois);
-    dashboard.setGroupesActifsParMois(groupesActifsParMois);
-}
+    // Variation d'effectif d'un mouvement : + pour une entree, - pour une sortie.
+    private int deltaSigneMouvement(MouvementLotPorc m) {
+        String type = m.getTypeMouvement();
+        int q = m.getQuantite() != null ? m.getQuantite() : 0;
+        if ("ENTREE".equals(type) || "NAISSANCE".equals(type) || "TRANSFERT_ENTREE".equals(type)) {
+            return q;
+        }
+        if ("SORTIE".equals(type) || "DECES".equals(type) || "VENTE".equals(type)
+                || "TRANSFERT_SORTIE".equals(type)) {
+            return -q;
+        }
+        return 0;
+    }
 
     private String nomMoisCourt(int mois) {
         switch (mois) {

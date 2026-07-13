@@ -12,4 +12,5 @@ public class EvenementCalendrier {
     private String start;   // date ISO "aaaa-mm-jj"
     private String type;    // misebas | depense | vente | mort
     private String color;   // couleur de la pastille
+    private String url;     // lien (relatif au contexte) vers la page détail
 }

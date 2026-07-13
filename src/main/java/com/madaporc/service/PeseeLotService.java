@@ -47,6 +47,10 @@ public class PeseeLotService {
         if (lot == null) {
             return "Lot introuvable.";
         }
+        if (lot.getDateCreation() != null && dto.getDatePesee().isBefore(lot.getDateCreation())) {
+            return "La date de pesée ne peut pas être antérieure à la date de création du lot ("
+                    + lot.getDateCreation() + ").";
+        }
 
         PeseeLot pesee = new PeseeLot();
         pesee.setLot(lot);

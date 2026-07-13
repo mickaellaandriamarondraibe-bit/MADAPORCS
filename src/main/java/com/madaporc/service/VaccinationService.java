@@ -72,12 +72,18 @@ public VaccinationDTO getDtoById(Long id) {
         Vaccination vaccination;
 
         boolean creation = dto.getId() == null;
+        String ancienneDescription = null;
 
-        if (dto.getId() == null) {
+        if (creation) {
             vaccination = new Vaccination();
         } else {
             vaccination = vaccinationRepository.findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Vaccination introuvable avec l'id : " + dto.getId()));
+            // Description de la dépense existante (avant modification) pour pouvoir la remplacer.
+            if (vaccination.getVaccin() != null && vaccination.getLot() != null) {
+                ancienneDescription = "Vaccination " + vaccination.getVaccin().getNom()
+                        + " - lot " + vaccination.getLot().getCodeLot();
+            }
         }
 
         LotPorc lot = lotPorcRepository.findById(dto.getLotId())
@@ -94,14 +100,13 @@ public VaccinationDTO getDtoById(Long id) {
 
         vaccinationRepository.save(vaccination);
 
-        // Une vaccination est une dépense : on l'enregistre (seulement à la création).
-        if (creation) {
-            depenseService.creerDepense(
-                    dto.getCout(),
-                    "Vaccination " + vaccin.getNom() + " - lot " + lot.getCodeLot(),
-                    dto.getDateVaccination(),
-                    "SANTE");
+        // Une vaccination est une dépense : on la crée, ou on la resynchronise à la modification
+        // (on retire l'ancienne puis on recrée selon le nouveau coût / lot / vaccin).
+        String description = "Vaccination " + vaccin.getNom() + " - lot " + lot.getCodeLot();
+        if (!creation && ancienneDescription != null) {
+            depenseService.supprimerParDescription(ancienneDescription);
         }
+        depenseService.creerDepense(dto.getCout(), description, dto.getDateVaccination(), "SANTE");
 
         return null;
     }

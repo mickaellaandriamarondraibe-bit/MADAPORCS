@@ -18,4 +18,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     Ingredient findFirstByOrderByCreatedAtDesc();
 
     boolean existsByNomIgnoreCase(String nom);
+
+    boolean existsByNomIgnoreCaseAndIdNot(String nom, Long id);
 }

@@ -142,6 +142,57 @@ a {
   font-weight: 600;
 }
 
+/* En-tete de section repliable (accordeon du menu). */
+.nav__group-title {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--marine-400);
+  font-weight: 600;
+  margin: 14px 0 4px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  transition: background .15s, color .15s;
+}
+
+.nav__group-title:hover {
+  background: rgba(125, 179, 221, .12);
+  color: #fff;
+}
+
+/* Chevron CSS (pas de dependance a une police d'icones). */
+.nav__group-title::after {
+  content: "";
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform .15s;
+  opacity: .7;
+}
+
+.nav__group.is-open > .nav__group-title::after {
+  transform: rotate(45deg);
+}
+
+/* Liens du groupe : masques par defaut, visibles quand le groupe est ouvert. */
+.nav__group-items {
+  display: none;
+}
+
+.nav__group.is-open > .nav__group-items {
+  display: block;
+}
+
 .nav__link {
   display: flex;
   align-items: center;
@@ -161,15 +212,13 @@ a {
 }
 
 .nav__link:hover {
-  background: rgba(125, 179, 221, .12);
   color: #fff;
 }
 
 .nav__link.is-active {
-  background: var(--marine-600);
+  background: rgba(255, 255, 255, .09);
   color: #fff;
   font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--marine-400);
 }
 
 .nav__badge {
@@ -480,6 +529,15 @@ a {
   overflow-x: auto;
 }
 
+/* Responsive : sur petit écran, toute table .tbl défile horizontalement
+   (même si elle n'est pas encapsulée dans .table-wrap). */
+@media (max-width: 760px) {
+  table.tbl {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 table.tbl {
   width: 100%;
   border-collapse: collapse;
@@ -711,6 +769,20 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
   font-size: 13px;
 }
 
+/* Barre d'outils alignée à droite (champ de recherche collé au bouton). */
+.toolbar--end {
+  justify-content: flex-end;
+}
+
+.search--auto {
+  flex: 0 1 320px;
+}
+
+/* L'input remplit son conteneur, sinon un vide apparait avant le bouton. */
+.toolbar--end .search--auto .input {
+  width: 100%;
+}
+
 /* Alerts / messages */
 .alert {
   padding: 12px 15px;
@@ -765,6 +837,17 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 
 .progress--gold>span {
   background: linear-gradient(90deg, var(--or-500), #d8b53a);
+}
+
+/* Couleur progressive selon l'urgence (jours restants avant mise bas). */
+.progress--ok>span {
+  background: linear-gradient(90deg, var(--vert-500), var(--vert-400));
+}
+.progress--warn>span {
+  background: linear-gradient(90deg, var(--ambre-600), #d97706);
+}
+.progress--danger>span {
+  background: linear-gradient(90deg, var(--rouge-600), #dc2626);
 }
 
 /* Definition list (détails) */
@@ -1411,6 +1494,117 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
   color: #666;
 }
 
+/* En-têtes de colonne triables (clic pour trier) */
+.tbl th.th-sort {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.tbl th.th-sort:hover {
+  color: var(--bleu-600);
+}
+.tbl th.th-sort::after {
+  content: " \2195";
+  opacity: .3;
+  font-size: .85em;
+}
+.tbl th.th-sort[data-sort="asc"]::after {
+  content: " \2191";
+  opacity: 1;
+}
+.tbl th.th-sort[data-sort="desc"]::after {
+  content: " \2193";
+  opacity: 1;
+}
+
+/* Filtre par intervalle (nombres / dates) */
+.range-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.range-filter > span:first-child {
+  color: var(--gris-600);
+  font-size: .9rem;
+}
+.range-filter .range-sep {
+  color: var(--gris-500);
+}
+.input--sm {
+  padding: 4px 8px;
+  font-size: 13px;
+  max-width: 130px;
+}
+
+/* Barre de liste : recherche à gauche, bouton "Filtres" à droite */
+.listbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.listbar .search { flex: 0 1 320px; min-width: 200px; }
+.listbar .spacer { flex: 1; }
+.filters-toggle { display: inline-flex; align-items: center; gap: 7px; }
+.filters-toggle .chevron { font-size: 11px; transition: transform .15s; }
+.filters-toggle.is-open .chevron { transform: rotate(180deg); }
+.badge-count {
+  background: var(--marine-600); color: #fff; border-radius: 999px;
+  font-size: 11px; font-weight: 700; padding: 1px 7px; line-height: 1.5;
+}
+
+/* Panneau de filtres repliable */
+.filters-panel {
+  background: var(--gris-050);
+  border: 1px solid var(--gris-200);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.filters-panel[hidden] { display: none; }
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 18px;
+  margin: 0;
+}
+.filters-row + .filters-row {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--gris-200);
+}
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  color: var(--gris-500);
+}
+.fld .select,
+.fld .input { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.fld-actions { display: flex; gap: 8px; align-items: flex-end; margin-left: auto; }
+.filters-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--gris-600);
+}
+.filters-sort .select { width: auto; min-width: 130px; }
+.sort-dir { padding: 6px 10px; }
+.sort-dir.is-active {
+  background: var(--marine-600);
+  color: #fff;
+  border-color: var(--marine-600);
+}
+
 /* =============================================================
    Dashboard exploitation — UI (portée : /dashboard)
    ============================================================= */
@@ -1645,9 +1839,8 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 .empty--sm { padding: 26px 20px; }
 .empty--sm .ico { font-size: 26px; color: var(--gris-400); }
 
-/* ---------- Sidebar (actif / hover plus nets) ---------- */
-.nav__link:hover { background: rgba(255, 255, 255, .09); }
-.nav__link.is-active { box-shadow: inset 4px 0 0 var(--or-500); font-weight: 600; }
+/* ---------- Sidebar (actif plus net) ---------- */
+.nav__link.is-active { font-weight: 600; }
 .nav__section { color: #77a4c8; }
 
 /* ---------- Responsive ---------- */

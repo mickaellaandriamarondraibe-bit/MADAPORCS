@@ -26,13 +26,13 @@
                 <td>${al.dateAlerteFormattee}</td>
                 <td>
                   <c:choose>
-                    <c:when test="${al.statut == 'NOUVELLE'}"><span class="badge badge--red"><span class="dot"></span>Nouvelle</span></c:when>
+                    <c:when test="${al.statut == 'NON_LUE'}"><span class="badge badge--red"><span class="dot"></span>Non lue</span></c:when>
                     <c:when test="${al.statut == 'LUE'}"><span class="badge badge--blue">Lue</span></c:when>
                     <c:otherwise><span class="badge badge--gray">Traitée</span></c:otherwise>
                   </c:choose>
                 </td>
                 <td class="actions">
-                  <c:if test="${al.statut == 'NOUVELLE'}">
+                  <c:if test="${al.statut == 'NON_LUE'}">
                     <form method="post" action="${ctx}/reproduction/alertes/${al.id}/lire" style="display:inline">
                       <button type="submit" style="background:none;border:none;cursor:pointer;color:var(--vert-600);font-weight:600;font-family:inherit;font-size:13px">Marquer lue</button>
                     </form>

@@ -3,7 +3,7 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="pageTitle" value="Mouvements — ${lot.codeLot}" />
-<c:set var="crumbs" value="Cheptel / Lots / ${lot.codeLot} / Mouvements" />
+<c:set var="crumbs" value="Cheptel / Lots / ${lot.codeLot} / <b>Mouvements</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
@@ -122,9 +122,6 @@
             </option>
             <option value="DECES" ${mouvement.typeMouvement == 'DECES' ? 'selected' : ''}>
               Décès
-            </option>
-            <option value="VENTE" ${mouvement.typeMouvement == 'VENTE' ? 'selected' : ''}>
-              Vente
             </option>
             <option value="TRANSFERT_ENTREE" ${mouvement.typeMouvement == 'TRANSFERT_ENTREE' ? 'selected' : ''}>
               Transfert entrée

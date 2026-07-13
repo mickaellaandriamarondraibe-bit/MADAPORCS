@@ -63,6 +63,15 @@ public class MouvementLotService {
 
         String type = dto.getTypeMouvement().trim().toUpperCase();
 
+        // Date du mouvement : ni dans le futur, ni avant la creation du lot.
+        LocalDate dateMvt = dto.getDateMouvement() != null ? dto.getDateMouvement() : LocalDate.now();
+        if (dateMvt.isAfter(LocalDate.now())) {
+            return "La date du mouvement ne peut pas être dans le futur.";
+        }
+        if (lot.getDateCreation() != null && dateMvt.isBefore(lot.getDateCreation())) {
+            return "La date du mouvement ne peut pas précéder la date de création du lot.";
+        }
+
         if (estSortie(type) && dto.getQuantite() > lot.getEffectifActuel()) {
             return "La quantité est supérieure à l'effectif actuel.";
         }
@@ -106,12 +115,18 @@ public class MouvementLotService {
     }
 
     public void augmenterEffectif(Long lotId, Integer quantite) {
+        augmenterEffectif(lotId, quantite, "Augmentation de l'effectif du lot");
+    }
+
+    // Variante avec motif explicite (ex. réintégration après annulation de vente),
+    // pour une traçabilité claire du mouvement.
+    public void augmenterEffectif(Long lotId, Integer quantite, String observation) {
         MouvementLotDTO dto = new MouvementLotDTO();
         dto.setLotId(lotId);
         dto.setTypeMouvement("ENTREE");
         dto.setQuantite(quantite);
         dto.setDateMouvement(LocalDate.now());
-        dto.setObservation("Augmentation de l'effectif du lot");
+        dto.setObservation(observation);
 
         String error = enregistrerMouvement(dto);
 

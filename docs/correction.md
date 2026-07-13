@@ -38,4 +38,4 @@ le calendrier ne marche plus , que ce soit lors de creation vente ou creation mo
 
 
 
-    quand je fait confirmation de mis bae j'ai fait genre 5 viviant dont 3 femelle et jai enregistrer et ca a reussi mais seul le lot femelle a ete creer donc ou sont passer les 2 reste 
+quand je fait confirmation de mis bae j'ai fait genre 5 viviant dont 3 femelle et jai enregistrer et ca a reussi mais seul le lot femelle a ete creer donc ou sont passer les 2 reste 

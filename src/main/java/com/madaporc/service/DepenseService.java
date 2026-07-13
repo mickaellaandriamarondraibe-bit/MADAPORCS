@@ -49,7 +49,7 @@ public class DepenseService {
     public String enregistrerDepense(DepenseDTO dto) {
         String validation = validerDepense(dto);
         if (validation != null) {
-            return "error";
+            return validation;
         }
 
         Depense depense = new Depense();
@@ -69,12 +69,12 @@ public class DepenseService {
     public String modifierDepense(Long id, DepenseDTO dto) {
         Depense depense = depenseRepository.findById(id).orElse(null);
         if (depense == null) {
-            return "error";
+            return "Dépense introuvable.";
         }
 
         String validation = validerDepense(dto);
         if (validation != null) {
-            return "error";
+            return validation;
         }
 
         depense.setDateDepense(dto.getDateDepense());
@@ -94,13 +94,13 @@ public class DepenseService {
 
     public String validerDepense(DepenseDTO dto) {
         if (dto.getDateDepense() == null) {
-            return "error";
+            return "La date de la dépense est obligatoire.";
         }
         if (dto.getMontant() == null) {
-            return "error";
+            return "Le montant est obligatoire.";
         }
         if (dto.getMontant().compareTo(BigDecimal.ZERO) <= 0) {
-            return "error";
+            return "Le montant doit être supérieur à 0.";
         }
         return null;
     }
@@ -120,6 +120,34 @@ public class DepenseService {
         depense.setCategorie(trouverOuCreerCategorie(nomCategorie));
 
         return depenseRepository.save(depense);
+    }
+
+    // Met a jour le montant de la depense d'achat d'un lot (identifiee par sa
+    // description "Achat du lot <code>"), ou la cree si elle n'existe pas encore.
+    // Appelee lors de la modification du prix d'achat d'un lot.
+    public void mettreAJourOuCreerAchatLot(String codeLot, BigDecimal montant, LocalDate dateDepense) {
+        if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
+        String description = "Achat du lot " + codeLot;
+        Depense existante = depenseRepository.findFirstByDescription(description).orElse(null);
+        if (existante != null) {
+            existante.setMontant(montant);
+            depenseRepository.save(existante);
+        } else {
+            creerDepense(montant, description, dateDepense, "ACHAT ANIMAUX");
+        }
+    }
+
+    // Supprime la premiere depense correspondant a une description (si elle existe).
+    public void supprimerParDescription(String description) {
+        depenseRepository.findFirstByDescription(description)
+                .ifPresent(depenseRepository::delete);
+    }
+
+    // Supprime la depense d'achat d'un lot. Utilisee quand un lot cesse d'etre de type ACHAT.
+    public void supprimerAchatLot(String codeLot) {
+        supprimerParDescription("Achat du lot " + codeLot);
     }
 
     // Retrouve une categorie par son nom, la cree si elle n'existe pas encore.

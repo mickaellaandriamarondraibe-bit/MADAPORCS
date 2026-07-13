@@ -19,12 +19,15 @@ public class GroupeReproductionMiseBasService {
 
     private final GroupeReproductionRepository groupeRepository;
     private final RepartitionReproductiveService repartitionReproductiveService;
+    private final LotNaissanceService lotNaissanceService;
 
     public GroupeReproductionMiseBasService(
             GroupeReproductionRepository groupeRepository,
-            RepartitionReproductiveService repartitionReproductiveService) {
+            RepartitionReproductiveService repartitionReproductiveService,
+            LotNaissanceService lotNaissanceService) {
         this.groupeRepository = groupeRepository;
         this.repartitionReproductiveService = repartitionReproductiveService;
+        this.lotNaissanceService = lotNaissanceService;
     }
 
     // Fonction pour afficher tout les details d'un groupe
@@ -99,6 +102,7 @@ public class GroupeReproductionMiseBasService {
                 .orElseThrow(() -> new IllegalArgumentException("Groupe de reproduction introuvable."));
 
         validerDonneesMiseBas(groupe, dto);
+        completerChampsDeduits(groupe, dto);
         mettreAJourGroupeApresMiseBas(groupe, dto);
 
         groupeRepository.save(groupe);
@@ -108,8 +112,11 @@ public class GroupeReproductionMiseBasService {
                 groupe.getLotFemelle().getId(),
                 groupe.getNbFemellesMiseBas(),
                 groupe.getNombreFemellesConcernees());
-        //id null      → INSERT
-        //id existe    → UPDATE
+
+        // Création des lot(s) naissance dans la MÊME transaction : si elle échoue,
+        // la confirmation de mise bas est annulée aussi (plus d'état incohérent).
+        lotNaissanceService.creerLotsNaissance(groupeId, dto);
+
         return getDetailGroupe(groupeId);
     }
 
@@ -137,7 +144,10 @@ public class GroupeReproductionMiseBasService {
         }
     }
 
-    //validation des donner envoyer par l'user 
+    // Validation des saisies de l'utilisateur. Les champs déduits (porcelets nés,
+    // femelles non gestantes, porcelets mâles) ne sont pas saisis : ils sont
+    // calculés dans completerChampsDeduits, donc validés indirectement ici via
+    // les bornes sur les saisies (femelles gestantes, femelles, vivants...).
     private void validerDonneesMiseBas(GroupeReproduction groupe, ConfirmationMiseBasDTO dto) {
         if ("MISE_BAS_CONFIRMEE".equals(groupe.getStatut()) || "CLOTURE".equals(groupe.getStatut())) {
             throw new IllegalArgumentException("Ce groupe est déjà confirmé ou clôturé.");
@@ -148,20 +158,44 @@ public class GroupeReproductionMiseBasService {
         if (dto.getDateMiseBasReelle().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("La date de mise bas ne peut pas être dans le futur.");
         }
-        if (dto.getNbFemellesGestantes() + dto.getNbFemellesNonGestantes()
-                > groupe.getNombreFemellesConcernees()) {
-            throw new IllegalArgumentException("Le total gestantes + non gestantes dépasse les femelles concernées.");
+
+        int concernees = groupe.getNombreFemellesConcernees() != null ? groupe.getNombreFemellesConcernees() : 0;
+        int gestantes = dto.getNbFemellesGestantes() != null ? dto.getNbFemellesGestantes() : 0;
+        int miseBas = dto.getNbFemellesMiseBas() != null ? dto.getNbFemellesMiseBas() : 0;
+        int vivants = dto.getNbPorceletsVivants() != null ? dto.getNbPorceletsVivants() : 0;
+        int morts = dto.getNbPorceletsMorts() != null ? dto.getNbPorceletsMorts() : 0;
+        int femelles = dto.getNbFemelles() != null ? dto.getNbFemelles() : 0;
+
+        if (gestantes > concernees) {
+            throw new IllegalArgumentException("Le nombre de femelles gestantes (" + gestantes
+                    + ") dépasse les femelles concernées (" + concernees + ").");
         }
-        if (dto.getNbFemellesMiseBas() > dto.getNbFemellesGestantes()) {
+        if (miseBas > gestantes) {
             throw new IllegalArgumentException("Les femelles ayant mis bas dépassent les femelles gestantes.");
         }
-        if (dto.getNbPorceletsVivants() + dto.getNbPorceletsMorts()
-                > dto.getNbPorceletsNes()) {
-            throw new IllegalArgumentException("Vivants + morts dépasse le nombre de porcelets nés.");
-        }
-        if (dto.getNbFemellesMiseBas() == 0 && dto.getNbPorceletsNes() > 0) {
+        if (miseBas == 0 && (vivants + morts) > 0) {
             throw new IllegalArgumentException("Impossible d'avoir des porcelets si aucune femelle n'a mis bas.");
         }
+        if (femelles > vivants) {
+            throw new IllegalArgumentException("Le nombre de porcelets femelles (" + femelles
+                    + ") dépasse le nombre de porcelets vivants (" + vivants + ").");
+        }
+    }
+
+    // Champs déduits (non saisis dans le formulaire), calculés après validation :
+    //   porcelets nés        = vivants + morts
+    //   femelles non gestantes = femelles concernées - gestantes
+    //   porcelets mâles      = vivants - femelles
+    private void completerChampsDeduits(GroupeReproduction groupe, ConfirmationMiseBasDTO dto) {
+        int concernees = groupe.getNombreFemellesConcernees() != null ? groupe.getNombreFemellesConcernees() : 0;
+        int gestantes = dto.getNbFemellesGestantes() != null ? dto.getNbFemellesGestantes() : 0;
+        int vivants = dto.getNbPorceletsVivants() != null ? dto.getNbPorceletsVivants() : 0;
+        int morts = dto.getNbPorceletsMorts() != null ? dto.getNbPorceletsMorts() : 0;
+        int femelles = dto.getNbFemelles() != null ? dto.getNbFemelles() : 0;
+
+        dto.setNbPorceletsNes(vivants + morts);
+        dto.setNbFemellesNonGestantes(concernees - gestantes);
+        dto.setNbMales(vivants - femelles);
     }
 
     // Cloture le groupe : seulement apres une mise bas confirmee (ou un echec).

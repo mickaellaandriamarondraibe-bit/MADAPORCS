@@ -35,7 +35,7 @@
         <div class="stack">
           <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=CLIENTS">Modèle Clients (nom, téléphone, adresse)</a>
           <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=INGREDIENTS">Modèle Ingrédients (nom, unité, stock, seuil)</a>
-          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=LOTS">Modèle Lots (code, sexe, objectif, origine, race, effectif)</a>
+          <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=LOTS">Modèle Lots (sexe, objectif, origine, race, prix_achat, effectif)</a>
           <a class="btn btn--ghost btn--sm" href="${ctx}/imports/modele?module=VACCINATIONS">Modèle Vaccinations (code_lot, vaccin, date, rappel, obs.)</a>
         </div>
         <button class="btn btn--primary w-full" style="justify-content:center" type="submit">Importer le fichier</button>

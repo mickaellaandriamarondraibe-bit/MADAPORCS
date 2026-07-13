@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,6 +41,11 @@ public class LotPorc {
     // Sert à classer les femelles pour l'analyse reproductive.
     @Column(name = "age_mois")
     private Integer ageMois;
+
+    // Prix d'achat unitaire (par animal) pour un lot d'origine ACHAT.
+    // Sert a (re)calculer la depense d'achat du lot.
+    @Column(name = "prix_achat")
+    private BigDecimal prixAchat;
 
     @Column(name = "effectif_initial", nullable = false)
     private Integer effectifInitial;

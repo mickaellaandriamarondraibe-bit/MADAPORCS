@@ -50,6 +50,11 @@ public class PeseeLotController {
         String error = peseeLotService.enregistrerPesee(dto);
         Long lotId = dto != null ? dto.getLotId() : null;
 
+        // Sans lot, on ne peut ni reafficher la liste des pesees ni rediriger : retour a la liste des lots.
+        if (lotId == null) {
+            return "redirect:/lots";
+        }
+
         if (error != null) {
             model.addAttribute("error", error);
             return listPesees(lotId, model);

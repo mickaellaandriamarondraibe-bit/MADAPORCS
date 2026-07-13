@@ -12,12 +12,13 @@
 
 <div class="card" style="max-width:760px">
   <div class="card__body">
+    <c:if test="${not empty error}"><div class="alert alert--err"><span>${error}</span></div></c:if>
     <%-- POST /depenses/save, bind DepenseDTO --%>
     <form method="post" action="${ctx}/depenses/save">
       <input type="hidden" name="id" value="${depense.id}">
       <div class="form-grid">
-        <div class="field"><label>Catégorie <span class="req">*</span></label>
-          <select class="select" name="categorieId" required>
+        <div class="field"><label>Catégorie</label>
+          <select class="select" name="categorieId">
             <option value="">— Choisir —</option>
             <c:forEach var="cat" items="${categories}">
               <option value="${cat.id}" ${depense.categorieId == cat.id ? 'selected' : ''}>${cat.nom}</option>

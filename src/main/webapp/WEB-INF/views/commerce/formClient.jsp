@@ -12,12 +12,13 @@
 
 <div class="card" style="max-width:760px">
   <div class="card__body">
+    <c:if test="${not empty error}"><div class="alert alert--err"><span>${error}</span></div></c:if>
     <%-- POST /clients/save, bind ClientDTO --%>
     <form method="post" action="${ctx}/clients/save">
       <input type="hidden" name="id" value="${clientDTO.id}">
       <div class="form-grid">
         <div class="field"><label>Nom <span class="req">*</span></label><input class="input" name="nom" value="${clientDTO.nom}" required></div>
-        <div class="field"><label>Téléphone</label><input class="input" name="telephone" value="${clientDTO.telephone}"></div>
+        <div class="field"><label>Téléphone <span class="req">*</span></label><input class="input" name="telephone" value="${clientDTO.telephone}" required></div>
         <div class="field span-2"><label>Adresse</label><textarea class="textarea" name="adresse">${clientDTO.adresse}</textarea></div>
       </div>
       <div class="form-actions">

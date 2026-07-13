@@ -12,4 +12,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findAllByOrderByNomAsc();
 
     boolean existsByNomIgnoreCase(String nom);
+
+    java.util.Optional<Client> findByTelephone(String telephone);
 }

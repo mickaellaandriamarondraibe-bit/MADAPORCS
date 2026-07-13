@@ -1,30 +1,25 @@
 package com.madaporc.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.madaporc.dto.IngredientDTO;
 import com.madaporc.dto.MouvementStockDTO;
 import com.madaporc.model.Ingredient;
-import com.madaporc.model.MouvementStock;
 import com.madaporc.repository.IngredientRepository;
-import com.madaporc.repository.MouvementLotPorcRepository;
-import com.madaporc.repository.MouvementStockRepository;
 
 @Service
 public class IngredientService {
     
     private final IngredientRepository ingredientRepository;
-    private final MouvementStockRepository mouvementStockRepository;
     private final MouvementStockService mouvementStockService;
-    public IngredientService(IngredientRepository ingredientRepository , MouvementStockRepository mouvementStockRepository,
+    public IngredientService(IngredientRepository ingredientRepository,
             MouvementStockService mouvementStockService) {
         this.ingredientRepository = ingredientRepository;
-        this.mouvementStockRepository = mouvementStockRepository;
         this.mouvementStockService = mouvementStockService;
     }
 
@@ -50,6 +45,7 @@ public class IngredientService {
         return null;
     }
 
+    @Transactional
     public String creerIngredient(IngredientDTO dto) {
         String erreur = validerDto(dto);
         if (erreur != null) {
@@ -68,18 +64,16 @@ public class IngredientService {
         ingredient.setCreatedAt(LocalDateTime.now());
         ingredient.setUpdatedAt(LocalDateTime.now());
 
-        
         ingredientRepository.save(ingredient);
-        
+
+        // On utilise l'id de l'entite qu'on vient de sauvegarder (fiable),
+        // et non une requete "dernier cree" qui pourrait viser un autre ingredient.
         MouvementStockDTO mouvement = new MouvementStockDTO();
-        mouvement.setIngredientId(ingredientRepository.findFirstByOrderByCreatedAtDesc().getId());
+        mouvement.setIngredientId(ingredient.getId());
         mouvement.setQuantite(dto.getStockActuel());
         mouvement.setTypeMouvement("ENTREE");
-
-        
         mouvementStockService.enregistrerMouvementStock(mouvement);
 
-        
         return "Ingredient created successfully";
     }
 
@@ -90,9 +84,13 @@ public class IngredientService {
         }
         Ingredient ingredient = findById(id);
         if (ingredient != null) {
+            if (ingredientRepository.existsByNomIgnoreCaseAndIdNot(dto.getNom().trim(), id)) {
+                return "Un ingrédient avec ce nom existe déjà";
+            }
             ingredient.setNom(dto.getNom().trim());
             ingredient.setUnite(dto.getUnite());
-            ingredient.setStockActuel(dto.getStockActuel());
+            // Le stock ne se modifie que via les mouvements de stock (ENTREE/SORTIE),
+            // pas ici : sinon l'historique des mouvements ne correspondrait plus au stock reel.
             ingredient.setSeuilAlerte(dto.getSeuilAlerte());
             ingredient.setUpdatedAt(LocalDateTime.now());
             ingredientRepository.save(ingredient);

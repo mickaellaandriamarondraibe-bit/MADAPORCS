@@ -39,12 +39,12 @@ public class ClientService {
     public String creer(ClientDTO dto) {
         String validation = valider(dto);
         if (validation != null) {
-            return "error";
+            return validation;
         }
 
         Client client = new Client();
-        client.setNom(dto.getNom());
-        client.setTelephone(dto.getTelephone());
+        client.setNom(dto.getNom().trim());
+        client.setTelephone(dto.getTelephone().replaceAll("\\s", ""));
         client.setAdresse(dto.getAdresse());
 
         clientRepository.save(client);
@@ -54,16 +54,17 @@ public class ClientService {
     public String modifier(Long id, ClientDTO dto) {
         Client client = clientRepository.findById(id).orElse(null);
         if (client == null) {
-            return "error";
+            return "Client introuvable.";
         }
 
+        dto.setId(id); // pour exclure le client courant du contrôle d'unicité
         String validation = valider(dto);
         if (validation != null) {
-            return "error";
+            return validation;
         }
 
-        client.setNom(dto.getNom());
-        client.setTelephone(dto.getTelephone());
+        client.setNom(dto.getNom().trim());
+        client.setTelephone(dto.getTelephone().replaceAll("\\s", ""));
         client.setAdresse(dto.getAdresse());
 
         clientRepository.save(client);
@@ -72,7 +73,21 @@ public class ClientService {
 
     public String valider(ClientDTO dto) {
         if (dto.getNom() == null || dto.getNom().trim().isEmpty()) {
-            return "error";
+            return "Le nom du client est obligatoire.";
+        }
+        String tel = dto.getTelephone() != null ? dto.getTelephone().trim() : "";
+        if (tel.isEmpty()) {
+            return "Le téléphone est obligatoire.";
+        }
+        // Regle de gestion : le telephone ne contient que des chiffres (espaces tolérés).
+        if (!tel.replaceAll("\\s", "").matches("\\d+")) {
+            return "Le téléphone ne doit contenir que des chiffres.";
+        }
+        // Unicité du téléphone (hors le client en cours d'édition), sur la valeur
+        // normalisée (sans espaces) pour ne pas contourner l'unicité avec des espaces.
+        Client existant = clientRepository.findByTelephone(tel.replaceAll("\\s", "")).orElse(null);
+        if (existant != null && !existant.getId().equals(dto.getId())) {
+            return "Ce numéro de téléphone est déjà utilisé par un autre client.";
         }
         return null;
     }

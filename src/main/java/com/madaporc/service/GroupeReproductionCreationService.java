@@ -207,6 +207,11 @@ public class GroupeReproductionCreationService {
             }
         }
         if (nombreFemelles > totalDisponibles) {
+            if (totalDisponibles == 0) {
+                return "Aucune femelle apte à la reproduction dans ce lot : "
+                        + "les femelles sont probablement trop jeunes (âge minimum requis) "
+                        + "ou à retirer. Disponibles : 0.";
+            }
             return "Nombre de femelles insuffisant. Disponibles : " + totalDisponibles;
         }
         return null;

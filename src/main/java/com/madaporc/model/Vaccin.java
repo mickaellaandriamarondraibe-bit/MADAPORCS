@@ -20,8 +20,6 @@ public class Vaccin {
     @Column(name = "description")
     private String description;
 
-    // Champs supplémentaires (affichés dans les JSP) : non présents dans schema.sql.
-    // Pour ne pas bloquer, on les expose via getters/setters non persistés.
     @Transient
     private String maladieCiblee;
 

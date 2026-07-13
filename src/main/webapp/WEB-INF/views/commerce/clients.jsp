@@ -9,7 +9,7 @@
   <a class="btn btn--primary" href="${ctx}/clients/form"> Nouveau client</a>
 </div>
 
-<div class="toolbar"><div class="search"><input class="input" placeholder="Rechercher un client…" data-filter-input="#tbl-clients"></div></div>
+<div class="toolbar toolbar--end"><div class="search search--auto"><input class="input" placeholder="Rechercher un client…" data-filter-input="#tbl-clients"></div><button type="button" class="btn btn--ghost" data-filter-btn>Rechercher</button></div>
 
 <div class="card">
   <div class="table-wrap">

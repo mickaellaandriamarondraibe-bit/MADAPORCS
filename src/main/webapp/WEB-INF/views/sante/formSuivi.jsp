@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="edition" value="${not empty suivi.id}" />
 <c:set var="pageTitle" value="${edition ? 'Modifier le suivi' : 'Nouveau suivi sanitaire'}" />
-<c:set var="crumbs" value="Santé / Suivis / ${edition ? 'Édition' : 'Création'}" />
+<c:set var="crumbs" value="Santé / Suivis / <b>${edition ? 'Édition' : 'Création'}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 

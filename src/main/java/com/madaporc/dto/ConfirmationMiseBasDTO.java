@@ -21,16 +21,14 @@ public class ConfirmationMiseBasDTO {
     @Min(value = 0, message = "Le nombre de femelles gestantes ne peut pas être négatif.")
     private Integer nbFemellesGestantes;
 
-    @NotNull(message = "Le nombre de femelles non gestantes est obligatoire.")
-    @Min(value = 0, message = "Le nombre de femelles non gestantes ne peut pas être négatif.")
+    // Calculé côté serveur : femelles concernées − femelles gestantes.
     private Integer nbFemellesNonGestantes;
 
     @NotNull(message = "Le nombre de femelles ayant mis bas est obligatoire.")
     @Min(value = 0, message = "Le nombre de femelles ayant mis bas ne peut pas être négatif.")
     private Integer nbFemellesMiseBas;
 
-    @NotNull(message = "Le nombre de porcelets nés est obligatoire.")
-    @Min(value = 0, message = "Le nombre de porcelets nés ne peut pas être négatif.")
+    // Calculé côté serveur : porcelets vivants + porcelets morts.
     private Integer nbPorceletsNes;
 
     @NotNull(message = "Le nombre de porcelets vivants est obligatoire.")
@@ -46,7 +44,7 @@ public class ConfirmationMiseBasDTO {
     @Min(value = 0, message = "Le nombre de femelles ne peut pas être négatif.")
     private Integer nbFemelles = 0;
 
-    @Min(value = 0, message = "Le nombre de mâles ne peut pas être négatif.")
+    // Calculé côté serveur : porcelets vivants − porcelets femelles.
     private Integer nbMales = 0;
 
     private String objectifLot = "ENGRAISSEMENT";

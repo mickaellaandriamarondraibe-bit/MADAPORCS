@@ -28,4 +28,30 @@
   </div>
 </div>
 
+<div class="card" style="max-width:760px">
+  <div class="card__head"><h2>Historique d'achats</h2></div>
+  <div class="card__body">
+    <c:choose>
+      <c:when test="${not empty achats}">
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Référence</th><th>Date</th><th>Montant</th><th>Statut</th></tr></thead>
+            <tbody>
+              <c:forEach var="v" items="${achats}">
+                <tr>
+                  <td><a href="${ctx}/ventes/${v.id}"><b>${v.reference}</b></a></td>
+                  <td>${v.dateVente}</td>
+                  <td class="num">${v.montantTotal} Ar</td>
+                  <td>${v.statut}</td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+        </div>
+      </c:when>
+      <c:otherwise><p class="muted">Aucun achat pour ce client.</p></c:otherwise>
+    </c:choose>
+  </div>
+</div>
+
 <%@ include file="/WEB-INF/views/layout/footer.jsp" %>

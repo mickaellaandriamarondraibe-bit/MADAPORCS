@@ -5,7 +5,7 @@
 <c:set var="g" value="${detail}" />
 
 <c:set var="pageTitle" value="Groupe ${g.codeGroupe}" />
-<c:set var="crumbs" value="Reproduction / Groupes / ${g.codeGroupe}" />
+<c:set var="crumbs" value="Reproduction / Groupes / <b>${g.codeGroupe}</b>" />
 
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
@@ -112,7 +112,12 @@
             </div>
         </div>
 
-        <div class="progress ${pourcentageEvolution >= 90 ? 'progress--gold' : ''}">
+        <%-- Couleur progressive selon les jours restants : vert (calme),
+             orange (<= 15 j), rouge (<= 5 j, mise bas imminente). --%>
+        <c:set var="progColor" value="progress--ok" />
+        <c:if test="${not empty joursRestants and joursRestants le 15}"><c:set var="progColor" value="progress--warn" /></c:if>
+        <c:if test="${not empty joursRestants and joursRestants le 5}"><c:set var="progColor" value="progress--danger" /></c:if>
+        <div class="progress ${progColor}">
             <span style="width:${empty pourcentageEvolution ? 0 : pourcentageEvolution}%"></span>
         </div>
 
