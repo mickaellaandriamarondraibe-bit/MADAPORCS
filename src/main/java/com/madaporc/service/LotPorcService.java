@@ -8,9 +8,11 @@ import com.madaporc.dto.LotDetailDTO;
 import com.madaporc.dto.LotFiltreDTO;
 import com.madaporc.dto.LotPorcDTO;
 import com.madaporc.dto.PeseeLotDTO;
+import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.LotPorc;
 import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.model.Race;
+import com.madaporc.repository.GroupeReproductionRepository;
 import com.madaporc.repository.LotPorcRepository;
 import com.madaporc.repository.MouvementLotPorcRepository;
 import com.madaporc.repository.RaceRepository;
@@ -29,6 +31,7 @@ public class LotPorcService {
     private final RepartitionReproductiveService repartitionReproductiveService;
     private final PeseeLotService peseeLotService;
     private final DepenseService depenseService;
+    private final GroupeReproductionRepository groupe ; 
 
     public LotPorcService(
             LotPorcRepository lotPorcRepository,
@@ -36,13 +39,15 @@ public class LotPorcService {
             MouvementLotPorcRepository mouvementLotPorcRepository,
             RepartitionReproductiveService repartitionReproductiveService,
             PeseeLotService peseeLotService,
-            DepenseService depenseService) {
+            DepenseService depenseService ,
+            GroupeReproductionRepository groupe) {
         this.lotPorcRepository = lotPorcRepository;
         this.raceRepository = raceRepository;
         this.mouvementLotPorcRepository = mouvementLotPorcRepository;
         this.repartitionReproductiveService = repartitionReproductiveService;
         this.peseeLotService = peseeLotService;
         this.depenseService = depenseService;
+        this.groupe = groupe ;
     }
 
     @Transactional(readOnly = true)
@@ -241,10 +246,21 @@ public class LotPorcService {
 
     public String modifierLot(Long id, LotPorcDTO dto) {
         LotPorc lot = findById(id);
+        if(lot.getSexe().equals("FEMELLE")){
+            GroupeReproduction dernier = groupe
+            .findFirstByLotFemelleIdOrderByDateSaillieDesc(id)
+            .orElse(null);
+
+            if(dernier.getStatut().equals("SAILLIE")){
+                return ("Lot ne peut etre toucher car encore en cycle");
+            }
+        }
+        
 
         if (dto.getCodeLot() == null || dto.getCodeLot().trim().isEmpty()) {
             return "Le code du lot est obligatoire.";
-        }
+        }   
+
 
         String nouveauCode = dto.getCodeLot().trim().toUpperCase();
 
@@ -308,6 +324,7 @@ public class LotPorcService {
                     .orElseThrow(() -> new IllegalArgumentException("Race non trouvée"));
             lot.setRace(race);
         }
+
 
         lotPorcRepository.save(lot);
 

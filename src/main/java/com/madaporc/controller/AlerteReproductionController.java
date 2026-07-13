@@ -20,7 +20,9 @@ public class AlerteReproductionController {
 
     @GetMapping("/reproduction/alertes")
     public String listAlertes(Model model) {
-        alerteService.genererAlertesMiseBasProche();
+        // La génération est assurée par la tâche planifiée (toutes les 60 s).
+        // On ne régénère PAS ici : une page d'affichage ne doit pas créer de données,
+        // sinon des doublons apparaissent quand la tâche et la page s'exécutent en même temps.
         model.addAttribute("alertes", alerteService.listerAlertesActives());
         return "reproduction/alertes/liste";
     }

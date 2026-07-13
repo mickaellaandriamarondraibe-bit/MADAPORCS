@@ -25,6 +25,9 @@ public interface GroupeReproductionRepository extends JpaRepository<GroupeReprod
 
     List<GroupeReproduction> findByDatePrevueMiseBasLessThanEqualAndDateMiseBasReelleIsNullOrderByDatePrevueMiseBasAsc(
             LocalDate fin);
+    
+    Optional<GroupeReproduction> findFirstByLotFemelleIdOrderByDateSaillieDesc(Long lotFemelleId);
+
 
     long countByStatutIn(List<String> statuts);
 }

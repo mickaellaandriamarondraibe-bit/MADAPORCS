@@ -2,7 +2,6 @@ package com.madaporc.service;
 
 import com.madaporc.model.AlerteReproduction;
 import com.madaporc.model.GroupeReproduction;
-import com.madaporc.model.Ingredient;
 import com.madaporc.model.LotPorc;
 import com.madaporc.repository.AlerteReproductionRepository;
 import com.madaporc.repository.GroupeReproductionRepository;
@@ -229,7 +228,6 @@ public class AlerteReproductionService {
         try {
             Files.writeString(journalEmailPath, LocalDate.now().toString(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            // Ne bloque pas l'enregistrement des alertes si le marquage échoue.
         }
     }
 

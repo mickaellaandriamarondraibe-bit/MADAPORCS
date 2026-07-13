@@ -60,7 +60,7 @@ public class GroupeReproductionCreationService {
             if (erreurResaillie != null)
                 return erreurResaillie;
 
-            // efectif dispo
+            // effectif dispo
             String erreurDispo = verifierFemellesDisponibles(dto.getLotFemelleId(), dto.getNombreFemellesConcernees());
             if (erreurDispo != null)
                 return erreurDispo;
@@ -155,12 +155,17 @@ public class GroupeReproductionCreationService {
         if (lotMaleId == null)
             return "Veuillez sélectionner un lot mâle.";
         Optional<LotPorc> lot = lotPorcRepository.findById(lotMaleId);
+        LotPorc lotMale = lotPorcRepository.findById(lotMaleId).orElse(null);
+        if(lotMale.getAgeMois() < 8){
+            return "Le lot mâle est trop jeune pour la reproduction (âge minimum requis : 8 mois).";
+        }
         if (lot.isEmpty())
             return "Lot mâle introuvable.";
         if (!"MALE".equals(lot.get().getSexe()))
             return "Le lot sélectionné doit être de sexe MALE.";
         if (!"ACTIF".equals(lot.get().getStatut()))
             return "Le lot mâle doit être ACTIF.";
+
 
         // On refuse un lot mâle atteint d'une maladie encore en cours.
         if (suiviSanitaireRepository.countByLotIdAndDateGuerisonIsNull(lotMaleId) > 0) {
@@ -199,6 +204,7 @@ public class GroupeReproductionCreationService {
             return "Le nombre de femelles doit être supérieur à 0.";
         }
         List<RepartitionReproductiveLot> repartitions = repartitionRepository.findByLotId(lotFemelleId);
+        LotPorc lot  = lotPorcRepository.findById(lotFemelleId).orElse(null);
         int totalDisponibles = 0;
         for (RepartitionReproductiveLot r : repartitions) {
             String code = r.getStatutReproductif();
@@ -206,11 +212,12 @@ public class GroupeReproductionCreationService {
                 totalDisponibles += r.getQuantite();
             }
         }
+        if(lot.getAgeMois() != null && lot.getAgeMois() < 8) {
+            return "Le lot femelle est trop jeune pour la reproduction (âge minimum requis : 6 mois).";
+        }
         if (nombreFemelles > totalDisponibles) {
             if (totalDisponibles == 0) {
-                return "Aucune femelle apte à la reproduction dans ce lot : "
-                        + "les femelles sont probablement trop jeunes (âge minimum requis) "
-                        + "ou à retirer. Disponibles : 0.";
+                return "Lot insuffisante" ; 
             }
             return "Nombre de femelles insuffisant. Disponibles : " + totalDisponibles;
         }

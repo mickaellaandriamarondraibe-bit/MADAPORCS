@@ -75,6 +75,12 @@
     </div>
 
     <div class="flex gap-8">
+        <c:if test="${not empty g.lotFemelleId}">
+            <a class="btn btn--ghost" href="${ctx}/reproduction/analyse/lots/${g.lotFemelleId}">
+                Voir l'analyse
+            </a>
+        </c:if>
+
         <c:if test="${g.statut == 'SAILLIE' or g.statut == 'EN_GESTATION' or g.statut == 'MISE_BAS_PROCHE'}">
             <a class="btn btn--gold" href="${ctx}/reproduction/groupes/${g.id}/confirmer-mise-bas">
                 Confirmer la mise bas

@@ -22,7 +22,7 @@
               <tr>
                 <td><span class="badge badge--amber">${al.typeAlerte}</span></td>
                 <td><a href="${ctx}/reproduction/groupes/${al.groupeReproduction.id}"><b>${al.groupeReproduction.codeGroupe}</b></a></td>
-                <td>${al.groupeReproduction.lotFemelle}</td>
+                <td>${al.groupeReproduction.lotFemelle.codeLot}</td>
                 <td>${al.dateAlerteFormattee}</td>
                 <td>
                   <c:choose>
