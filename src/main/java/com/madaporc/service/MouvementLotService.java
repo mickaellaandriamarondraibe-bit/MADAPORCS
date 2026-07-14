@@ -84,6 +84,12 @@ public class MouvementLotService {
             return "Type de mouvement invalide.";
         }
 
+        // Tous les porcs sont morts (effectif 0 apres un deces) : le lot est
+        // archive automatiquement, il ne peut plus recevoir de mouvement.
+        if ("DECES".equals(type) && lot.getEffectifActuel() == 0) {
+            lot.setStatut("ARCHIVE");
+        }
+
         MouvementLotPorc mouvement = new MouvementLotPorc();
 
         // Très important : on lie le mouvement au lot.

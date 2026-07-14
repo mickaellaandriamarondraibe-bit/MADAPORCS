@@ -7,6 +7,13 @@ import com.madaporc.dto.IngredientDTO;
 import com.madaporc.dto.LotPorcDTO;
 import com.madaporc.dto.VaccinationDTO;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -284,25 +291,74 @@ public class ImportExportService {
         return e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
     }
 
-    // ================= EXPORT EXCEL (CSV) =================
+    // ================= EXPORT XLSX (vrai fichier Excel) =================
 
     @Transactional
-    public byte[] exporterCsv(String module) {
+    public byte[] exporterXlsx(String module) {
         List<String[]> lignes = donneesExport(module);
         if (lignes == null) {
-            tracer("EXPORT", "EXCEL", module, module + ".csv", "ECHEC", "Export non supporte.");
+            tracer("EXPORT", "EXCEL", module, module + ".xlsx", "ECHEC", "Export non supporte.");
             return null;
         }
-        StringBuilder sb = new StringBuilder();
-        for (String[] ligne : lignes) {
-            for (int i = 0; i < ligne.length; i++) {
-                if (i > 0) sb.append(SEP);
-                sb.append(echapper(ligne[i]));
-            }
-            sb.append("\n");
+        try (Workbook wb = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            remplirFeuille(wb, wb.createSheet(module), lignes);
+            wb.write(out);
+            tracer("EXPORT", "EXCEL", module, module + ".xlsx", "SUCCES", "Export reussi.");
+            return out.toByteArray();
+        } catch (Exception e) {
+            tracer("EXPORT", "EXCEL", module, module + ".xlsx", "ECHEC", e.getMessage());
+            return null;
         }
-        tracer("EXPORT", "EXCEL", module, module + ".csv", "SUCCES", "Export reussi.");
-        return sb.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    // Remplit une feuille : en-tete (ligne 0) en gras, valeurs numeriques ecrites
+    // comme de vrais nombres (pour les sommes dans Excel), le reste en texte.
+    private void remplirFeuille(Workbook wb, Sheet sheet, List<String[]> lignes) {
+        CellStyle enteteStyle = wb.createCellStyle();
+        Font gras = wb.createFont();
+        gras.setBold(true);
+        enteteStyle.setFont(gras);
+
+        for (int r = 0; r < lignes.size(); r++) {
+            Row row = sheet.createRow(r);
+            String[] cellules = lignes.get(r);
+            for (int c = 0; c < cellules.length; c++) {
+                Cell cell = row.createCell(c);
+                String valeur = cellules[c] != null ? cellules[c] : "";
+                if (r > 0 && estNombreExcel(valeur)) {
+                    cell.setCellValue(Double.parseDouble(valeur));
+                } else {
+                    cell.setCellValue(valeur);
+                }
+                if (r == 0) {
+                    cell.setCellStyle(enteteStyle);
+                }
+            }
+        }
+
+        // Ajuste la largeur des colonnes (sans faire echouer l'export si indisponible).
+        int nbColonnes = lignes.isEmpty() ? 0 : lignes.get(0).length;
+        try {
+            for (int c = 0; c < nbColonnes; c++) {
+                sheet.autoSizeColumn(c);
+            }
+        } catch (Exception ignore) {
+            // environnement sans polices : on garde les largeurs par defaut.
+        }
+    }
+
+    // Vrai nombre pour Excel : entier/decimal simple, en excluant les identifiants
+    // a zero initial (numeros de telephone, codes) qui doivent rester du texte.
+    private boolean estNombreExcel(String v) {
+        if (v == null || !v.matches("-?\\d+(\\.\\d+)?")) {
+            return false;
+        }
+        String abs = v.startsWith("-") ? v.substring(1) : v;
+        if (abs.length() > 1 && abs.charAt(0) == '0' && abs.indexOf('.') < 0) {
+            return false;
+        }
+        return true;
     }
 
     // ================= EXPORT PDF =================
@@ -433,29 +489,27 @@ public class ImportExportService {
         }
     }
 
-    // Export global : toutes les donnees dans un seul CSV, une section par module.
+    // Export global : toutes les donnees dans un seul classeur xlsx, une feuille par module.
     @Transactional
-    public byte[] exporterCsvGlobal() {
+    public byte[] exporterXlsxGlobal() {
         String[] modules = {"LOTS", "GROUPES", "ANALYSE", "SANITAIRE", "VENTES", "DEPENSES",
                 "CLIENTS", "INGREDIENTS", "FINANCIER"};
-        StringBuilder sb = new StringBuilder();
-        for (String module : modules) {
-            List<String[]> lignes = donneesExport(module);
-            if (lignes == null) {
-                continue;
-            }
-            sb.append("### ").append(module).append("\n");
-            for (String[] ligne : lignes) {
-                for (int i = 0; i < ligne.length; i++) {
-                    if (i > 0) sb.append(SEP);
-                    sb.append(echapper(ligne[i]));
+        try (Workbook wb = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            for (String module : modules) {
+                List<String[]> lignes = donneesExport(module);
+                if (lignes == null) {
+                    continue;
                 }
-                sb.append("\n");
+                remplirFeuille(wb, wb.createSheet(module), lignes);
             }
-            sb.append("\n");
+            wb.write(out);
+            tracer("EXPORT", "EXCEL", "GLOBAL", "export_global.xlsx", "SUCCES", "Export global reussi.");
+            return out.toByteArray();
+        } catch (Exception e) {
+            tracer("EXPORT", "EXCEL", "GLOBAL", "export_global.xlsx", "ECHEC", e.getMessage());
+            return null;
         }
-        tracer("EXPORT", "EXCEL", "GLOBAL", "export_global.csv", "SUCCES", "Export global reussi.");
-        return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private List<String[]> lireCsv(MultipartFile file) throws Exception {
@@ -565,14 +619,6 @@ public class ImportExportService {
             }
         }
         return cell;
-    }
-
-    private String echapper(String v) {
-        if (v == null) return "";
-        if (v.contains(SEP) || v.contains("\"") || v.contains("\n")) {
-            return "\"" + v.replace("\"", "\"\"") + "\"";
-        }
-        return v;
     }
 
     private String html(String v) {

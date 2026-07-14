@@ -9,8 +9,10 @@ import com.madaporc.dto.ConfirmationMiseBasDTO;
 import com.madaporc.dto.LotNaissanceDTO;
 import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.LotPorc;
+import com.madaporc.model.MouvementLotPorc;
 import com.madaporc.repository.GroupeReproductionRepository;
 import com.madaporc.repository.LotPorcRepository;
+import com.madaporc.repository.MouvementLotPorcRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -19,10 +21,15 @@ public class LotNaissanceService {
 
     private final LotPorcRepository lotPorcRepository;
     private final GroupeReproductionRepository groupeRepository;
+    private final MouvementLotPorcRepository mouvementLotPorcRepository;
 
-    public LotNaissanceService( LotPorcRepository lotPorcRepository, GroupeReproductionRepository groupeRepository) {
+    public LotNaissanceService(
+            LotPorcRepository lotPorcRepository,
+            GroupeReproductionRepository groupeRepository,
+            MouvementLotPorcRepository mouvementLotPorcRepository) {
         this.lotPorcRepository = lotPorcRepository;
         this.groupeRepository = groupeRepository;
+        this.mouvementLotPorcRepository = mouvementLotPorcRepository;
     }
 
     // Pre-remplit un DTO de lot naissance a partir des donnees du groupe (apres mise bas).
@@ -116,6 +123,17 @@ public class LotNaissanceService {
         lot.setCreatedAt(LocalDateTime.now());
         lot.setUpdatedAt(LocalDateTime.now());
         lotPorcRepository.save(lot);
+
+        // Mouvement d'entree "NAISSANCE" : trace la naissance dans l'historique
+        // du lot (et alimente l'onglet Naissances de la page Mouvements).
+        MouvementLotPorc mouvement = new MouvementLotPorc();
+        mouvement.setLot(lot);
+        mouvement.setTypeMouvement("NAISSANCE");
+        mouvement.setQuantite(effectif);
+        mouvement.setDateMouvement(lot.getDateCreation());
+        mouvement.setObservation("Naissance issue de la mise bas du groupe " + groupe.getCodeGroupe());
+        mouvement.setCreatedAt(LocalDateTime.now());
+        mouvementLotPorcRepository.save(mouvement);
     }
 
     // Garantit un code de lot unique (ajoute un suffixe -2, -3... si deja pris).

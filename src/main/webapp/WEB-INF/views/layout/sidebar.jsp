@@ -4,13 +4,14 @@
 <c:set var="isAdmin" value="${sessionScope.roleNom == 'ADMIN'}" />
 <aside class="sidebar">
   <div class="sidebar__brand">
-    <span class="logo"><img src="${ctx}/css/logo.png" class="logo"></span>
+    <span class="logo"><img src="${ctx}/css/oIBastcY.jpeg" class="logo"></span>
     <div>MADAPORC<small>Gestion d'élevage</small></div>
   </div>
 
   <nav class="nav">
     <a class="nav__link" data-match="/dashboard" href="${ctx}/dashboard">Tableau de bord</a>
     <a class="nav__link" data-match="/calendrier" href="${ctx}/calendrier">Calendrier</a>
+    <a class="nav__link" data-match="/mouvements" href="${ctx}/mouvements">Mouvements</a>
 
     <div class="nav__group">
       <button type="button" class="nav__group-title" data-nav-group>Cheptel</button>

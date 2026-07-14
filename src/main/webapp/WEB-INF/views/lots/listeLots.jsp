@@ -50,6 +50,12 @@
         <option value="ARCHIVE" ${filtre.statut == 'ARCHIVE' ? 'selected' : ''}>Archivé</option>
       </select>
     </label>
+    <label class="fld">Entrée depuis
+      <input class="input" type="date" name="dateCreationDebut" value="${filtre.dateCreationDebut}">
+    </label>
+    <label class="fld">Entrée jusqu'au
+      <input class="input" type="date" name="dateCreationFin" value="${filtre.dateCreationFin}">
+    </label>
     <div class="fld-actions">
       <button class="btn btn--primary" type="submit">Filtrer</button>
       <a class="btn btn--ghost" href="${ctx}/lots">Réinitialiser</a>

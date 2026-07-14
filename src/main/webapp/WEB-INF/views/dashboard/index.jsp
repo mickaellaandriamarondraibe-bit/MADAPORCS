@@ -417,7 +417,8 @@
   const couleurBenefice = benefice < 0 ? ROUGE : VERT;
 
   const tabs = {
-    // Comparaison financière : dépenses affichées en négatif (sortie de trésorerie)
+    // Comparaison financière : chaque montant affiché tel quel. Les dépenses
+    // sont un montant depensé (positif), pas une valeur négative.
     finances: {
       title: 'Pilotage financier mensuel (Ar)',
       type: 'bar',
@@ -427,7 +428,7 @@
         labels: ['Ventes', 'Dépenses', 'Bénéfice net'],
         datasets: [{
           label: 'Montant',
-          data: [ventes, -depenses, benefice],
+          data: [ventes, depenses, benefice],
           backgroundColor: [VERT, ROUGE, benefice < 0 ? ROUGE_CLAIR : VERT]
         }]
       }

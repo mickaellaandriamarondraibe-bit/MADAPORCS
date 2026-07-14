@@ -59,14 +59,15 @@ public class RapportController {
         return pdf("GROUPES", "reproduction");
     }
 
-    // Export global : toutes les donnees dans un CSV (ouvrable dans Excel).
+    // Export global : toutes les donnees dans un classeur xlsx (une feuille par module).
     @GetMapping("/rapports/export/excel")
     public ResponseEntity<byte[]> exportGlobal() {
-        byte[] data = importExportService.exporterCsvGlobal();
+        byte[] data = importExportService.exporterXlsxGlobal();
         if (data == null) {
             return ResponseEntity.notFound().build();
         }
-        return fichier(data, "export_global.csv", "text/csv");
+        return fichier(data, "export_global.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
     private ResponseEntity<byte[]> pdf(String module, String nom) {

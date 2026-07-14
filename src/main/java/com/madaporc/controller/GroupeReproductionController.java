@@ -9,7 +9,6 @@ import com.madaporc.repository.LotPorcRepository;
 import com.madaporc.service.GroupeReproductionCreationService;
 import com.madaporc.service.GroupeReproductionQueryService;
 import com.madaporc.service.GroupeReproductionMiseBasService;
-import com.madaporc.service.LotNaissanceService;
 import com.madaporc.service.AlerteReproductionService;
 
 import jakarta.validation.Valid;
@@ -28,7 +27,6 @@ public class GroupeReproductionController {
     private final GroupeReproductionMiseBasService miseBasService;
     private final GroupeReproductionQueryService queryService;
     private final GroupeReproductionCreationService creationService;
-    private final LotNaissanceService lotNaissanceService;
     private final LotPorcRepository lotPorcRepository;
     private final AlerteReproductionService alerteService;
 
@@ -36,13 +34,11 @@ public class GroupeReproductionController {
             GroupeReproductionMiseBasService miseBasService,
             GroupeReproductionQueryService queryService,
             GroupeReproductionCreationService creationService,
-            LotNaissanceService lotNaissanceService,
             LotPorcRepository lotPorcRepository,
             AlerteReproductionService alerteService) {
         this.miseBasService = miseBasService;
         this.queryService = queryService;
         this.creationService = creationService;
-        this.lotNaissanceService = lotNaissanceService;
         this.lotPorcRepository = lotPorcRepository;
         this.alerteService = alerteService;
     }
@@ -127,18 +123,14 @@ public class GroupeReproductionController {
             if (alerteId != null && !id.equals(alerteService.getGroupeId(alerteId))) {
                 throw new IllegalArgumentException("L'alerte ne correspond pas au groupe de reproduction confirmé.");
             }
-            // 1. On enregistre la mise bas
+            // On enregistre la mise bas. Le(s) lot(s) naissance (femelle / male) sont
+            // crees dans la MEME transaction par confirmerMiseBas : ne pas rappeler
+            // creerLotsNaissance ici, sinon on obtient des doublons (LOT-...-2).
             miseBasService.confirmerMiseBas(id, dto);
             if (alerteId != null) {
                 alerteService.traiterApresConfirmationMiseBas(alerteId, id);
             }
-            // 2. On cree automatiquement le(s) lot(s) naissance (femelle / male)
-            String resultatLots = lotNaissanceService.creerLotsNaissance(id, dto);
-            if ("SUCCESS".equals(resultatLots)) {
-                ra.addFlashAttribute("message", "Mise bas confirmée et lot(s) naissance créé(s).");
-            } else {
-                ra.addFlashAttribute("message", "Mise bas confirmée. " + resultatLots);
-            }
+            ra.addFlashAttribute("message", "Mise bas confirmée et lot(s) naissance créé(s).");
             return "redirect:/reproduction/groupes/" + id;
         } catch (IllegalArgumentException e) {
             model.addAttribute("detail", miseBasService.getDetailGroupe(id));

@@ -2,6 +2,8 @@ package com.madaporc.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class LotFiltreDTO {
     private String codeLot;
     private Long raceId;
@@ -9,7 +11,9 @@ public class LotFiltreDTO {
     private String objectif;
     private String origine;
     private String statut;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateCreationDebut;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateCreationFin;
 
     public LotFiltreDTO() {

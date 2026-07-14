@@ -52,9 +52,10 @@ public class ImportExportController {
 
     @GetMapping("/exports/excel")
     public ResponseEntity<byte[]> exporterExcel(@RequestParam String module) {
-        byte[] data = service.exporterCsv(module);
+        byte[] data = service.exporterXlsx(module);
         if (data == null) return ResponseEntity.notFound().build();
-        return fichier(data, module.toLowerCase() + ".csv", "text/csv");
+        return fichier(data, module.toLowerCase() + ".xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
     @GetMapping("/exports/pdf")
