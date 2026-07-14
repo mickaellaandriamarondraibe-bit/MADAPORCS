@@ -55,6 +55,8 @@ public class GroupeReproductionCreationService {
             if (erreurMale != null)
                 return erreurMale;
 
+            
+
             // regle de re-saillie (ecart avec la derniere mise bas <= 60 jours)
             String erreurResaillie = verifierDelaiResaillie(dto.getLotFemelleId(), dto.getDateSaillie());
             if (erreurResaillie != null)
@@ -80,6 +82,10 @@ public class GroupeReproductionCreationService {
                 if (params.isPresent()) {
                     dureeGestation = params.get().getDureeGestationJours();
                 }
+            }
+
+            if(!lotFemelle.getRace().equals(lotMale.getRace())){
+                return "Le lot doit etre de meme race ";
             }
 
             // Calcul de la date prévue de mise bas

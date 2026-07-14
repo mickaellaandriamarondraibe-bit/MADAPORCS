@@ -49,7 +49,7 @@ public class MouvementStockService {
             String resultat = appliquerEntree(ingredient, dto.getQuantite());
             // Une entrée en stock est un achat : on enregistre la dépense.
             depenseService.creerDepense(
-                    dto.getMontant(),
+                    dto.getMontant().multiply(dto.getQuantite()),
                     "Achat ingrédient " + ingredient.getNom(),
                     LocalDate.now(),
                     "ALIMENTATION");

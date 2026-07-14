@@ -327,7 +327,7 @@ public class ImportExportService {
             String tag = (r == 0) ? "th" : "td";
             html.append("<tr>");
             for (String cell : lignes.get(r)) {
-                html.append("<").append(tag).append(">").append(html(cell)).append("</").append(tag).append(">");
+                html.append("<").append(tag).append(">").append(html(formaterMontant(cell))).append("</").append(tag).append(">");
             }
             html.append("</tr>");
         }
@@ -548,6 +548,23 @@ public class ImportExportService {
 
     private String texte(Object o) {
         return o == null ? "" : o.toString();
+    }
+
+    // Uniquement pour le PDF : un nombre decimal (ex. montant "1000000.00") est
+    // affiche avec des separateurs de milliers -> "1 000 000". Le reste (dates,
+    // codes, entiers, telephones) est laisse tel quel.
+    private String formaterMontant(String cell) {
+        if (cell != null && cell.matches("-?\\d+\\.\\d+")) {
+            try {
+                java.text.NumberFormat nf = java.text.NumberFormat.getInstance(java.util.Locale.FRANCE);
+                nf.setMinimumFractionDigits(0);
+                nf.setMaximumFractionDigits(2);
+                return nf.format(new java.math.BigDecimal(cell));
+            } catch (NumberFormatException e) {
+                return cell;
+            }
+        }
+        return cell;
     }
 
     private String echapper(String v) {

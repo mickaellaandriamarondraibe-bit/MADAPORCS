@@ -22,9 +22,14 @@
     <p>Vue globale de l'élevage au ${dateJour}</p>
   </div>
 
-  <a class="btn btn--primary" href="${ctx}/rapports">
-     Générer un rapport
-  </a>
+  <form method="get" action="${ctx}/dashboard" class="flex gap-8" style="align-items:center">
+    <label class="muted" style="font-size:13px">Mois</label>
+    <input type="month" name="mois" value="${moisSelectionne}" class="input" style="width:auto"
+           onchange="this.form.submit()">
+    <button class="btn btn--ghost" type="submit">Voir</button>
+    <a class="btn btn--ghost" href="${ctx}/dashboard/comparaison?mois1=${moisSelectionne}">Comparer</a>
+    <a class="btn btn--primary" href="${ctx}/rapports">Générer un rapport</a>
+  </form>
 </div>
 
 <%-- ================= KPI ================= --%>

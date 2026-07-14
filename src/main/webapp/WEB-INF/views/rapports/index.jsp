@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="pageTitle" value="Rapports" />
 <c:set var="crumbs"    value="Données / <b>Rapports</b>" />
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
@@ -33,17 +34,17 @@
     <div class="grid-3">
       <div class="card"><div class="card__body">
         <p class="muted" style="font-size:12.5px">Total ventes (validées)</p>
-        <h2 style="color:#1b7f3b">${rapport.totalVentes} Ar</h2>
+        <h2 style="color:#1b7f3b"><fmt:formatNumber value="${rapport.totalVentes}" type="number" maxFractionDigits="0"/> Ar</h2>
         <p class="muted" style="font-size:12px">${rapport.nombreVentes} vente(s)</p>
       </div></div>
       <div class="card"><div class="card__body">
         <p class="muted" style="font-size:12.5px">Total dépenses</p>
-        <h2 style="color:#b3261e">${rapport.totalDepenses} Ar</h2>
+        <h2 style="color:#b3261e"><fmt:formatNumber value="${rapport.totalDepenses}" type="number" maxFractionDigits="0"/> Ar</h2>
         <p class="muted" style="font-size:12px">${rapport.nombreDepenses} dépense(s)</p>
       </div></div>
       <div class="card"><div class="card__body">
         <p class="muted" style="font-size:12.5px">Bénéfice net</p>
-        <h2>${rapport.beneficeNet} Ar</h2>
+        <h2><fmt:formatNumber value="${rapport.beneficeNet}" type="number" maxFractionDigits="0"/> Ar</h2>
         <p class="muted" style="font-size:12px">
           <c:choose>
             <c:when test="${empty filtre.dateDebut and empty filtre.dateFin}">Toute la période</c:when>

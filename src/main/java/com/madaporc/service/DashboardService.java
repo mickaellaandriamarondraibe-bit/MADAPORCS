@@ -57,28 +57,47 @@ public class DashboardService {
         this.mouvementLotPorcRepository = mouvementLotPorcRepository;
     }
 
+    // Tableau de bord du mois courant.
     public DashboardDTO getDashboard() {
+        return getDashboard(YearMonth.from(LocalDate.now()));
+    }
+
+    // Tableau de bord "historique" : reconstruit l'etat de l'elevage a la FIN du mois choisi
+    // (plafonne a aujourd'hui). Tout est calcule a cette date de reference.
+    public DashboardDTO getDashboard(YearMonth mois) {
         LocalDate aujourdHui = LocalDate.now();
-        YearMonth moisCourant = YearMonth.from(aujourdHui);
+        if (mois == null) {
+            mois = YearMonth.from(aujourdHui);
+        }
+        // Date de reference = fin du mois choisi, sans depasser aujourd'hui (pas de futur).
+        LocalDate asOf = mois.atEndOfMonth().isAfter(aujourdHui) ? aujourdHui : mois.atEndOfMonth();
 
         DashboardDTO dashboard = new DashboardDTO();
 
-        dashboard.setLotsActifs(compterLotsActifs());
-        dashboard.setTotalPorcs(calculerTotalPorcsActifs());
-        dashboard.setGroupesActifs(compterGroupesReproductionActifs());
-        dashboard.setMisesBasProches(compterMisesBasProches());
+        // Etat du cheptel reconstruit a la date de reference (effectif via les mouvements).
+        List<LotPorc> lots = lotPorcRepository.findAll();
+        List<GroupeReproduction> groupes = groupeReproductionRepository.findAll();
+        List<MouvementLotPorc> mouvements = mouvementLotPorcRepository.findAll();
+        EtatCheptel etat = etatCheptelAsOf(asOf, lots, groupes, mouvements);
+        dashboard.setLotsActifs(etat.lots());
+        dashboard.setTotalPorcs(etat.porcs());
+        dashboard.setGroupesActifs(etat.groupes());
+        dashboard.setMisesBasProches(listerMisesBasProches(asOf).size());
 
+        // Taux d'aptitude / fertilite : valeurs globales (snapshots), non datees.
         dashboard.setTauxAptitudeGlobale(calculerTauxAptitudeGlobal());
         dashboard.setTauxFertiliteObserve(calculerTauxFertiliteGlobal());
 
-        dashboard.setVentesMois(calculerVentesMois(moisCourant.atDay(1)));
-        dashboard.setDepensesMois(calculerDepensesMois(moisCourant.atDay(1)));
+        // Finances du mois choisi.
+        dashboard.setVentesMois(calculerVentesMois(mois.atDay(1)));
+        dashboard.setDepensesMois(calculerDepensesMois(mois.atDay(1)));
         dashboard.setBeneficeNet(dashboard.getVentesMois().subtract(dashboard.getDepensesMois()));
 
         dashboard.setStocksFaibles(listerStocksFaibles());
-        dashboard.setVaccinationsAVenir(listerVaccinationsAVenir(aujourdHui.plusDays(30)));
+        dashboard.setVaccinationsAVenir(listerVaccinationsAVenir(asOf, asOf.plusDays(30)));
 
-        remplirEvolutionCheptel(dashboard, aujourdHui.getYear());
+        // Graphe d'evolution sur l'annee du mois choisi.
+        remplirEvolutionCheptel(dashboard, mois.getYear());
 
         return dashboard;
     }
@@ -104,11 +123,14 @@ public class DashboardService {
     }
 
     public List<GroupeReproduction> listerMisesBasProches() {
-        LocalDate aujourdHui = LocalDate.now();
+        return listerMisesBasProches(LocalDate.now());
+    }
 
+    // Mises bas proches par rapport a une date de reference (dans les 5 jours suivants).
+    public List<GroupeReproduction> listerMisesBasProches(LocalDate asOf) {
         return groupeReproductionRepository
                 .findByDatePrevueMiseBasLessThanEqualAndDateMiseBasReelleIsNullOrderByDatePrevueMiseBasAsc(
-                        aujourdHui.plusDays(5));
+                        asOf.plusDays(5));
     }
 
     public BigDecimal calculerTauxAptitudeGlobal() {
@@ -162,8 +184,12 @@ public class DashboardService {
     }
 
     public List<Vaccination> listerVaccinationsAVenir(LocalDate dateLimite) {
+        return listerVaccinationsAVenir(LocalDate.now(), dateLimite);
+    }
+
+    public List<Vaccination> listerVaccinationsAVenir(LocalDate debut, LocalDate dateLimite) {
         List<Vaccination> vaccinations = vaccinationRepository
-                .findByDateRappelBetweenOrderByDateRappelAsc(LocalDate.now(), dateLimite);
+                .findByDateRappelBetweenOrderByDateRappelAsc(debut, dateLimite);
         return vaccinations != null ? vaccinations : new ArrayList<>();
     }
 
@@ -204,41 +230,10 @@ public class DashboardService {
             // masquant les lots crees ce mois-ci).
             LocalDate asOf = ym.atEndOfMonth().isAfter(aujourdHui) ? aujourdHui : ym.atEndOfMonth();
 
-            int totalPorcs = 0;
-            long nombreLotsActifs = 0;
-
-            for (LotPorc lot : lots) {
-                // Lot pas encore cree a cette date (date de creation inconnue => on l'inclut).
-                if (lot.getDateCreation() != null && lot.getDateCreation().isAfter(asOf)) {
-                    continue;
-                }
-                // Effectif historique = effectif actuel MOINS les mouvements survenus
-                // APRES "asOf" (calcul exact, independant du mouvement initial).
-                int effectif = lot.getEffectifActuel() != null ? lot.getEffectifActuel() : 0;
-                for (MouvementLotPorc m : mouvements) {
-                    if (m.getLot() != null && m.getLot().getId().equals(lot.getId())
-                            && m.getDateMouvement() != null && m.getDateMouvement().isAfter(asOf)) {
-                        effectif -= deltaSigneMouvement(m);
-                    }
-                }
-                if (effectif > 0) {
-                    nombreLotsActifs++;
-                    totalPorcs += effectif;
-                }
-            }
-
-            long nombreGroupesActifs = 0;
-            for (GroupeReproduction groupe : groupes) {
-                if (groupe.getDateSaillie() != null
-                        && !groupe.getDateSaillie().isAfter(asOf)
-                        && STATUTS_GROUPES_ACTIFS.contains(groupe.getStatut())) {
-                    nombreGroupesActifs++;
-                }
-            }
-
-            totalPorcsParMois.add(totalPorcs);
-            lotsActifsParMois.add(nombreLotsActifs);
-            groupesActifsParMois.add(nombreGroupesActifs);
+            EtatCheptel etat = etatCheptelAsOf(asOf, lots, groupes, mouvements);
+            totalPorcsParMois.add(etat.porcs());
+            lotsActifsParMois.add(etat.lots());
+            groupesActifsParMois.add(etat.groupes());
         }
 
         dashboard.setMoisLabels(moisLabels);
@@ -246,6 +241,46 @@ public class DashboardService {
         dashboard.setLotsActifsParMois(lotsActifsParMois);
         dashboard.setGroupesActifsParMois(groupesActifsParMois);
     }
+
+    // Etat du cheptel a une date de reference : effectif total, nb de lots actifs,
+    // nb de groupes actifs. L'effectif est reconstruit a partir des mouvements posterieurs.
+    private EtatCheptel etatCheptelAsOf(LocalDate asOf, List<LotPorc> lots,
+            List<GroupeReproduction> groupes, List<MouvementLotPorc> mouvements) {
+        int totalPorcs = 0;
+        long nombreLotsActifs = 0;
+
+        for (LotPorc lot : lots) {
+            // Lot pas encore cree a cette date (date de creation inconnue => on l'inclut).
+            if (lot.getDateCreation() != null && lot.getDateCreation().isAfter(asOf)) {
+                continue;
+            }
+            // Effectif historique = effectif actuel MOINS les mouvements survenus APRES "asOf".
+            int effectif = lot.getEffectifActuel() != null ? lot.getEffectifActuel() : 0;
+            for (MouvementLotPorc m : mouvements) {
+                if (m.getLot() != null && m.getLot().getId().equals(lot.getId())
+                        && m.getDateMouvement() != null && m.getDateMouvement().isAfter(asOf)) {
+                    effectif -= deltaSigneMouvement(m);
+                }
+            }
+            if (effectif > 0) {
+                nombreLotsActifs++;
+                totalPorcs += effectif;
+            }
+        }
+
+        long nombreGroupesActifs = 0;
+        for (GroupeReproduction groupe : groupes) {
+            if (groupe.getDateSaillie() != null
+                    && !groupe.getDateSaillie().isAfter(asOf)
+                    && STATUTS_GROUPES_ACTIFS.contains(groupe.getStatut())) {
+                nombreGroupesActifs++;
+            }
+        }
+
+        return new EtatCheptel(totalPorcs, nombreLotsActifs, nombreGroupesActifs);
+    }
+
+    private record EtatCheptel(int porcs, long lots, long groupes) {}
 
     // Variation d'effectif d'un mouvement : + pour une entree, - pour une sortie.
     private int deltaSigneMouvement(MouvementLotPorc m) {

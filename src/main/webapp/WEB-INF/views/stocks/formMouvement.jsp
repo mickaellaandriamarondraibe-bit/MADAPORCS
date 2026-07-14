@@ -34,7 +34,7 @@
         <input class="input" type="number" step="0.01" min="0.01" name="quantite" required>
       </div>
       <div class="field" id="champMontant">
-        <label>Montant dépensé (Ar)</label>
+        <label>Montant dépensé (Kg)</label>
         <input class="input" type="number" step="0.01" min="0" name="montant" placeholder="Ex: 50000">
         <span class="hint">Pour une entrée (achat), enregistré comme dépense.</span>
       </div>
