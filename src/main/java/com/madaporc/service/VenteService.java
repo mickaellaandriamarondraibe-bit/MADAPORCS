@@ -310,37 +310,81 @@ public class VenteService {
 	}
 
 	// Genere le recu PDF d'une vente (facture). Retourne null en cas d'erreur.
+	@Transactional(readOnly = true)
 	public byte[] genererRecuPdf(Long id) {
 		Vente vente = chargerVente(id);
 		NumberFormat nf = NumberFormat.getIntegerInstance(Locale.FRANCE);
 
+		String statut = vente.getStatut();
+		String statutLabel = "VALIDEE".equals(statut) ? "Validée"
+				: "ANNULEE".equals(statut) ? "Annulée" : "Brouillon";
+		com.madaporc.model.Client client = vente.getClient();
+		String tel = client != null ? esc(client.getTelephone()) : "";
+		String adr = client != null ? esc(client.getAdresse()) : "";
+
 		StringBuilder html = new StringBuilder();
 		html.append("<html><head><meta charset='UTF-8'/><style>")
-			.append("body{font-family:sans-serif;color:#222;font-size:12px;}")
-			.append("h1{color:#1b4332;margin:0;} .muted{color:#666;}")
-			.append("table{width:100%;border-collapse:collapse;margin-top:14px;}")
-			.append("th,td{border:1px solid #ccc;padding:6px;text-align:left;}")
-			.append("th{background:#eee;} .num{text-align:right;}")
-			.append("</style></head><body>");
-		html.append("<h1>MADAPORC</h1><p class='muted'>Recu de vente</p>")
-			.append("<p><b>").append(vente.getReference()).append("</b><br/>")
-			.append("Client : ").append(esc(vente.getNomClient())).append("<br/>")
-			.append("Date : ").append(vente.getDateVente()).append("<br/>")
-			.append("Statut : ").append(esc(vente.getStatut())).append("</p>");
-		html.append("<table><tr><th>Lot</th><th class='num'>Quantite</th>")
+			.append("@page{size:A5;margin:1.3cm;}")
+			.append("body{font-family:sans-serif;color:#1b1f23;font-size:11px;}")
+			.append(".box{border:1px solid #e6e9ee;border-radius:12px;padding:24px 28px;}")
+			.append(".brand{text-align:center;color:#0b2545;font-weight:bold;font-size:15px;letter-spacing:1px;}")
+			.append(".brand small{display:block;color:#6b7480;font-size:9px;font-weight:normal;letter-spacing:0;}")
+			.append(".title{text-align:center;color:#13315c;letter-spacing:3px;font-size:17px;margin:14px 0 4px;}")
+			.append(".lead{text-align:center;color:#6b7480;font-size:10px;margin:0 0 16px;}")
+			.append(".label{text-transform:uppercase;font-size:8.5px;letter-spacing:.5px;color:#6b7480;font-weight:bold;}")
+			.append(".sep{border:0;border-top:1px solid #e6e9ee;margin:14px 0;}")
+			.append("table{width:100%;border-collapse:collapse;}")
+			.append(".cols td{vertical-align:top;width:50%;padding:0;}")
+			.append(".meta td{vertical-align:top;width:33%;padding:0;}")
+			.append(".strong{font-weight:bold;font-size:12px;}")
+			.append(".lines{margin-top:6px;}")
+			.append(".lines th{text-align:left;font-size:8.5px;text-transform:uppercase;color:#6b7480;border-bottom:2px solid #e6e9ee;padding:6px 4px;}")
+			.append(".lines td{padding:7px 4px;border-bottom:1px solid #f1f3f6;}")
+			.append(".num{text-align:right;}")
+			.append(".total td{border-top:2px solid #e6e9ee;font-weight:bold;color:#13315c;font-size:13px;padding-top:9px;}")
+			.append(".paid{background:#effaf3;border:1px solid #d8f3e6;border-radius:8px;color:#245741;font-weight:bold;margin-top:10px;}")
+			.append(".paid td{padding:9px 12px;}")
+			.append(".foot{text-align:center;color:#9aa3af;font-size:9px;margin-top:18px;}")
+			.append("</style></head><body><div class='box'>");
+
+		html.append("<div class='brand'>MADAPORC<small>Gestion d'élevage</small></div>")
+			.append("<div class='title'>REÇU DE VENTE</div>")
+			.append("<p class='lead'>Ce reçu est délivré pour servir et valoir ce que de droit.</p>");
+
+		html.append("<hr class='sep'/><table class='cols'><tr>")
+			.append("<td><div class='label'>Vendeur</div><div class='strong'>MADAPORC</div>Gestion d'élevage porcin</td>")
+			.append("<td><div class='label'>Client</div><div class='strong'>").append(esc(vente.getNomClient())).append("</div>");
+		if (!tel.isEmpty()) html.append(tel).append("<br/>");
+		if (!adr.isEmpty()) html.append(adr);
+		html.append("</td></tr></table>");
+
+		html.append("<hr class='sep'/><table class='meta'><tr>")
+			.append("<td><div class='label'>Référence</div><b>").append(esc(vente.getReference())).append("</b></td>")
+			.append("<td><div class='label'>Date de vente</div><b>").append(vente.getDateVente()).append("</b></td>")
+			.append("<td><div class='label'>Statut</div><b>").append(statutLabel).append("</b></td>")
+			.append("</tr></table>");
+
+		html.append("<div class='label' style='margin-top:16px;'>Détail des lignes</div>")
+			.append("<table class='lines'><tr><th>Lot</th><th class='num'>Qté</th>")
 			.append("<th class='num'>Prix unitaire</th><th class='num'>Montant</th></tr>");
 		if (vente.getLignes() != null) {
 			for (DetailVente d : vente.getLignes()) {
 				BigDecimal pu = d.getPrixUnitaire() != null ? d.getPrixUnitaire() : BigDecimal.ZERO;
-				html.append("<tr><td>").append(esc(d.getCodeLot())).append("</td>")
+				html.append("<tr><td><b>").append(esc(d.getCodeLot())).append("</b></td>")
 					.append("<td class='num'>").append(d.getQuantite()).append("</td>")
 					.append("<td class='num'>").append(nf.format(pu)).append(" Ar</td>")
 					.append("<td class='num'>").append(nf.format(d.getTotal())).append(" Ar</td></tr>");
 			}
 		}
-		html.append("<tr><td colspan='3' class='num'><b>Montant total</b></td>")
-			.append("<td class='num'><b>").append(nf.format(vente.getMontantTotal())).append(" Ar</b></td></tr>")
-			.append("</table></body></html>");
+		html.append("<tr class='total'><td colspan='3' class='num'>TOTAL</td><td class='num'>")
+			.append(nf.format(vente.getMontantTotal())).append(" Ar</td></tr></table>");
+
+		if ("VALIDEE".equals(statut)) {
+			html.append("<table class='paid'><tr><td>Montant payé</td><td class='num'>")
+				.append(nf.format(vente.getMontantTotal())).append(" Ar</td></tr></table>");
+		}
+
+		html.append("<div class='foot'>Merci de votre confiance.</div></div></body></html>");
 
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

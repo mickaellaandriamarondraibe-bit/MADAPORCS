@@ -443,7 +443,7 @@
       panel.addEventListener("input", rafraichir);
       panel.addEventListener("change", rafraichir);
       rafraichir();
-      ouvrir(compter() > 0); // déjà ouvert si des filtres sont actifs au chargement
+      ouvrir(panel.hasAttribute("data-open") || compter() > 0); // ouvert si data-open ou filtres actifs
     });
   }
 
