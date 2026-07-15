@@ -1,5 +1,6 @@
 package com.madaporc.service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -157,11 +158,12 @@ public class GroupeReproductionCreationService {
         return null;
     }
 
-    public String verifierLotMale(Long lotMaleId) {
+    public String verifierLotMale(Long lotMaleId, LocalDate dateSaillie) {
         if (lotMaleId == null)
             return "Veuillez sélectionner un lot mâle.";
         Optional<LotPorc> lot = lotPorcRepository.findById(lotMaleId);
         LotPorc lotMale = lotPorcRepository.findById(lotMaleId).orElse(null);
+        // Integer realAge = lotMale.getAgeMois() + dateSaill
         if(lotMale.getAgeMois() < 8){
             return "Le lot mâle est trop jeune pour la reproduction (âge minimum requis : 8 mois).";
         }
