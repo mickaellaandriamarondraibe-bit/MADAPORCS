@@ -60,7 +60,7 @@ public class AlerteReproductionService {
         return alerteReproductionRepository.findByStatut(STATUT_NON_LUE);
     }
 
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(fixedRate = 5_000)
     @Transactional
     public void genererAlertesMiseBasProche() {
         List<String> messages = new ArrayList<>();

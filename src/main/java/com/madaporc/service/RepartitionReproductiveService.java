@@ -55,8 +55,17 @@ public class RepartitionReproductiveService {
             return;
         }
 
-        int effectif = lot.getEffectifInitial() != null ? lot.getEffectifInitial() : 0;
+        // On se base sur l'effectif ACTUEL (pas l'initial) : si des femelles sont
+        // mortes ou vendues, la repartition doit refleter le nombre restant.
+        int effectif = lot.getEffectifActuel() != null ? lot.getEffectifActuel() : 0;
         if (effectif <= 0) {
+            // Lot vide : plus aucune femelle a classer. On remet TOUTE la repartition
+            // a zero, sinon l'analyse continue d'afficher l'ancien total.
+            enregistrerRepartition(lot, "PRETE_JAMAIS_SAILLIE", 0);
+            enregistrerRepartition(lot, "A_SURVEILLER", 0);
+            enregistrerRepartition(lot, "A_RETIRER_REPRODUCTION", 0);
+            enregistrerRepartition(lot, "EN_CYCLE", 0);
+            enregistrerRepartition(lot, "DEJA_REPRODUCTRICE_APTE", 0);
             return;
         }
 
