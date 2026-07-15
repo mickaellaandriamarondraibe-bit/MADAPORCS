@@ -47,6 +47,12 @@ public class VenteController {
 		return "commerce/detailVente";
 	}
 
+	@GetMapping("/ventes/{id}/recu")
+	public String recuVente(@PathVariable Long id, Model model) {
+		model.addAttribute("vente", venteService.chargerVente(id));
+		return "commerce/recuVente";
+	}
+
 	@PostMapping("/ventes/valider/{id}")
 	public String validerVente(@PathVariable Long id) {
 		venteService.validerVente(id);
