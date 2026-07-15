@@ -94,6 +94,7 @@
         <button type="button" class="nav__group-title" data-nav-group>Administration</button>
         <div class="nav__group-items">
           <a class="nav__link" data-match="/utilisateurs" href="${ctx}/utilisateurs">Utilisateurs</a>
+          <a class="nav__link" data-match="/email" href="${ctx}/email">Destinataires alertes</a>
         </div>
       </div>
     </c:if>

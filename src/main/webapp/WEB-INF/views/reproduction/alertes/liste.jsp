@@ -23,7 +23,7 @@
                 <td><span class="badge badge--amber">${al.typeAlerte}</span></td>
                 <td><a href="${ctx}/reproduction/groupes/${al.groupeReproduction.id}"><b>${al.groupeReproduction.codeGroupe}</b></a></td>
                 <td>${al.groupeReproduction.lotFemelle.codeLot}</td>
-                <td>${al.dateAlerteFormattee}</td>
+                <td>${al.groupeReproduction.datePrevueMiseBasFormattee}</td>
                 <td>
                   <c:choose>
                     <c:when test="${al.statut == 'NON_LUE'}"><span class="badge badge--red"><span class="dot"></span>Non lue</span></c:when>

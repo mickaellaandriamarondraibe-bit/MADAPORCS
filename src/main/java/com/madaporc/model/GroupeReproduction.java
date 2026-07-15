@@ -2,6 +2,7 @@ package com.madaporc.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 import jakarta.persistence.Column;
@@ -84,4 +85,9 @@ public class GroupeReproduction {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public String getDatePrevueMiseBasFormattee() {
+        if (this.datePrevueMiseBas == null) return "";
+        return this.datePrevueMiseBas.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
 }

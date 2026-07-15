@@ -3,14 +3,13 @@ package com.madaporc.service;
 import com.madaporc.model.AlerteReproduction;
 import com.madaporc.model.GroupeReproduction;
 import com.madaporc.model.LotPorc;
+import com.madaporc.model.DestinataireAlerte;
 import com.madaporc.repository.AlerteReproductionRepository;
+import com.madaporc.repository.DestinataireAlerteRepository;
 import com.madaporc.repository.GroupeReproductionRepository;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,18 +34,20 @@ public class AlerteReproductionService {
 
     private final AlerteReproductionRepository alerteReproductionRepository;
     private final GroupeReproductionRepository groupeReproductionRepository;
+    private final DestinataireAlerteRepository destinataireAlerteRepository;
     private final IngredientService ingredientService;
     private final NotificationService notificationService;
     private final EmailService emailService;
-    private final Path journalEmailPath = Paths.get(System.getProperty("java.io.tmpdir"), "madaporc-alert-email-date.txt");
 
     public AlerteReproductionService(AlerteReproductionRepository alerteReproductionRepository,
                                      GroupeReproductionRepository groupeReproductionRepository,
+                                     DestinataireAlerteRepository destinataireAlerteRepository,
                                      IngredientService ingredientService,
                                      NotificationService notificationService,
                                      EmailService emailService) {
         this.alerteReproductionRepository = alerteReproductionRepository;
         this.groupeReproductionRepository = groupeReproductionRepository;
+        this.destinataireAlerteRepository = destinataireAlerteRepository;
         this.ingredientService = ingredientService;
         this.notificationService = notificationService;
         this.emailService = emailService;
@@ -100,7 +101,7 @@ public class AlerteReproductionService {
             notificationService.envoyerNotification(message);
         }
 
-        envoyerEmailJournalier(messages);
+        envoyerEmailAlertes(messages);
     }
 
     @Transactional
@@ -168,8 +169,8 @@ public class AlerteReproductionService {
                 .anyMatch(alerte -> message.equals(alerte.getMessage()));
     }
 
-    private void envoyerEmailJournalier(List<String> messages) {
-        if (messages.isEmpty() || emailDejaEnvoyeAujourdHui() || !emailService.isConfigured()) {
+    private void envoyerEmailAlertes(List<String> messages) {
+        if (messages.isEmpty() || !emailService.isConfigured()) {
             return;
         }
 
@@ -206,29 +207,13 @@ public class AlerteReproductionService {
             .append("<span style=\"color:#666666; font-weight:normal; font-size:13px;\">Le service Support & Supervision</span></p>")
             .append("</div>");
 
-        if (emailService.envoyerHTML(null, "MADAPORC - Alertes du jour", corps.toString())) {
-            marquerEmailCommeEnvoyeAujourdHui();
-        }
-    }
+        String destinataires = destinataireAlerteRepository.findAll().stream()
+                .map(DestinataireAlerte::getEmail)
+                .collect(Collectors.joining(","));
 
-    private boolean emailDejaEnvoyeAujourdHui() {
-        try {
-            if (!Files.exists(journalEmailPath)) {
-                return false;
-            }
-
-            String contenu = Files.readString(journalEmailPath, StandardCharsets.UTF_8).trim();
-            return LocalDate.now().toString().equals(contenu);
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    private void marquerEmailCommeEnvoyeAujourdHui() {
-        try {
-            Files.writeString(journalEmailPath, LocalDate.now().toString(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-        }
+        // Si aucun destinataire enregistré, on retombe sur l'adresse par défaut (null).
+        emailService.envoyerHTML(destinataires.isBlank() ? null : destinataires,
+                "MADAPORC - Alertes du jour", corps.toString());
     }
 
     private void enregistrerAlerte(GroupeReproduction groupe, LotPorc lot, String typeAlerte, String message) {
