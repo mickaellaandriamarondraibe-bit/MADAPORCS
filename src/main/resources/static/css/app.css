@@ -754,19 +754,28 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 }
 
 .search .input {
-  padding-left: 34px;
+  padding-left: 38px;
+  border-radius: 999px;
+  background: var(--gris-050);
+  border-color: var(--gris-200);
 }
 
+.search .input:focus {
+  background: var(--blanc);
+}
+
+/* Loupe en SVG inline (aucune dependance a une police d'icones) */
 .search::before {
-  content: "\f002";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
+  content: "";
   position: absolute;
-  left: 11px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--gris-400);
-  font-size: 13px;
+  width: 15px;
+  height: 15px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7480' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+  opacity: .6;
+  pointer-events: none;
 }
 
 /* Barre d'outils alignée à droite (champ de recherche collé au bouton). */
@@ -1558,15 +1567,29 @@ input[type="date"].input::-webkit-calendar-picker-indicator:hover {
 
 /* Panneau de filtres repliable : filtres + tri sur une seule ligne */
 .filters-panel {
-  background: var(--gris-050);
+  background: var(--blanc);
   border: 1px solid var(--gris-200);
-  border-radius: var(--radius);
-  padding: 16px 18px;
+  border-radius: 14px;
+  padding: 18px 20px;
   margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 14px 18px;
+  gap: 16px 18px;
+}
+
+/* Champs du panneau de filtres : fond doux, coins arrondis */
+.filters-panel .select,
+.filters-panel .input {
+  border-radius: 9px;
+  background: var(--gris-050);
+  border-color: var(--gris-200);
+}
+.filters-panel .select { min-width: 150px; }
+.filters-panel .select:focus,
+.filters-panel .input:focus {
+  background: var(--blanc);
 }
 .filters-panel[hidden] { display: none; }
 /* Les rangees se fondent dans le panneau : tous les champs s'alignent

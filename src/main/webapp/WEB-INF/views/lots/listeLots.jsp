@@ -57,8 +57,14 @@
       <input class="input" type="date" name="dateCreationFin" value="${filtre.dateCreationFin}">
     </label>
     <div class="fld-actions">
-      <button class="btn btn--primary" type="submit">Filtrer</button>
-      <a class="btn btn--ghost" href="${ctx}/lots">Réinitialiser</a>
+      <button class="btn btn--primary" type="submit">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filtrer
+      </button>
+      <a class="btn btn--ghost" href="${ctx}/lots">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Réinitialiser
+      </a>
     </div>
   </form>
 

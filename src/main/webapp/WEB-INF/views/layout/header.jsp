@@ -43,6 +43,7 @@
 
     <header class="topbar">
       <button class="menu-toggle" data-menu-toggle aria-label="Menu">☰</button>
+      <button type="button" class="btn btn--ghost btn--sm" onclick="history.back()" title="Page précédente">&larr; Retour</button>
       <div>
         <c:if test="${not empty crumbs}">
           <div class="topbar__crumbs">${crumbs}</div>
